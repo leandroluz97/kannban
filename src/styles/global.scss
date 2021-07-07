@@ -1,0 +1,30 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html {
+  font-size: 62.5%;
+  scroll-behavior: smooth;
+}
+:root {
+  /* Colors */
+  --blue: #26323e;
+  --blue-plus: #36414b;
+  --blue-900: #15202b;
+
+  --violet: #6c71d1;
+  --violet-plus: #9da1f5;
+
+  --green: #70c574;
+  --green-plus: #8fe393;
+
+  --gray-50: #ecefed;
+
+  /* Font size */
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  background-color: var(--blue-900);
+}
