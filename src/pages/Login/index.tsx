@@ -1,12 +1,15 @@
-import Input from "../../components/Input";
 import React from "react";
+import Input from "../../components/Input";
+import styles from "./styles.module.scss";
+import Login from "../../components/Login";
 
-const Login = () => {
+const LoginPage = () => {
   return (
-    <div>
-      <Input />
+    <div className={styles.login}>
+      <Login />
+      {/*<Input />*/}
     </div>
   );
 };
 
-export default Login;
+export default LoginPage;

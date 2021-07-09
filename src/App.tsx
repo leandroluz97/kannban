@@ -1,11 +1,14 @@
 import Routes from "./routes";
 import "./styles/global.scss";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 function App() {
   return (
-    <div>
-      <Routes />
-    </div>
+    <Router>
+      <div>
+        <Routes />
+      </div>
+    </Router>
   );
 }
 

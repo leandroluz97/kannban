@@ -1,0 +1,28 @@
+.login {
+  width: 100%;
+  max-width: 500px;
+  background-color: var(--blue);
+  min-height: 100vh;
+  padding: var(--p-50);
+
+  &__link {
+    text-align: right;
+  }
+
+  &__signup {
+    background-color: var(--blue-900);
+    padding: 1rem 2rem;
+    text-decoration: none;
+    border-radius: var(--br-4);
+    font-size: var(--font-14);
+    color: var(--green);
+    display: inline-block;
+    margin-left: auto;
+    text-align: right;
+  }
+
+  &__form {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+}

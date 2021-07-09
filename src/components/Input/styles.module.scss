@@ -1,0 +1,28 @@
+.group {
+  width: 100%;
+  margin: 1rem 0;
+
+  &:focus {
+    border: solid 2px var(--violet);
+  }
+}
+
+.input {
+  width: 100%;
+  padding: 1.5rem;
+  border: none;
+  border-radius: var(--br-4);
+  background-color: var(--blue-900);
+  color: var(--white);
+  font-size: var(--font-15);
+  outline: none;
+  border: solid 2px var(--blue);
+
+  &:focus {
+    //border: solid 2px var(--violet);
+  }
+
+  &::placeholder {
+    color: var(--gray-400);
+  }
+}
