@@ -3,7 +3,7 @@
   max-width: 500px;
   background-color: var(--blue);
   min-height: 100vh;
-  padding: var(--p-50);
+  padding: 2rem 3.5rem;
 
   &__link {
     text-align: right;
@@ -19,10 +19,83 @@
     display: inline-block;
     margin-left: auto;
     text-align: right;
+
+    &:hover {
+      filter: brightness(1.1);
+    }
+  }
+
+  &__imgbox {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  h1 {
+    color: var(--white);
+    text-align: center;
+    font-weight: 300;
+    margin-bottom: 2.5rem;
   }
 
   &__form {
-    max-width: 400px;
+    max-width: 350px;
     margin: 0 auto;
+
+    button {
+      margin-top: 3rem;
+    }
+  }
+
+  &__checkbox {
+    label {
+      position: relative;
+      span {
+        color: var(--gray-200);
+        margin-left: 2rem;
+      }
+    }
+
+    label::before {
+      content: "";
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background-color: var(--blue-900);
+      border-radius: 2px;
+    }
+
+    input:checked ~ span:before {
+      content: " ";
+      position: absolute;
+      left: 4px;
+      top: 4px;
+      width: 8px;
+      height: 8px;
+      border-radius: 10px;
+      color: var(--violet);
+      background-color: var(--violet);
+    }
+  }
+
+  &__google {
+    display: flex;
+    margin: 0 auto;
+    max-width: 350px;
+    margin-top: 4rem;
+
+    p {
+      color: var(--white);
+      font-size: var(--font-16);
+    }
+    button {
+      background-color: transparent;
+      border: none;
+      padding: 0;
+    }
+
+    img {
+      margin-left: 1rem;
+      cursor: pointer;
+    }
   }
 }

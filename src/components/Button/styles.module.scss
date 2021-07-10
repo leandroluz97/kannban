@@ -1,0 +1,15 @@
+.button {
+  background-color: var(--violet);
+  border: none;
+  color: var(--blue);
+  width: 100%;
+  padding: 1.5rem;
+  border-radius: var(--br-4);
+  cursor: pointer;
+  font-weight: 700;
+  font-size: var(--font-16);
+
+  &:hover {
+    filter: brightness(1.1);
+  }
+}
