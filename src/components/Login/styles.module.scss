@@ -4,6 +4,10 @@
   background-color: var(--blue);
   min-height: 100vh;
   padding: 2rem 3.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
 
   &__link {
     text-align: right;
@@ -38,8 +42,9 @@
   }
 
   &__form {
+    min-width: 80%;
     max-width: 350px;
-    margin: 0 auto;
+    margin: auto;
 
     button {
       margin-top: 3rem;
@@ -97,5 +102,11 @@
       margin-left: 1rem;
       cursor: pointer;
     }
+  }
+}
+
+@media (max-width: 768px) {
+  .login {
+    margin: auto;
   }
 }

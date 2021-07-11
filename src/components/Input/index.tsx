@@ -1,34 +1,47 @@
 import styles from "./styles.module.scss";
 import eye from "../../assets/Eye.svg";
 import closeEye from "../../assets/Eye-closed.svg";
+import { ChangeEvent } from "react";
+import {
+  FieldError,
+  UseFormRegisterReturn,
+  ValidationRule,
+} from "react-hook-form";
 
 interface InputProps {
-  type: "text" | "password" | "email";
-  holderText: string;
-  showPassword?: boolean;
+  rules?: ValidationRule;
+  name: string;
+  label: string;
+  type: "text" | "email" | "number" | "password";
+  property: UseFormRegisterReturn;
+  error: FieldError | undefined;
+  visible?: boolean;
+  setVisibility?: (value: boolean) => void;
   handleShowPassword?: () => void;
 }
 
 const Input = ({
+  property,
+  error,
   type,
-  holderText,
-  showPassword,
+  name,
+  visible,
   handleShowPassword,
 }: InputProps) => {
   let input = (
-    <input type={type} placeholder={holderText} className={styles.input} />
+    <input {...property} type={type} id={name} className={styles.input} />
   );
-
   if (type === "password") {
     input = (
       <>
         <input
-          type={showPassword ? "text" : "password"}
-          placeholder={holderText}
+          type={visible ? "text" : "password"}
+          {...property}
+          id={name}
           className={styles.input}
         />
         <img
-          src={showPassword ? eye : closeEye}
+          src={visible ? closeEye : eye}
           alt="eye"
           onClick={handleShowPassword}
         />

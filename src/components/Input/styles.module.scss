@@ -2,6 +2,8 @@
   width: 100%;
   margin: 1rem 0;
   display: flex;
+  align-items: center;
+  position: relative;
 
   &:focus {
     border: solid 2px var(--violet);
@@ -9,6 +11,9 @@
 
   img {
     margin-left: -40px;
+    position: relative;
+    padding: 0.5rem;
+    background-color: var(--blue-900);
   }
 }
 
