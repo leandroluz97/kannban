@@ -21,6 +21,7 @@ interface InputProps {
 }
 
 const Input = ({
+  label,
   property,
   error,
   type,
@@ -28,23 +29,49 @@ const Input = ({
   visible,
   handleShowPassword,
 }: InputProps) => {
+  const inputStyle = error
+    ? `${styles.input} ${styles.input__error}`
+    : `${styles.input}`;
+
   let input = (
-    <input {...property} type={type} id={name} className={styles.input} />
+    <>
+      <div>
+        <input
+          {...property}
+          type={type}
+          id={name}
+          className={inputStyle}
+          placeholder={label}
+        />
+        {visible && (
+          <img
+            src={visible ? closeEye : eye}
+            alt="eye"
+            onClick={handleShowPassword}
+          />
+        )}
+      </div>
+      {error && <span className={styles.group__error}>{error.message}</span>}
+    </>
   );
   if (type === "password") {
     input = (
       <>
-        <input
-          type={visible ? "text" : "password"}
-          {...property}
-          id={name}
-          className={styles.input}
-        />
-        <img
-          src={visible ? closeEye : eye}
-          alt="eye"
-          onClick={handleShowPassword}
-        />
+        <div>
+          <input
+            type={visible ? "text" : "password"}
+            {...property}
+            id={name}
+            className={inputStyle}
+            placeholder={label}
+          />
+          <img
+            src={visible ? closeEye : eye}
+            alt="eye"
+            onClick={handleShowPassword}
+          />
+        </div>
+        {error && <span className={styles.group__error}>{error.message}</span>}
       </>
     );
   }

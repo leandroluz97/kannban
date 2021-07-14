@@ -16,7 +16,7 @@ interface SignupState {
   terms: boolean;
 }
 
-const Login = () => {
+const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const {
@@ -35,21 +35,21 @@ const Login = () => {
     console.log({ ...data });
   }
   return (
-    <div className={styles.login}>
-      <div className={styles.login__link}>
-        <Link to="/signup" className={styles.login__signup}>
-          Sign up
+    <div className={styles.signup}>
+      <div className={styles.signup__link}>
+        <Link to="/Login" className={styles.signup__signup}>
+          Login
         </Link>
       </div>
 
-      <div className={styles.login__imgbox}>
+      <div className={styles.signup__imgbox}>
         <img src={kannban} alt="Kannban " />
       </div>
 
       <h1>Create Your Account</h1>
 
       <form
-        className={styles.login__form}
+        className={styles.signup__form}
         onSubmit={handleSubmit(handleOnSubmit)}
       >
         <Input
@@ -103,7 +103,7 @@ const Login = () => {
           handleShowPassword={handleShowPassword}
         />
 
-        <div className={styles.login__checkbox}>
+        <div className={styles.signup__checkbox}>
           <label htmlFor="terms">
             <input
               type="checkbox"
@@ -124,7 +124,7 @@ const Login = () => {
         <Button />
       </form>
 
-      <div className={styles.login__google}>
+      <div className={styles.signup__google}>
         <p>Or register with </p>
         <button>
           <img src={google} alt="google logo" />
@@ -134,4 +134,62 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;
+
+/*
+ const [formData, setDataForm] = useState({
+    name: {
+      type: "text",
+      name: "name",
+      placeholder: "Enter your name",
+      value: "",
+      validation: {
+        required: true,
+        isValid: false,
+        errorMessage: "Invalid name. Valid name eg: John Doe",
+        pattern: "",
+        minLength: 2,
+      },
+    },
+    email: {
+      type: "email",
+      name: "email",
+      placeholder: "Enter your email",
+      value: "",
+      validation: {
+        isValid: false,
+        errorMessage: "Invalid email. Valid email eg: johndoe@gmail.com",
+        minLength: null,
+        pattern:
+          "/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)*$/",
+      },
+    },
+    password: {
+      type: "password",
+      name: "password",
+      placeholder: "Enter your password",
+      value: "",
+      validation: {
+        required: true,
+        isValid: false,
+        errorMessage: "Please enter a valid name,eg: John Doe",
+        pattern: "",
+        minLength: 8,
+      },
+    },
+    repeatedPassword: {
+      type: "password",
+      name: "password",
+      placeholder: "Enter your password",
+      value: "",
+      validation: {
+        required: true,
+        isValid: false,
+        errorMessage: "Please enter a valid name,eg: John Doe",
+        pattern: "",
+        minLength: 8,
+      },
+    },
+  });
+
+*/

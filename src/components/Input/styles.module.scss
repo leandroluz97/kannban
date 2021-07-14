@@ -1,10 +1,21 @@
 .group {
   width: 100%;
   margin: 1rem 0;
-  display: flex;
-  align-items: center;
+
   position: relative;
 
+  > div {
+    display: flex;
+    align-items: center;
+  }
+
+  &__error {
+    color: var(--error);
+    font-size: var(--font-10);
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
+    display: block;
+  }
   &:focus {
     border: solid 2px var(--violet);
   }
@@ -35,4 +46,8 @@
   &::placeholder {
     color: var(--gray-400);
   }
+}
+
+.input__error {
+  border: solid 1px var(--error);
 }

@@ -1,10 +1,11 @@
-import React from "react";
-import Login from "../pages/Login";
+import SignupPage from "../components/Signup";
+import LoginPage from "../pages/Login";
 
 const Routes = () => {
   return (
     <div>
-      <Login />
+      <LoginPage />
+      <SignupPage />
     </div>
   );
 };

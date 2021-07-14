@@ -1,5 +1,3 @@
-import React from "react";
-import Input from "../../components/Input";
 import styles from "./styles.module.scss";
 import Login from "../../components/Login";
 
