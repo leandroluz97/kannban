@@ -13,7 +13,7 @@ interface SignupState {
   password: string;
 }
 
-const Login = () => {
+const Reset = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const {
@@ -32,21 +32,21 @@ const Login = () => {
     console.log({ ...data });
   }
   return (
-    <div className={styles.login}>
-      <div className={styles.login__link}>
-        <Link to="/signup" className={styles.login__signup}>
+    <div className={styles.reset}>
+      <div className={styles.reset__link}>
+        <Link to="/signup" className={styles.reset__signup}>
           Sign up
         </Link>
       </div>
 
-      <div className={styles.login__imgbox}>
+      <div className={styles.reset__imgbox}>
         <img src={kannban} alt="Kannban " />
       </div>
 
-      <h1>Login to your Account</h1>
+      <h1>reset to your Account</h1>
 
       <form
-        className={styles.login__form}
+        className={styles.reset__form}
         onSubmit={handleSubmit(handleOnSubmit)}
       >
         <Input
@@ -75,14 +75,14 @@ const Login = () => {
           handleShowPassword={handleShowPassword}
         />
 
-        <p className={styles.login__forgotpassword}>
+        <p className={styles.reset__forgotpassword}>
           Forgot password? <Link to="/resetpassword">Click here!</Link>
         </p>
 
         <Button />
       </form>
 
-      <div className={styles.login__google}>
+      <div className={styles.reset__google}>
         <p>Or Login with </p>
         <button>
           <img src={google} alt="google logo" />
@@ -92,4 +92,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Reset;

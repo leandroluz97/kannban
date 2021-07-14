@@ -37,7 +37,7 @@ const Signup = () => {
   return (
     <div className={styles.signup}>
       <div className={styles.signup__link}>
-        <Link to="/Login" className={styles.signup__signup}>
+        <Link to="/login" className={styles.signup__signup}>
           Login
         </Link>
       </div>
