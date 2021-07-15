@@ -42,6 +42,7 @@ const Input = ({
           id={name}
           className={inputStyle}
           placeholder={label}
+          autoComplete="off"
         />
         {visible && (
           <img
@@ -64,6 +65,7 @@ const Input = ({
             id={name}
             className={inputStyle}
             placeholder={label}
+            autoComplete="off"
           />
           <img
             src={visible ? closeEye : eye}

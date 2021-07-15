@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import styles from "./styles.module.scss";
 import kannban from "../../assets/horizontal_kannban.svg";
 import Input from "../Input";
@@ -7,14 +7,17 @@ import google from "../../assets/google.svg";
 import Button from "../Button";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useAuth } from "../../hooks/useAuth";
+import Spinner from "../Spinner";
 
-interface SignupState {
+interface LoginState {
   email: string;
   password: string;
 }
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     register,
@@ -23,13 +26,29 @@ const Login = () => {
     getValues,
 
     formState: { errors },
-  } = useForm<SignupState>();
+  } = useForm<LoginState>();
+  const { onSubmitGmail, onSigninPassword } = useAuth();
+
+  //history route
+  let history = useHistory();
 
   function handleShowPassword() {
     setShowPassword(!showPassword);
   }
-  function handleOnSubmit(data: SignupState) {
+
+  async function handleOnSubmit(data: LoginState) {
     console.log({ ...data });
+
+    setIsLoading(true);
+    try {
+      await onSigninPassword(data.email, data.password);
+
+      history.push("/dashboard");
+      reset();
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error.message);
+    }
   }
   return (
     <div className={styles.login}>
@@ -79,7 +98,13 @@ const Login = () => {
           Forgot password? <Link to="/resetpassword">Click here!</Link>
         </p>
 
-        <Button />
+        {isLoading ? (
+          <Button color={"var(--violet)"} disable={true}>
+            <Spinner color="blue" />
+          </Button>
+        ) : (
+          <Button text="Login" color={"var(--violet)"} disable={false} />
+        )}
       </form>
 
       <div className={styles.login__google}>

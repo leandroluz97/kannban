@@ -7,14 +7,16 @@ import google from "../../assets/google.svg";
 import Button from "../Button";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useAuth } from "../../hooks/useAuth";
+import Spinner from "../Spinner";
 
-interface SignupState {
+interface ResetState {
   email: string;
-  password: string;
 }
 
 const Reset = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     register,
@@ -23,19 +25,33 @@ const Reset = () => {
     getValues,
 
     formState: { errors },
-  } = useForm<SignupState>();
+  } = useForm<ResetState>();
+
+  const { resetPassword } = useAuth();
 
   function handleShowPassword() {
     setShowPassword(!showPassword);
   }
-  function handleOnSubmit(data: SignupState) {
+
+  async function handleOnSubmit(data: ResetState) {
     console.log({ ...data });
+
+    setIsLoading(true);
+    try {
+      await resetPassword(data.email);
+
+      setIsLoading(false);
+      // history.push("/signin");
+    } catch (error) {
+      console.log("aqui", error.message);
+    }
   }
+
   return (
     <div className={styles.reset}>
       <div className={styles.reset__link}>
-        <Link to="/signup" className={styles.reset__signup}>
-          Sign up
+        <Link to="/login" className={styles.reset__signup}>
+          Login
         </Link>
       </div>
 
@@ -43,7 +59,7 @@ const Reset = () => {
         <img src={kannban} alt="Kannban " />
       </div>
 
-      <h1>reset to your Account</h1>
+      <h1>Password Reset</h1>
 
       <form
         className={styles.reset__form}
@@ -59,35 +75,19 @@ const Reset = () => {
           error={errors.email}
           name="email"
         />
-        <Input
-          property={register("password", {
-            required: "You must specify a password",
-            minLength: {
-              value: 8,
-              message: "Password must have at least 8 characters",
-            },
-          })}
-          label="Password"
-          type={showPassword ? "text" : "password"}
-          name="password"
-          error={errors.password}
-          visible={showPassword}
-          handleShowPassword={handleShowPassword}
-        />
 
-        <p className={styles.reset__forgotpassword}>
-          Forgot password? <Link to="/resetpassword">Click here!</Link>
-        </p>
-
-        <Button />
+        {isLoading ? (
+          <Button color={"var(--violet)"} disable={true}>
+            <Spinner color="blue" />
+          </Button>
+        ) : (
+          <Button
+            text="Reset Password"
+            color={"var(--violet)"}
+            disable={false}
+          />
+        )}
       </form>
-
-      <div className={styles.reset__google}>
-        <p>Or Login with </p>
-        <button>
-          <img src={google} alt="google logo" />
-        </button>
-      </div>
     </div>
   );
 };

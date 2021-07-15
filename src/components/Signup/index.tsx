@@ -7,6 +7,9 @@ import google from "../../assets/google.svg";
 import Button from "../Button";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useAuth } from "../../hooks/useAuth";
+import { useHistory } from "react-router-dom";
+import Spinner from "../Spinner";
 
 interface SignupState {
   name: string;
@@ -18,7 +21,9 @@ interface SignupState {
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
+  const { onSubmitGmail } = useAuth();
   const {
     register,
     handleSubmit,
@@ -28,11 +33,22 @@ const Signup = () => {
     formState: { errors },
   } = useForm<SignupState>();
 
+  //history router
+  let history = useHistory();
+
   function handleShowPassword() {
     setShowPassword(!showPassword);
   }
-  function handleOnSubmit(data: SignupState) {
+  async function handleOnSubmit(data: SignupState) {
     console.log({ ...data });
+    try {
+      await onSubmitGmail();
+
+      history.push("/dashboard");
+      reset();
+    } catch (error) {
+      console.log(error.message);
+    }
   }
   return (
     <div className={styles.signup}>
@@ -121,7 +137,13 @@ const Signup = () => {
 
         {<p></p>}
 
-        <Button />
+        {isLoading ? (
+          <Button color={"var(--violet)"} disable={true}>
+            <Spinner color="blue" />
+          </Button>
+        ) : (
+          <Button text="Sign up" color={"var(--violet)"} disable={false} />
+        )}
       </form>
 
       <div className={styles.signup__google}>
@@ -135,61 +157,3 @@ const Signup = () => {
 };
 
 export default Signup;
-
-/*
- const [formData, setDataForm] = useState({
-    name: {
-      type: "text",
-      name: "name",
-      placeholder: "Enter your name",
-      value: "",
-      validation: {
-        required: true,
-        isValid: false,
-        errorMessage: "Invalid name. Valid name eg: John Doe",
-        pattern: "",
-        minLength: 2,
-      },
-    },
-    email: {
-      type: "email",
-      name: "email",
-      placeholder: "Enter your email",
-      value: "",
-      validation: {
-        isValid: false,
-        errorMessage: "Invalid email. Valid email eg: johndoe@gmail.com",
-        minLength: null,
-        pattern:
-          "/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)*$/",
-      },
-    },
-    password: {
-      type: "password",
-      name: "password",
-      placeholder: "Enter your password",
-      value: "",
-      validation: {
-        required: true,
-        isValid: false,
-        errorMessage: "Please enter a valid name,eg: John Doe",
-        pattern: "",
-        minLength: 8,
-      },
-    },
-    repeatedPassword: {
-      type: "password",
-      name: "password",
-      placeholder: "Enter your password",
-      value: "",
-      validation: {
-        required: true,
-        isValid: false,
-        errorMessage: "Please enter a valid name,eg: John Doe",
-        pattern: "",
-        minLength: 8,
-      },
-    },
-  });
-
-*/
