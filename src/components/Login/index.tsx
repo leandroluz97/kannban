@@ -9,6 +9,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../hooks/useAuth";
 import Spinner from "../Spinner";
+import { toast } from "react-toastify";
 
 interface LoginState {
   email: string;
@@ -50,6 +51,20 @@ const Login = () => {
       console.log(error.message);
     }
   }
+
+  async function handleGmailSignup() {
+    try {
+      await onSubmitGmail();
+
+      history.push("/dashboard");
+    } catch (error) {
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+    }
+  }
+
   return (
     <div className={styles.login}>
       <div className={styles.login__link}>
@@ -109,7 +124,7 @@ const Login = () => {
 
       <div className={styles.login__google}>
         <p>Or Login with </p>
-        <button>
+        <button onClick={handleGmailSignup}>
           <img src={google} alt="google logo" />
         </button>
       </div>

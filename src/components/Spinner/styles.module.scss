@@ -16,10 +16,20 @@
   height: 30px;
   margin: 3px;
   border-radius: 50%;
-  border: 3px solid var(--red);
-  border-color: var(--red) transparent transparent transparent;
+  border: 3px solid red;
+  border-color: red transparent transparent transparent;
   animation: ldsRing 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
 }
+
+.ldsRing .blue {
+  border: 3px solid var(--blue);
+  border-color: var(--blue) transparent transparent transparent;
+}
+.ldsRing .violet {
+  border: 3px solid var(--violet);
+  border-color: var(--violet) transparent transparent transparent;
+}
+
 .ldsRing div:nth-child(1) {
   animation-delay: -0.45s;
 }
@@ -37,12 +47,7 @@
     transform: rotate(360deg);
   }
 }
-.blue {
-  div {
-    border: 3px solid var(--blue);
-    border-color: var(--blue) transparent transparent transparent;
-  }
-}
+
 .violet {
   div {
     border: 3px solid var(--violet);

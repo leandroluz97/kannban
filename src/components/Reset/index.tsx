@@ -9,6 +9,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../hooks/useAuth";
 import Spinner from "../Spinner";
+import { toast } from "react-toastify";
 
 interface ResetState {
   email: string;
@@ -43,7 +44,10 @@ const Reset = () => {
       setIsLoading(false);
       // history.push("/signin");
     } catch (error) {
-      console.log("aqui", error.message);
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
     }
   }
 

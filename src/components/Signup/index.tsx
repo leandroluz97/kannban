@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import { useAuth } from "../../hooks/useAuth";
 import { useHistory } from "react-router-dom";
 import Spinner from "../Spinner";
+import { toast } from "react-toastify";
 
 interface SignupState {
   name: string;
@@ -50,6 +51,20 @@ const Signup = () => {
       console.log(error.message);
     }
   }
+
+  async function handleGmailSignup() {
+    try {
+      await onSubmitGmail();
+
+      history.push("/dashboard");
+    } catch (error) {
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+    }
+  }
+
   return (
     <div className={styles.signup}>
       <div className={styles.signup__link}>
@@ -135,8 +150,6 @@ const Signup = () => {
           </label>
         </div>
 
-        {<p></p>}
-
         {isLoading ? (
           <Button color={"var(--violet)"} disable={true}>
             <Spinner color="blue" />
@@ -148,7 +161,7 @@ const Signup = () => {
 
       <div className={styles.signup__google}>
         <p>Or register with </p>
-        <button>
+        <button onClick={handleGmailSignup}>
           <img src={google} alt="google logo" />
         </button>
       </div>
