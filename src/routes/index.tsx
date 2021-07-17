@@ -5,6 +5,7 @@ import Dashboard from "../pages/Dashboard";
 
 import styles from "./styles.module.scss";
 import { Switch, Route, Redirect } from "react-router-dom";
+import SideBar from "../components/SideBar";
 
 const Routes = () => {
   const currentUser = true;
@@ -22,9 +23,14 @@ const Routes = () => {
   if (currentUser) {
     routes = (
       <div className={styles.app}>
-        <Switch>
-          <Route path="/dashboard" component={Dashboard} />
-        </Switch>
+        <div >
+          <SideBar />
+        </div>
+        <div>
+          <Switch>
+            <Route path="/dashboard" component={Dashboard} />
+          </Switch>
+        </div>
       </div>
     );
   }

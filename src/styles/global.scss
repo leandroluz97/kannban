@@ -30,6 +30,7 @@ html {
   --gray-100: #c4c4c4;
   --gray-200: #929292;
   --gray-400: #49525a;
+  --gray-500: #36414b;
 
   /* Font size */
   --font-16: 1.6rem;
@@ -44,4 +45,25 @@ html {
 
 body {
   font-family: "Roboto", sans-serif;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--gray-400);
+  border-radius: 100px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-200);
 }

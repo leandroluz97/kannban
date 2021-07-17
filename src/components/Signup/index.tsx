@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styles from "./styles.module.scss";
-import kannban from "../../assets/horizontal_kannban.svg";
+import kannban from "../../assets/vertical_kannban.svg";
 import Input from "../Input";
 import google from "../../assets/google.svg";
 import Button from "../Button";
