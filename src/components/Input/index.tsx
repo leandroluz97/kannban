@@ -13,8 +13,8 @@ interface InputProps {
   name: string;
   label: string;
   type: "text" | "email" | "number" | "password";
-  property: UseFormRegisterReturn;
-  error: FieldError | undefined;
+  property?: UseFormRegisterReturn;
+  error?: FieldError | undefined;
   visible?: boolean;
   setVisibility?: (value: boolean) => void;
   handleShowPassword?: () => void;

@@ -45,11 +45,23 @@
     padding: 1rem;
     padding-left: 2rem;
     text-decoration: none;
-    cursor: pointer;
+
+    button {
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 0px;
+      border-radius: 3px;
+
+      &:hover {
+        background-color: var(--gray-400);
+        cursor: pointer;
+      }
+    }
 
     &:hover {
       background-color: var(--gray-500);
-      cursor: pointer;
+      // cursor: pointer;
     }
 
     svg {
@@ -70,6 +82,7 @@
 
   &__groupActive {
     background-color: var(--gray-500);
+    color: var(--gray-100) !important;
     cursor: pointer;
   }
 
@@ -92,7 +105,7 @@
           cursor: pointer;
           text-decoration: none;
           display: block;
-          padding-left: 5.5rem;
+          padding-left: 6rem;
 
           span {
             display: block;

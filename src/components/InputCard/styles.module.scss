@@ -1,0 +1,17 @@
+.group {
+  background-color: var(--blue-100);
+  padding: 1rem 2rem;
+  border-radius: 2px;
+
+  input {
+    background-color: var(--blue-900);
+    border: solid 2px transparent;
+    outline: none;
+    font-size: 1.6rem;
+    color: var(--white);
+
+    &:focus {
+      border: solid 2px var(--violet);
+    }
+  }
+}

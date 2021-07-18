@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import styles from "./styles.module.scss";
+import stylescss from "./styles.module.scss";
 import kannbanImg from "../../assets/horizontal_kannban.svg";
 import profileImg from "../../assets/profileImg.svg";
 import kannbanIcon from "../../assets/icon_kannban.svg";
 import colapseImg from "../../assets/colapse.svg";
 import uncolapseImg from "../../assets/uncolapse.svg";
+import AddRoundedIcon from "@material-ui/icons/AddRounded";
 import {
   IoIosRocket,
   IoIosSettings,
@@ -16,9 +17,15 @@ import {
 } from "react-icons/io";
 import { NavLink } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
+import { usePopper } from "react-popper";
+import InputCard from "../InputCard";
 
 const SideBar = () => {
   const [colapse, setColapse] = useState(true);
+  const [referenceElement, setReferenceElement] = useState(null as any);
+  const [popperElement, setPopperElement] = useState(null as any);
+
+  const { styles, attributes } = usePopper(referenceElement, popperElement);
 
   function handleNewGroup() {
     console.log("yess");
@@ -26,75 +33,86 @@ const SideBar = () => {
   return (
     <div
       className={
-        colapse ? `${styles.sidebar} ${styles.colapse}` : `${styles.sidebar}`
+        colapse
+          ? `${stylescss.sidebar} ${stylescss.colapse}`
+          : `${stylescss.sidebar}`
       }
     >
-      <div className={styles.sidebar__logo}>
+      <div className={stylescss.sidebar__logo}>
         <img src={colapse ? kannbanIcon : kannbanImg} alt="kannban logo" />
       </div>
 
-      <div className={styles.sidebar__profile}>
+      <div className={stylescss.sidebar__profile}>
         <img src={profileImg} alt="profile" />
         <p>Leandro Luz </p>
       </div>
 
-      <div className={styles.sidebar__menu}>
+      <div className={stylescss.sidebar__menu}>
         <NavLink
           to="/gettingstarted"
-          className={styles.sidebar__group}
-          activeClassName={styles.sidebar__groupActive}
+          className={stylescss.sidebar__group}
+          activeClassName={stylescss.sidebar__groupActive}
         >
           <IoIosRocket size={20} />
           <span>Getting Started</span>
         </NavLink>
         <NavLink
           to="/settings"
-          className={styles.sidebar__group}
-          activeClassName={styles.sidebar__groupActive}
+          className={stylescss.sidebar__group}
+          activeClassName={stylescss.sidebar__groupActive}
         >
           <IoIosSettings size={20} />
           <span>Settings</span>
         </NavLink>
         <NavLink
           to="/archive"
-          className={styles.sidebar__group}
-          activeClassName={styles.sidebar__groupActive}
+          className={stylescss.sidebar__group}
+          activeClassName={stylescss.sidebar__groupActive}
         >
           <IoMdArchive size={20} />
           <span>Archive</span>
         </NavLink>
         <NavLink
           to="/trash"
-          className={styles.sidebar__group}
-          activeClassName={styles.sidebar__groupActive}
+          className={stylescss.sidebar__group}
+          activeClassName={stylescss.sidebar__groupActive}
         >
           <IoIosNotifications size={20} />
           <span>Trash</span>
         </NavLink>
       </div>
 
-      <div className={styles.sidebar__projects}>
-        <div className={styles.sidebar__project}>
-          <NavLink
-            to="/web-development"
-            className={styles.sidebar__group}
-            activeClassName={styles.sidebar__groupActive}
-          >
+      <div className={stylescss.sidebar__projects}>
+        <div className={stylescss.sidebar__project}>
+          <div className={stylescss.sidebar__group}>
             <IoMdFolder size={20} />
             <span>Web Development</span>
-            <IoIosAdd size={20} onClick={handleNewGroup} />
-          </NavLink>
+
+            <button ref={setReferenceElement}>
+              <AddRoundedIcon fontSize="large" />
+            </button>
+            <div
+              ref={setPopperElement}
+              style={styles.popper}
+              {...attributes.popper}
+            >
+              <InputCard />
+            </div>
+          </div>
 
           <ul>
             <li>
-              <NavLink to="/http" activeClassName={styles.sidebar__groupActive}>
+              <NavLink
+                to="/http"
+                activeClassName={stylescss.sidebar__groupActive}
+              >
                 Https
               </NavLink>
             </li>
             <li>
               <NavLink
                 to="/client-side"
-                activeClassName={styles.sidebar__groupActive}
+                activeClassName={stylescss.sidebar__groupActive}
               >
                 Client Side
               </NavLink>
@@ -102,34 +120,35 @@ const SideBar = () => {
             <li>
               <NavLink
                 to="/reactjs"
-                activeClassName={styles.sidebar__groupActive}
+                activeClassName={stylescss.sidebar__groupActive}
               >
                 ReactJS
               </NavLink>
             </li>
           </ul>
         </div>
-        <div className={styles.sidebar__project}>
-          <NavLink
-            to="/web-development"
-            className={styles.sidebar__group}
-            activeClassName={styles.sidebar__groupActive}
-          >
+        <div className={stylescss.sidebar__project}>
+          <div className={stylescss.sidebar__group}>
             <IoMdFolder size={20} />
-            <span>Web Development</span>
-            <IoIosAdd size={20} onClick={handleNewGroup} />
-          </NavLink>
+            <span>Javascript</span>
 
+            <button onClick={handleNewGroup}>
+              <AddRoundedIcon fontSize="large" />
+            </button>
+          </div>
           <ul>
             <li>
-              <NavLink to="/http" activeClassName={styles.sidebar__groupActive}>
+              <NavLink
+                to="/http"
+                activeClassName={stylescss.sidebar__groupActive}
+              >
                 Https
               </NavLink>
             </li>
             <li>
               <NavLink
                 to="/client-side"
-                activeClassName={styles.sidebar__groupActive}
+                activeClassName={stylescss.sidebar__groupActive}
               >
                 Client Side
               </NavLink>
@@ -137,34 +156,36 @@ const SideBar = () => {
             <li>
               <NavLink
                 to="/reactjs"
-                activeClassName={styles.sidebar__groupActive}
+                activeClassName={stylescss.sidebar__groupActive}
               >
                 ReactJS
               </NavLink>
             </li>
           </ul>
         </div>
-        <div className={styles.sidebar__project}>
-          <NavLink
-            to="/web-development"
-            className={styles.sidebar__group}
-            activeClassName={styles.sidebar__groupActive}
-          >
+        <div className={stylescss.sidebar__project}>
+          <div className={stylescss.sidebar__group}>
             <IoMdFolder size={20} />
-            <span>Web Development</span>
-            <IoIosAdd size={20} onClick={handleNewGroup} />
-          </NavLink>
+            <span>Web services</span>
+
+            <button onClick={handleNewGroup}>
+              <AddRoundedIcon fontSize="large" />
+            </button>
+          </div>
 
           <ul>
             <li>
-              <NavLink to="/http" activeClassName={styles.sidebar__groupActive}>
+              <NavLink
+                to="/http"
+                activeClassName={stylescss.sidebar__groupActive}
+              >
                 Https
               </NavLink>
             </li>
             <li>
               <NavLink
                 to="/client-side"
-                activeClassName={styles.sidebar__groupActive}
+                activeClassName={stylescss.sidebar__groupActive}
               >
                 Client Side
               </NavLink>
@@ -172,7 +193,7 @@ const SideBar = () => {
             <li>
               <NavLink
                 to="/reactjs"
-                activeClassName={styles.sidebar__groupActive}
+                activeClassName={stylescss.sidebar__groupActive}
               >
                 ReactJS
               </NavLink>
@@ -180,11 +201,11 @@ const SideBar = () => {
           </ul>
         </div>
 
-        <div className={styles.sidebar__project}>
+        <div className={stylescss.sidebar__project}>
           <NavLink
             to="/javascript"
-            className={styles.sidebar__group}
-            activeClassName={styles.sidebar__groupActive}
+            className={stylescss.sidebar__group}
+            activeClassName={stylescss.sidebar__groupActive}
           >
             <IoMdFolder size={20} />
             <span>Javascript</span>
@@ -193,14 +214,17 @@ const SideBar = () => {
 
           <ul>
             <li>
-              <NavLink to="/oop " activeClassName={styles.sidebar__groupActive}>
+              <NavLink
+                to="/oop "
+                activeClassName={stylescss.sidebar__groupActive}
+              >
                 OOP
               </NavLink>
             </li>
             <li>
               <NavLink
                 to="/function-programming"
-                activeClassName={styles.sidebar__groupActive}
+                activeClassName={stylescss.sidebar__groupActive}
               >
                 <span>Function Programming</span>
               </NavLink>
@@ -208,7 +232,7 @@ const SideBar = () => {
             <li>
               <NavLink
                 to="/dom-manipulation"
-                activeClassName={styles.sidebar__groupActive}
+                activeClassName={stylescss.sidebar__groupActive}
               >
                 <span>DOM Manipulation</span>
               </NavLink>
@@ -218,13 +242,13 @@ const SideBar = () => {
       </div>
 
       <div
-        className={styles.sidebar__colapse}
+        className={stylescss.sidebar__colapse}
         onClick={() => setColapse(!colapse)}
       >
         <img src={colapse ? uncolapseImg : colapseImg} alt="colapse" />
       </div>
 
-      <div className={styles.sidebar__add}>
+      <div className={stylescss.sidebar__add}>
         <button>
           <div>
             <FaPlus size={20} />
