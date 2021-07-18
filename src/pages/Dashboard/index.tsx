@@ -1,8 +1,13 @@
 import React from "react";
-import styles from './styles.module.scss'
+import List from "../../components/List";
+import styles from "./styles.module.scss";
 
 const Dashboard = () => {
-  return <div className={styles.dashboard}>Dashboard</div>;
+  return (
+    <div className={styles.dashboard}>
+      <List />
+    </div>
+  );
 };
 
 export default Dashboard;

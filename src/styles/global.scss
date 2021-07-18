@@ -14,6 +14,7 @@ html {
 
   --blue: #26323e;
   --blue-plus: #36414b;
+  --blue-700: #212d38;
   --blue-900: #15202b;
 
   --violet: #6c71d1;
@@ -28,6 +29,7 @@ html {
 
   --gray-50: #ecefed;
   --gray-100: #c4c4c4;
+  --gray-150: #bcbcbc;
   --gray-200: #929292;
   --gray-400: #49525a;
   --gray-500: #36414b;
@@ -44,7 +46,8 @@ html {
 }
 
 body {
-  font-family: "Roboto", sans-serif;
+  //font-family: "Roboto", sans-serif;
+  font-family: "Roboto Mono", monospace;
 }
 
 /* width */

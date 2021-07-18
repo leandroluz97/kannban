@@ -1,0 +1,55 @@
+.list {
+  border: solid 2px var(--blue-plus);
+  border-radius: 3px;
+  max-width: 290px;
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 1rem;
+    border-bottom: solid 3px var(--green);
+    margin: 1rem;
+  }
+
+  &__left {
+    display: flex;
+    align-items: center;
+  }
+
+  &__right {
+    display: flex;
+    align-items: center;
+
+    div {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 3px;
+      cursor: pointer;
+
+      &:hover {
+        background-color: var(--blue);
+        color: var(--white);
+      }
+    }
+  }
+
+  &__drag {
+    font-size: 2.8rem !important;
+    color: var(--gray-200);
+    cursor: -webkit-grab;
+    cursor: grab;
+  }
+
+  &__body {
+    /*
+    height: 100%;
+    overflow-y: scroll;
+    */
+    min-height: 75vh;
+    max-height: 500px;
+    overflow-y: scroll;
+  }
+}

@@ -168,7 +168,7 @@
 }
 
 .colapse {
-  width: 200px;
+  width: 280px;
   max-width: 70px;
 
   transition: max-width 0.3s ease;
@@ -178,8 +178,7 @@
     display: flex;
     justify-content: center;
     p {
-      opacity: 0;
-      visibility: hidden;
+      display: none;
     }
   }
   .sidebar__menu {
@@ -190,19 +189,21 @@
       justify-content: center;
 
       span {
-        opacity: 0;
-        visibility: hidden;
         display: none;
       }
     }
   }
 
   .sidebar__projects {
-    display: none;
+    //display: none;
+
+    opacity: 0;
+    visibility: hidden;
   }
 
   .sidebar__add {
     display: none;
+
     button {
       span {
         display: none;

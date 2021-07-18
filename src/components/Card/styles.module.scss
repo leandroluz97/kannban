@@ -1,0 +1,28 @@
+.card {
+  border-radius: 3px;
+  padding: 1rem;
+  background-color: var(--blue);
+  margin: 1rem;
+
+  border: solid 2px var(--blue-plus);
+
+  p {
+    color: var(--gray-100);
+    font-weight: 300;
+    font-size: 1.3rem;
+    line-height: 1.8rem;
+  }
+
+  &__tags {
+    display: flex;
+    margin-top: 1.5rem;
+
+    p {
+      margin: 0.5rem;
+      background-color: var(--green);
+      color: white;
+      padding: 0.5rem;
+      border-radius: 3px;
+    }
+  }
+}
