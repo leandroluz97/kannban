@@ -7,6 +7,11 @@ const Dashboard = () => {
   return (
     <div className={styles.dashboard}>
       <List />
+      <List />
+      <List />
+      <List />
+      <List />
+      <List />
     </div>
   );
 };

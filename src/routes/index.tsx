@@ -23,10 +23,10 @@ const Routes = () => {
   if (currentUser) {
     routes = (
       <div className={styles.app}>
-        <div >
+        <div>
           <SideBar />
         </div>
-        <div>
+        <div className={styles.routes}>
           <Switch>
             <Route path="/dashboard" component={Dashboard} />
           </Switch>

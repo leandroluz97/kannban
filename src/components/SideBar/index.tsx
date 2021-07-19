@@ -91,13 +91,13 @@ const SideBar = () => {
             <button ref={setReferenceElement}>
               <AddRoundedIcon fontSize="large" />
             </button>
-            <div
+            {/* <div
               ref={setPopperElement}
               style={styles.popper}
               {...attributes.popper}
             >
               <InputCard />
-            </div>
+           </div> */}
           </div>
 
           <ul>

@@ -14,9 +14,10 @@ html {
 
   --blue: #26323e;
   --blue-plus: #36414b;
+  --blue-100: #3c4854;
   --blue-700: #212d38;
   --blue-900: #15202b;
-  --blue-100: #3c4854;
+  --blue-950: #0d141c;
 
   --violet: #6c71d1;
   --violet-plus: #9da1f5;
@@ -53,12 +54,14 @@ body {
 
 /* width */
 ::-webkit-scrollbar {
-  width: 7px;
+  width: 5px;
+  height: 5px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: var(--blue-950);
+  border-radius: 100px;
 }
 
 /* Handle */
