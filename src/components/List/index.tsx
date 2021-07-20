@@ -5,6 +5,7 @@ import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import AddRoundedIcon from "@material-ui/icons/AddRounded";
 import { IoIosMore } from "react-icons/io";
 import Card from "../Card";
+import ListCard from "../ListCard";
 
 const List = () => {
   return (
@@ -32,6 +33,7 @@ const List = () => {
         <Card />
         <Card />
         <Card />
+        <ListCard />
       </section>
     </section>
   );

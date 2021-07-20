@@ -1,0 +1,24 @@
+.form {
+  border-radius: 3px;
+  padding: 1rem;
+  background-color: var(--blue-100);
+  margin: 1rem;
+
+  border: solid 2px var(--gray-400);
+
+  textarea {
+    width: 100%;
+    resize: vertical;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    color: var(--white);
+    font-size: var(--font-14);
+  }
+  p {
+    color: var(--gray-100);
+    font-weight: 300;
+    font-size: 1.3rem;
+    line-height: 1.8rem;
+  }
+}

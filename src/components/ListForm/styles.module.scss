@@ -1,0 +1,21 @@
+.form {
+  display: flex;
+  background-color: var(--blue-100);
+  padding: 1rem;
+  border-radius: 4px;
+
+  min-width: 300px;
+
+  input {
+    background-color: transparent;
+    font-size: var(--font-15);
+    border: none;
+    outline: none;
+    color: var(--white);
+    font-family: "Roboto Mono", monospace;
+
+    &::placeholder {
+      color: var(--gray-200);
+    }
+  }
+}
