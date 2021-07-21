@@ -1,24 +1,45 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import AddRoundedIcon from "@material-ui/icons/AddRounded";
 import styles from "./styles.module.scss";
 
-const ListCard = () => {
-  const [cardName, setCardName] = useState("");
+interface ListCard {
+  handleCloseTextFied: () => void;
+}
 
-  function handleInput(e: ChangeEvent<HTMLTextAreaElement>) {
+const ListCard = ({ handleCloseTextFied }: ListCard) => {
+  const [cardName, setCardName] = useState("");
+  const inputEl = useRef(null as any);
+
+  useEffect(() => {
+    inputEl.current?.focus();
+  }, []);
+
+  function handleInput(e: any) {
     setCardName(e.target.value);
   }
 
-  function handleSubmit(e: FormEvent) {
-    e.preventDefault();
-
-    if (cardName.length < 1) return;
-    console.log("yess");
+  function handleOnKeyPress(event: any) {
+    if (event.key === "Enter" && !event.shiftKey && cardName.length > 2) {
+      handleCloseTextFied();
+    }
   }
+
+  function handleOnBlur() {
+    handleCloseTextFied();
+  }
+
   return (
     <div>
-      <form onSubmit={handleSubmit} className={styles.form}>
-        <textarea value={cardName} onChange={handleInput} />
+      <form className={styles.form}>
+        <textarea
+          ref={inputEl}
+          value={cardName}
+          onChange={handleInput}
+          onKeyPress={handleOnKeyPress}
+          rows={4}
+          onBlur={handleOnBlur}
+          placeholder="Type here..."
+        />
       </form>
     </div>
   );
