@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import stylescss from "./styles.module.scss";
 import kannbanImg from "../../assets/horizontal_kannban.svg";
 import profileImg from "../../assets/profileImg.svg";
@@ -19,25 +19,31 @@ import { NavLink } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
 import { usePopper } from "react-popper";
 import InputCard from "../InputCard";
+import { useRef } from "react";
 
 const SideBar = () => {
-  const [colapse, setColapse] = useState(true);
-  const [referenceElement, setReferenceElement] = useState(null as any);
-  const [popperElement, setPopperElement] = useState(null as any);
+  const [colapse, setColapse] = useState(false);
+  const [newProject, setNewProject] = useState(false);
 
-  const { styles, attributes } = usePopper(referenceElement, popperElement);
+  const projectNameRef = useRef(null as any);
+
+  useEffect(() => {
+    projectNameRef.current?.focus();
+  }, [newProject]);
 
   function handleNewGroup() {
-    console.log("yess");
+    setNewProject(true);
   }
+
+  function handleNewProjectBlur() {
+    setNewProject(false);
+  }
+
+  const sidebarStyle = colapse
+    ? `${stylescss.sidebar} ${stylescss.colapse}`
+    : `${stylescss.sidebar}`;
   return (
-    <div
-      className={
-        colapse
-          ? `${stylescss.sidebar} ${stylescss.colapse}`
-          : `${stylescss.sidebar}`
-      }
-    >
+    <div className={sidebarStyle}>
       <div className={stylescss.sidebar__logo}>
         <img src={colapse ? kannbanIcon : kannbanImg} alt="kannban logo" />
       </div>
@@ -88,16 +94,17 @@ const SideBar = () => {
             <IoMdFolder size={20} />
             <span>Web Development</span>
 
-            <button ref={setReferenceElement}>
+            <button onClick={handleNewGroup}>
               <AddRoundedIcon fontSize="large" />
             </button>
-            {/* <div
-              ref={setPopperElement}
-              style={styles.popper}
-              {...attributes.popper}
-            >
-              <InputCard />
-           </div> */}
+            {newProject && (
+              <div
+                className={stylescss.sidebar__new}
+                onBlur={handleNewProjectBlur}
+                tabIndex={-1}
+                ref={projectNameRef}
+              ></div>
+            )}
           </div>
 
           <ul>

@@ -16,10 +16,7 @@ const List = () => {
   const optionRef = useRef(null as any);
 
   useEffect(() => {
-    if (optionRef.current?.focus()) {
-      //optionRef.current?.blur();
-      handleMoreOtionOnBlur();
-    }
+    optionRef.current?.focus();
   }, [moreOption]);
 
   function handleCloseAddNewCardTextField() {
@@ -27,8 +24,6 @@ const List = () => {
   }
   function handleMoreOtionOnBlur() {
     setMoreOption(false);
-
-    console.log("outfocus");
   }
 
   return (
