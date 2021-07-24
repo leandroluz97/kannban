@@ -8,22 +8,47 @@ import ListCard from "../ListCard";
 import { useState } from "react";
 import InputCard from "../InputCard";
 import { useEffect } from "react";
+import ListOption from "../ListOption";
+import ChangeColors from "../ChangleColors";
 
 const List = () => {
   const [addNewCard, setAddNewCard] = useState(false);
   const [moreOption, setMoreOption] = useState(false);
+  const [changeColor, setChangeColor] = useState(false);
 
-  const optionRef = useRef(null as any);
+  const optionRef = useRef<HTMLDivElement | null>(null);
+  const colorRef = useRef<HTMLDivElement | null>(null);
+
+  /*
+  useEffect(() => {
+    //optionRef.current?.focus();
+    //colorRef.current?.focus();
+  }, [moreOption, changeColor]);
 
   useEffect(() => {
-    optionRef.current?.focus();
-  }, [moreOption]);
-
+    //colorRef.current?.focus();
+  }, [changeColor]);
+*/
   function handleCloseAddNewCardTextField() {
     setAddNewCard(false);
   }
   function handleMoreOtionOnBlur() {
+    optionRef.current?.focus();
     setMoreOption(false);
+  }
+  function handleColorOnBlur() {
+    setChangeColor(false);
+  }
+
+  function handleColors() {
+    colorRef.current?.focus();
+    setChangeColor(true);
+    setMoreOption(false);
+  }
+  async function handleChangeListColor(color: string) {
+    console.log(color);
+
+    setChangeColor(false);
   }
 
   return (
@@ -45,12 +70,18 @@ const List = () => {
         </div>
 
         {moreOption && (
-          <div
-            className={styles.list__moreinfo}
-            onBlur={handleMoreOtionOnBlur}
-            tabIndex={-1}
-            ref={optionRef}
-          ></div>
+          <ListOption
+            handleColor={handleColors}
+            optionRef={optionRef}
+            handleMoreOtionOnBlur={handleMoreOtionOnBlur}
+          />
+        )}
+        {changeColor && (
+          <ChangeColors
+            colorRef={colorRef}
+            handleColorOnBlur={handleColorOnBlur}
+            ChangeListColor={handleChangeListColor}
+          />
         )}
       </header>
       <section className={styles.list__body}>

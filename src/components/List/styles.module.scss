@@ -50,19 +50,6 @@
     cursor: grab;
   }
 
-  &__moreinfo {
-    background-color: var(--blue-100);
-    border-radius: 5px;
-    height: 80px;
-    width: 220px;
-    position: absolute;
-    z-index: 999;
-    left: calc(100% - 25px);
-    top: 30px;
-    filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.2));
-    outline: none;
-  }
-
   &__body {
     //min-height: 75vh;
     // max-height: 500px;
