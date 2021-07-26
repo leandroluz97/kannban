@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import styles from "./styles.module.scss";
 import Modal from "react-modal";
+import InputSubTask from "../InputSubTask";
+import Subtask from "../Subtask";
 
 const NewTaskModal = () => {
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(true);
@@ -15,7 +17,8 @@ const NewTaskModal = () => {
       overlayClassName="global__overlay"
       contentLabel="New task Modal"
     >
-      <p> Modallll</p>
+      <InputSubTask />
+      <Subtask />
     </Modal>
   );
 };

@@ -1,0 +1,58 @@
+.subtask {
+  background-color: var(--blue-50);
+  border-radius: 3px;
+  padding: 0.5rem;
+
+  &__checkbox {
+    transform: translateY(-9px);
+    label {
+      position: relative;
+    }
+
+    label::before {
+      content: "";
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background-color: var(--blue-plus);
+      border-radius: 2px;
+      border: solid 1px var(--gray-200);
+    }
+
+    input:checked ~ span:before {
+      content: "\2714";
+      position: absolute;
+      font-size: 1.5rem;
+      top: -2px;
+      left: 2px;
+      // left: 4px;
+      // top: 4px;
+      // width: 8px;
+      // height: 8px;
+      //border-radius: 10px;
+      color: var(--gray-100);
+      //background-color: var(--violet);
+    }
+  }
+
+  &__todo {
+    padding-left: 3rem;
+  }
+
+  form {
+    display: flex;
+    align-items: center;
+    svg {
+      color: var(--gray-100);
+    }
+    input {
+      background-color: transparent;
+      outline: none;
+      border: none;
+      color: var(--white);
+      font-size: var(--font-15);
+      font-family: var(--font-family);
+      width: 100%;
+    }
+  }
+}

@@ -1,0 +1,29 @@
+.inputSubTask {
+  background-color: var(--blue-50);
+  border-radius: 3px;
+  padding: 0.5rem;
+
+  svg {
+    color: var(--gray-100);
+  }
+
+  form {
+    display: flex;
+    align-items: center;
+
+    input {
+      width: 100%;
+      background-color: transparent;
+      outline: none;
+      border: none;
+      color: var(--white);
+      font-size: var(--font-16);
+      font-family: var(--font-family);
+      padding-left: 0.8rem;
+
+      &::placeholder {
+        color: var(--gray-200);
+      }
+    }
+  }
+}
