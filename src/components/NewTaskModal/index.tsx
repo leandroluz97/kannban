@@ -17,8 +17,14 @@ const NewTaskModal = () => {
       overlayClassName="global__overlay"
       contentLabel="New task Modal"
     >
-      <InputSubTask />
-      <Subtask />
+      <div className={styles.newTaskModal}>
+        <div className={styles.newTaskModal__left}></div>
+        <div className={styles.newTaskModal__right}>
+          <InputSubTask />
+          <Subtask key="32" />
+          <Subtask key="44w" />
+        </div>
+      </div>
     </Modal>
   );
 };

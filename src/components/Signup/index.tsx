@@ -12,6 +12,7 @@ import { useHistory } from "react-router-dom";
 import Spinner from "../Spinner";
 import { toast } from "react-toastify";
 
+
 interface SignupState {
   name: string;
   email: string;

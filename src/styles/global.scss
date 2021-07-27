@@ -14,7 +14,9 @@ html {
 
   --blue: #26323e;
   --blue-plus: #36414b;
+  --blue-10: #647686;
   --blue-50: #505f6d;
+  --blue-50-plus: #576775;
   --blue-100: #3c4854;
   --blue-700: #212d38;
   --blue-900: #15202b;
@@ -77,6 +79,7 @@ body {
   background-color: var(--blue-100);
   border-radius: 5px;
   padding: 0.5rem;
+  width: 80%;
 }
 
 /* width */
