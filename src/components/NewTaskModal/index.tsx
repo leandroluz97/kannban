@@ -3,6 +3,7 @@ import styles from "./styles.module.scss";
 import Modal from "react-modal";
 import InputSubTask from "../InputSubTask";
 import Subtask from "../Subtask";
+import InputComment from "../InputComment";
 
 const NewTaskModal = () => {
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(true);
@@ -23,6 +24,8 @@ const NewTaskModal = () => {
           <InputSubTask />
           <Subtask key="32" />
           <Subtask key="44w" />
+
+          <InputComment />
         </div>
       </div>
     </Modal>
