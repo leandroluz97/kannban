@@ -1,0 +1,42 @@
+.inputCartTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  textarea {
+    width: 100%;
+    border: none;
+    background-color: transparent;
+    resize: none;
+    outline: none;
+    border-radius: 3px;
+    color: var(--white);
+    font-size: var(--font-16);
+    border: solid 2px transparent;
+    text-decoration: none;
+
+    &:focus {
+      border: solid 2px var(--blue-10);
+    }
+  }
+
+  button {
+    font-size: 0;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    border-radius: 3px;
+    padding: 0.5rem;
+
+    svg {
+      color: var(--error);
+      width: 30px;
+      height: 30px;
+    }
+
+    &:hover {
+      padding: 0.5rem;
+      background-color: #e6694349;
+    }
+  }
+}

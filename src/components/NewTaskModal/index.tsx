@@ -4,6 +4,9 @@ import Modal from "react-modal";
 import InputSubTask from "../InputSubTask";
 import Subtask from "../Subtask";
 import InputComment from "../InputComment";
+import Comment from "../Comment";
+import DueDate from "../DueDate";
+import InputCartTitle from "../InputCartTitle";
 
 const NewTaskModal = () => {
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(true);
@@ -18,16 +21,25 @@ const NewTaskModal = () => {
       overlayClassName="global__overlay"
       contentLabel="New task Modal"
     >
-      <div className={styles.newTaskModal}>
-        <div className={styles.newTaskModal__left}></div>
-        <div className={styles.newTaskModal__right}>
-          <InputSubTask />
-          <Subtask key="32" />
-          <Subtask key="44w" />
-
-          <InputComment />
+      <section>
+        <div>
+          <InputCartTitle />
         </div>
-      </div>
+        <div className={styles.newTaskModal}>
+          <div className={styles.newTaskModal__left}>
+            <DueDate />
+            <InputComment />
+          </div>
+          <div className={styles.newTaskModal__right}>
+            <InputSubTask />
+            <Subtask key="32" />
+            <Subtask key="44w" />
+
+            <InputComment />
+            <Comment />
+          </div>
+        </div>
+      </section>
     </Modal>
   );
 };

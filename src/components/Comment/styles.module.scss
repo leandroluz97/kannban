@@ -1,0 +1,38 @@
+.comment {
+  background-color: var(--blue-50);
+  border-radius: 3px;
+  margin-top: 2rem;
+  padding: 0.8rem;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+
+    span {
+      color: var(--gray-150);
+    }
+
+    button {
+      font-size: 0;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      border-radius: 3px;
+
+      svg {
+        color: var(--gray-100);
+        width: 23px;
+        height: 23px;
+      }
+
+      &:hover {
+        background-color: var(--blue-10);
+      }
+    }
+  }
+
+  &__body {
+    color: var(--white);
+    font-size: var(--font-15);
+  }
+}

@@ -4,7 +4,7 @@ import styles from "./styles.module.scss";
 const InputComment = () => {
   return (
     <div className={styles.inputComment}>
-      <p>Comments(3)</p>
+      <h3>Comments(3)</h3>
       <form>
         <textarea
           name=""

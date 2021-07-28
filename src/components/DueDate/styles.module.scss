@@ -1,0 +1,22 @@
+.date {
+  h3 {
+    font-size: var(--font-16);
+    color: var(--white);
+    margin-bottom: 1rem;
+  }
+
+  button {
+    background-color: var(--blue-50);
+    color: var(--white);
+    border: none;
+    padding: 1rem 3rem;
+    border-radius: 3px;
+    cursor: pointer;
+    border: solid 2px transparent;
+
+    &:hover {
+      background-color: var(--blue-50-plus);
+      border: solid 2px var(--blue-10);
+    }
+  }
+}

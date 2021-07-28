@@ -1,10 +1,12 @@
 .inputComment {
-  p {
+  margin-top: 3rem;
+  h3 {
     font-size: var(--font-16);
     color: var(--white);
+    margin-bottom: 1rem;
   }
   textarea {
-    width: 100%;
+    resize: vertical;
 
     width: 100%;
     background-color: var(--blue-50);
@@ -34,6 +36,7 @@
     border-radius: 3px;
     cursor: pointer;
     border: solid 2px transparent;
+    margin-top: 1rem;
 
     &:hover {
       background-color: var(--blue-50-plus);
