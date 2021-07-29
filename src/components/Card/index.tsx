@@ -1,9 +1,16 @@
 import React from "react";
+import { useUI } from "../../hooks/useUi";
 import styles from "./styles.module.scss";
 
 const Card = () => {
+  const { setTaskModalOpen } = useUI();
+
+  function handleOpenTask() {
+    setTaskModalOpen(true);
+  }
+
   return (
-    <div className={styles.card}>
+    <div className={styles.card} onClick={handleOpenTask}>
       <p>
         t is a long established fact that a reader will be distracted by the
         readable content of a page when looking at its layout. The point of

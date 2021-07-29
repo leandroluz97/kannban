@@ -3,11 +3,12 @@
   padding: 1rem;
   background-color: var(--blue);
   margin: 1rem;
-
   border: solid 2px var(--blue-plus);
 
+  cursor: pointer;
+
   p {
-    color: var(--gray-100);
+    color: var(--white);
     font-weight: 300;
     font-size: 1.3rem;
     line-height: 1.8rem;
@@ -24,5 +25,11 @@
       padding: 0.5rem;
       border-radius: 3px;
     }
+  }
+
+  &:hover {
+    background-color: var(--blue-plus);
+
+    border: solid 2px var(--blue-50);
   }
 }

@@ -1,14 +1,49 @@
-section {
-  padding: 5rem;
+.section {
+  padding: 3rem;
+  height: 100%;
+
+  .close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 0px;
+    color: var(--white);
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 1rem;
+  }
+
+  .title {
+    margin-bottom: 2rem;
+  }
+
   .newTaskModal {
     display: flex;
-    width: 100%;
+    column-gap: 5rem;
+    position: relative;
+    max-height: 85%;
 
     &__left {
       width: 90%;
+      position: relative;
+
+      &::after {
+        content: " ";
+        height: 100%;
+        width: 1px;
+        background-color: var(--blue-50);
+        position: absolute;
+        right: 0;
+        top: 0;
+        margin-right: -2.5rem;
+      }
     }
     &__right {
       width: 90%;
+      padding-right: 1rem;
+
+      overflow-y: scroll;
     }
   }
 }

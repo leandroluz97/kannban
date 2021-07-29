@@ -7,22 +7,30 @@ import InputComment from "../InputComment";
 import Comment from "../Comment";
 import DueDate from "../DueDate";
 import InputCartTitle from "../InputCartTitle";
+import CloseRoundedIcon from "@material-ui/icons/CloseRounded";
+import { useUI } from "../../hooks/useUi";
 
 const NewTaskModal = () => {
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(true);
+  const { setTaskModalOpen, taskModalOpen } = useUI();
 
-  function closeModal() {}
+  function closeModal() {
+    setTaskModalOpen(false);
+  }
 
   return (
     <Modal
-      isOpen={modalIsOpen}
+      isOpen={taskModalOpen}
       onRequestClose={closeModal}
       className="global__modal"
       overlayClassName="global__overlay"
       contentLabel="New task Modal"
     >
-      <section>
-        <div>
+      <section className={styles.section}>
+        <button className={styles.close} onClick={closeModal}>
+          <CloseRoundedIcon fontSize="large" />
+        </button>
+        <div className={styles.title}>
           <InputCartTitle />
         </div>
         <div className={styles.newTaskModal}>
@@ -36,6 +44,41 @@ const NewTaskModal = () => {
             <Subtask key="44w" />
 
             <InputComment />
+            <Comment />
+            <Comment />
+            <Comment />
+            <Comment />
+            <Comment />
+            <Comment />
+            <Comment />
+            <Comment />
+            <Comment />
+            <Comment />
+            <Comment />
+            <Comment />
+            <Comment />
+            <Comment />
+            <Comment />
+            <Comment />
+            <Comment />
+            <Comment />
+            <Comment />
+            <Comment />
+            <Comment />
+            <Comment />
+            <Comment />
+            <Comment />
+            <Comment />
+            <Comment />
+            <Comment />
+            <Comment />
+            <Comment />
+            <Comment />
+            <Comment />
+            <Comment />
+            <Comment />
+            <Comment />
+            <Comment />
             <Comment />
           </div>
         </div>

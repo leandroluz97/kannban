@@ -16,11 +16,13 @@
   form {
     display: flex;
     align-items: center;
+
     svg {
       color: var(--gray-100);
       width: 23px;
       height: 23px;
     }
+
     input {
       background-color: transparent;
       outline: none;
