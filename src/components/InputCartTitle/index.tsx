@@ -5,7 +5,7 @@ import styles from "./styles.module.scss";
 const InputCartTitle = () => {
   return (
     <div className={styles.inputCartTitle}>
-      <textarea name="" id="" cols={30} rows={3} contentEditable></textarea>
+      <textarea name="" id="" cols={30} rows={3}></textarea>
       <button>
         <DeleteForeverIcon />
       </button>

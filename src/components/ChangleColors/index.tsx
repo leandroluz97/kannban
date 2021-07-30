@@ -1,4 +1,4 @@
-import React, { MutableRefObject } from "react";
+import React, { MutableRefObject, useEffect } from "react";
 import styles from "./styles.module.scss";
 
 interface ColorChangeType {
@@ -12,6 +12,27 @@ const ChangeColors = ({
   colorRef,
   ChangeListColor,
 }: ColorChangeType) => {
+  useEffect(() => {
+    //handle close calendar when clicked outsite
+    const handler = (event: any) => {
+      event.stopPropagation();
+
+      console.log(event.target);
+
+      if (!colorRef.current?.contains(event.target as HTMLElement)) {
+        handleColorOnBlur();
+      }
+    };
+
+    // close calendar when clicked outsite
+    document.addEventListener("mousedown", handler);
+
+    //clean up the mousedown effect
+    return () => {
+      document.removeEventListener("mousedown", handler);
+    };
+  }, []);
+
   const colors = [
     "#8B18D1",
     "#3399AF",
@@ -22,6 +43,7 @@ const ChangeColors = ({
     "#18D183",
     "#3350B9",
   ];
+
   return (
     <div
       className={styles.moreinfo}

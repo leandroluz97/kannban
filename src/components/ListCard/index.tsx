@@ -1,4 +1,12 @@
-import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+import {
+  ChangeEvent,
+  FormEvent,
+  KeyboardEvent,
+  SyntheticEvent,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import AddRoundedIcon from "@material-ui/icons/AddRounded";
 import styles from "./styles.module.scss";
 
@@ -8,7 +16,7 @@ interface ListCard {
 
 const ListCard = ({ handleCloseTextFied }: ListCard) => {
   const [cardName, setCardName] = useState("");
-  const inputEl = useRef(null as any);
+  const inputEl = useRef<HTMLTextAreaElement | null>(null);
 
   useEffect(() => {
     inputEl.current?.focus();
@@ -18,7 +26,7 @@ const ListCard = ({ handleCloseTextFied }: ListCard) => {
     setCardName(e.target.value);
   }
 
-  function handleOnKeyPress(event: any) {
+  function handleOnKeyPress(event: KeyboardEvent) {
     if (event.key === "Enter" && !event.shiftKey && cardName.length > 2) {
       handleCloseTextFied();
     }

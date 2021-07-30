@@ -17,19 +17,19 @@ import {
 } from "react-icons/io";
 import { NavLink } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
-import { usePopper } from "react-popper";
-import InputCard from "../InputCard";
+
 import { useRef } from "react";
+import InputProject from "../InputProject/input";
 
 const SideBar = () => {
   const [colapse, setColapse] = useState(false);
   const [newProject, setNewProject] = useState(false);
 
-  const projectNameRef = useRef(null as any);
+  const projectNameRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     projectNameRef.current?.focus();
-  }, [newProject]);
+  }, []);
 
   function handleNewGroup() {
     setNewProject(true);
@@ -42,6 +42,7 @@ const SideBar = () => {
   const sidebarStyle = colapse
     ? `${stylescss.sidebar} ${stylescss.colapse}`
     : `${stylescss.sidebar}`;
+
   return (
     <div className={sidebarStyle}>
       <div className={stylescss.sidebar__logo}>
@@ -97,14 +98,6 @@ const SideBar = () => {
             <button onClick={handleNewGroup}>
               <AddRoundedIcon fontSize="large" />
             </button>
-            {newProject && (
-              <div
-                className={stylescss.sidebar__new}
-                onBlur={handleNewProjectBlur}
-                tabIndex={-1}
-                ref={projectNameRef}
-              ></div>
-            )}
           </div>
 
           <ul>
@@ -132,6 +125,13 @@ const SideBar = () => {
                 ReactJS
               </NavLink>
             </li>
+            {newProject && <InputProject handleBlur={handleNewProjectBlur} />}
+            {/*<div
+                className={stylescss.sidebar__new}
+                onBlur={handleNewProjectBlur}
+                tabIndex={-1}
+                ref={projectNameRef}
+              ></div> */}
           </ul>
         </div>
         <div className={stylescss.sidebar__project}>

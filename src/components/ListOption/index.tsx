@@ -1,4 +1,10 @@
-import React, { MutableRefObject } from "react";
+import React, {
+  BaseSyntheticEvent,
+  MouseEvent,
+  MutableRefObject,
+  SyntheticEvent,
+} from "react";
+import { useEffect } from "react";
 import styles from "./styles.module.scss";
 
 interface RefObject<T> {
@@ -16,13 +22,29 @@ const ListOption = ({
   handleMoreOtionOnBlur,
   optionRef,
 }: ListOptionType) => {
-  console.log("render");
+  useEffect(() => {
+    //handle close calendar when clicked outsite
+    const handler = (event: any) => {
+      event.stopPropagation();
+      if (!optionRef.current?.contains(event.target as HTMLElement)) {
+        handleMoreOtionOnBlur();
+      }
+    };
+
+    // close calendar when clicked outsite
+    document.addEventListener("mousedown", handler);
+
+    //clean up the mousedown effect
+    return () => {
+      document.removeEventListener("mousedown", handler);
+    };
+  }, []);
 
   return (
     <>
       <div
         className={styles.moreinfo}
-        onBlur={handleMoreOtionOnBlur}
+        // onBlur={handleMoreOtionOnBlur}
         tabIndex={-1}
         ref={optionRef}
       >

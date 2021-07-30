@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { SyntheticEvent, useRef } from "react";
 import styles from "./styles.module.scss";
 import DragIndicatorIcon from "@material-ui/icons/DragIndicator";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
@@ -19,21 +19,11 @@ const List = () => {
   const optionRef = useRef<HTMLDivElement | null>(null);
   const colorRef = useRef<HTMLDivElement | null>(null);
 
-  /*
-  useEffect(() => {
-    //optionRef.current?.focus();
-    //colorRef.current?.focus();
-  }, [moreOption, changeColor]);
-
-  useEffect(() => {
-    //colorRef.current?.focus();
-  }, [changeColor]);
-*/
   function handleCloseAddNewCardTextField() {
     setAddNewCard(false);
   }
+  //event: SyntheticEvent<EventTarget>
   function handleMoreOtionOnBlur() {
-    optionRef.current?.focus();
     setMoreOption(false);
   }
   function handleColorOnBlur() {
@@ -46,8 +36,6 @@ const List = () => {
     setMoreOption(false);
   }
   async function handleChangeListColor(color: string) {
-    console.log(color);
-
     setChangeColor(false);
   }
 

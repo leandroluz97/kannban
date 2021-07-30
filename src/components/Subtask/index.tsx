@@ -14,23 +14,24 @@ const CustomCheckbox = withStyles({
     "&$checked": {
       color: "#13c552",
     },
+    icon: {
+      width: 50,
+      height: 50,
+    },
   },
+
   checked: {},
-  icon: {
-    width: 50,
-    height: 50,
-  },
 });
 
 const Subtask = () => {
-  const CheckBox = CustomCheckbox((props) => (
-    <Checkbox color="default" {...props} disableRipple size="medium" />
-  ));
+  const CheckBox = CustomCheckbox((props) => {
+    return <Checkbox color="default" {...props} disableRipple size="medium" />;
+  });
 
   return (
     <div className={styles.subtask}>
       <form>
-        <CheckBox />
+        <CheckBox key={Math.random() * 1000 + 1} />
 
         <div className={styles.subtask__todo}>
           <input type="text " />
