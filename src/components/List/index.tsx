@@ -62,6 +62,7 @@ const List = () => {
             handleColor={handleColors}
             optionRef={optionRef}
             handleMoreOtionOnBlur={handleMoreOtionOnBlur}
+            color={true}
           />
         )}
         {changeColor && (

@@ -13,14 +13,16 @@ interface RefObject<T> {
 }
 
 interface ListOptionType {
-  handleColor: () => void;
+  handleColor?: () => void | undefined;
   handleMoreOtionOnBlur: () => void;
   optionRef: MutableRefObject<HTMLDivElement | null>;
+  color: boolean;
 }
 const ListOption = ({
   handleColor,
   handleMoreOtionOnBlur,
   optionRef,
+  color,
 }: ListOptionType) => {
   useEffect(() => {
     //handle close calendar when clicked outsite
@@ -49,7 +51,7 @@ const ListOption = ({
         ref={optionRef}
       >
         <button>Rename</button>
-        <button onClick={() => handleColor()}>Change Color</button>
+        {color && <button onClick={handleColor}>Change Color</button>}
         <button>Delete</button>
       </div>
     </>
