@@ -5,6 +5,7 @@ import { AuthProvider } from "./hooks/useAuth";
 import { UiProvider } from "./hooks/useUi";
 import Modal from "react-modal";
 import NewTaskModal from "./components/NewTaskModal";
+import NewGroupModal from "./components/NewGroupModal";
 
 Modal.setAppElement("#root");
 
@@ -15,6 +16,7 @@ function App() {
         <Router>
           <>
             <NewTaskModal />
+            <NewGroupModal />
             <Routes />
           </>
         </Router>

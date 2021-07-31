@@ -1,0 +1,40 @@
+.section {
+  padding: 3rem;
+  input {
+    width: 100%;
+    background-color: var(--blue-50);
+    border: none;
+    border-radius: 3px;
+    outline: none;
+    padding: 1rem;
+    border: solid 2px var(--blue-50-plus);
+    color: var(--white);
+    font-size: var(--font-15);
+    font-family: var(--font-family);
+
+    &:focus {
+      border: solid 2px var(--blue-10);
+    }
+
+    &::placeholder {
+      color: var(--gray-180);
+    }
+  }
+
+  input[type="submit"] {
+    background-color: var(--blue-50);
+    color: var(--white);
+    border: none;
+    padding: 1rem;
+    border-radius: 3px;
+    cursor: pointer;
+    border: solid 2px transparent;
+    margin-top: 2rem;
+    max-width: 150px;
+
+    &:hover {
+      background-color: var(--blue-50-plus);
+      border: solid 2px var(--blue-10);
+    }
+  }
+}

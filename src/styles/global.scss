@@ -74,7 +74,8 @@ body {
   align-items: center;
   z-index: 99;
 }
-.global__modal {
+.global__modal,
+.group__modal {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -87,6 +88,12 @@ body {
   width: 80%;
   height: 90%;
   outline: none;
+}
+
+.group__modal {
+  width: 100%;
+  max-width: 450px;
+  height: 200px;
 }
 
 /* width */

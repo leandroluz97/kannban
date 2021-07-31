@@ -20,10 +20,13 @@ import { FaPlus } from "react-icons/fa";
 
 import { useRef } from "react";
 import InputProject from "../InputProject/input";
+import { useUI } from "../../hooks/useUi";
 
 const SideBar = () => {
   const [colapse, setColapse] = useState(false);
   const [newProject, setNewProject] = useState(false);
+
+  const { groupModalOpen, setGroupModalOpen } = useUI();
 
   const projectNameRef = useRef<HTMLDivElement | null>(null);
 
@@ -261,7 +264,7 @@ const SideBar = () => {
       </div>
 
       <div className={stylescss.sidebar__add}>
-        <button>
+        <button onClick={() => setGroupModalOpen(true)}>
           <div>
             <FaPlus size={20} />
           </div>
