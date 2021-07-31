@@ -21,11 +21,16 @@
   &__left {
     display: flex;
     align-items: center;
+
+    h2 {
+      color: var(--white);
+    }
   }
 
   &__right {
     display: flex;
     align-items: center;
+    color: var(--white);
 
     div {
       display: flex;

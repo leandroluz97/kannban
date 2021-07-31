@@ -17,8 +17,6 @@ const ChangeColors = ({
     const handler = (event: any) => {
       event.stopPropagation();
 
-      console.log(event.target);
-
       if (!colorRef.current?.contains(event.target as HTMLElement)) {
         handleColorOnBlur();
       }

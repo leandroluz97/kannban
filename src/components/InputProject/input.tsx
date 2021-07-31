@@ -1,4 +1,5 @@
 import React, { KeyboardEvent, useEffect, useRef, useState } from "react";
+import styles from "./styles.module.scss";
 
 interface InputProjectType {
   handleBlur: () => void;
@@ -26,7 +27,7 @@ const InputProject = ({ handleBlur }: InputProjectType) => {
     handleBlur();
   }
   return (
-    <div>
+    <div className={styles.inputProject}>
       <input
         ref={inputEl}
         value={projectName}
@@ -34,6 +35,7 @@ const InputProject = ({ handleBlur }: InputProjectType) => {
         onKeyPress={handleOnKeyPress}
         onBlur={handleOnBlur}
         type="text"
+        placeholder="Type here..."
       />
     </div>
   );

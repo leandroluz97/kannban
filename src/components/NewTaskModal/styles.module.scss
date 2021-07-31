@@ -47,3 +47,50 @@
     }
   }
 }
+
+@media (max-width: 768px) {
+  .section {
+    padding: 2rem;
+
+    .newTaskModal {
+      display: flex;
+      flex-direction: column;
+
+      column-gap: 0rem;
+      position: relative;
+      max-height: 85%;
+      overflow-y: scroll;
+      padding-right: 1rem;
+
+      &__left {
+        width: 100%;
+        position: relative;
+
+        &::after {
+          content: " ";
+          height: 100%;
+          width: 1px;
+          background-color: transparent;
+          position: absolute;
+          right: 0;
+          top: 0;
+          margin-right: 0;
+          display: block;
+        }
+      }
+      &__right {
+        margin-top: 3rem;
+        width: 100%;
+        padding-right: 0rem;
+
+        overflow-y: visible;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: 1rem;
+  }
+}

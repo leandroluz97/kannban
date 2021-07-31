@@ -80,12 +80,12 @@ const SideBar = () => {
           <span>Archive</span>
         </NavLink>
         <NavLink
-          to="/trash"
+          to="/notification"
           className={stylescss.sidebar__group}
           activeClassName={stylescss.sidebar__groupActive}
         >
           <IoIosNotifications size={20} />
-          <span>Trash</span>
+          <span>Notification</span>
         </NavLink>
       </div>
 
@@ -125,7 +125,12 @@ const SideBar = () => {
                 ReactJS
               </NavLink>
             </li>
-            {newProject && <InputProject handleBlur={handleNewProjectBlur} />}
+            {newProject && (
+              <li>
+                <InputProject handleBlur={handleNewProjectBlur} />
+              </li>
+            )}
+            {/*newProject */}
             {/*<div
                 className={stylescss.sidebar__new}
                 onBlur={handleNewProjectBlur}

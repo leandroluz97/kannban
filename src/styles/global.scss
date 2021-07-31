@@ -111,3 +111,10 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--gray-200);
 }
+
+@media (max-width: 425px) {
+  .global__modal {
+    width: 100%;
+    height: 100%;
+  }
+}
