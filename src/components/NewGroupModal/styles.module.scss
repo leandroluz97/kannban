@@ -1,5 +1,22 @@
 .section {
   padding: 3rem;
+  position: relative;
+  margin-top: 2rem;
+
+  &__close {
+    font-size: 0px;
+    position: absolute;
+    top: -15px;
+    right: 5px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+
+    svg {
+      color: var(--white);
+    }
+  }
+
   input {
     width: 100%;
     background-color: var(--blue-50);

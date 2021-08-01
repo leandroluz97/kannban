@@ -27,6 +27,9 @@ const NewTaskModal = () => {
       contentLabel="New task Modal"
     >
       <section className={styles.section}>
+        <button className={styles.section__close} onClick={closeModal}>
+          <CloseRoundedIcon fontSize="large" />
+        </button>
         <form action="">
           <input type="text" placeholder="Type group name here..." />
           <input type="submit" value="Create group" />

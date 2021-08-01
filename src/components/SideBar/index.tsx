@@ -17,10 +17,13 @@ import {
 } from "react-icons/io";
 import { NavLink } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 
+import firebase from "../../config/firebase-config";
 import { useRef } from "react";
 import InputProject from "../InputProject/input";
 import { useUI } from "../../hooks/useUi";
+import { useHistory } from "react-router";
 
 const SideBar = () => {
   const [colapse, setColapse] = useState(false);
@@ -34,12 +37,24 @@ const SideBar = () => {
     projectNameRef.current?.focus();
   }, []);
 
+  let history = useHistory();
+
   function handleNewGroup() {
     setNewProject(true);
   }
 
   function handleNewProjectBlur() {
     setNewProject(false);
+  }
+
+  function handleLogout() {
+    firebase
+      .auth()
+      .signOut()
+      .then(function () {
+        //setCurrentUser(null);
+        history.push("/login");
+      });
   }
 
   const sidebarStyle = colapse
@@ -56,6 +71,11 @@ const SideBar = () => {
         <img src={profileImg} alt="profile" />
         <p>Leandro Luz </p>
       </div>
+
+      <button className={stylescss.sidebar__logout} onClick={handleLogout}>
+        <ExitToAppIcon fontSize="large" />
+        <span> Logout</span>
+      </button>
 
       <div className={stylescss.sidebar__menu}>
         <NavLink
@@ -142,7 +162,7 @@ const SideBar = () => {
               ></div> */}
           </ul>
         </div>
-        <div className={stylescss.sidebar__project}>
+        {/*<div className={stylescss.sidebar__project}>
           <div className={stylescss.sidebar__group}>
             <IoMdFolder size={20} />
             <span>Javascript</span>
@@ -253,7 +273,7 @@ const SideBar = () => {
               </NavLink>
             </li>
           </ul>
-        </div>
+        </div>*/}
       </div>
 
       <div
