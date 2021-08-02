@@ -10,9 +10,29 @@ import InputCartTitle from "../InputCartTitle";
 import CloseRoundedIcon from "@material-ui/icons/CloseRounded";
 import { useUI } from "../../hooks/useUi";
 
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    container: {
+      display: "flex",
+      flexWrap: "wrap",
+    },
+    textField: {
+      marginLeft: theme.spacing(1),
+      marginRight: theme.spacing(1),
+      width: 200,
+    },
+  })
+);
+
 const NewTaskModal = () => {
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(true);
+
   const { setTaskModalOpen, taskModalOpen } = useUI();
+
+  const classes = useStyles();
 
   function closeModal() {
     setTaskModalOpen(false);
@@ -36,6 +56,7 @@ const NewTaskModal = () => {
         <div className={styles.newTaskModal}>
           <div className={styles.newTaskModal__left}>
             <DueDate />
+
             <InputComment />
           </div>
           <div className={styles.newTaskModal__right}>

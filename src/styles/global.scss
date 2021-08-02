@@ -119,6 +119,18 @@ body {
   background: var(--gray-200);
 }
 
+::-webkit-calendar-picker-indicator {
+  color: var(--white);
+  cursor: pointer;
+  border-radius: 3px;
+  padding: 0.3rem;
+  filter: invert(1);
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+}
+
 @media (max-width: 425px) {
   .global__modal {
     width: 100%;
