@@ -1,0 +1,38 @@
+.tags {
+  margin-bottom: 3rem;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 0.5rem;
+  row-gap: 0.5rem;
+  position: relative;
+
+  &__select {
+    background-color: var(--blue-50);
+    border: none;
+    padding: 0rem 2rem;
+    border-radius: 3px;
+    color: var(--white);
+    font-family: var(--font-family);
+    border: solid 2px transparent;
+    font-weight: 700;
+    height: 3rem;
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--blue-50-plus);
+      border: solid 2px var(--blue-10);
+    }
+  }
+
+  &__insidePaper {
+    /*
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    */
+
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 0.5rem;
+    row-gap: 0.5rem;
+  }
+}

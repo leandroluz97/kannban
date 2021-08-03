@@ -1,0 +1,13 @@
+.papercard {
+  background-color: var(--blue-50);
+  border-radius: 3px;
+  //height: 80px;
+  width: 100%;
+  max-width: 250px;
+  position: absolute;
+  z-index: 999;
+
+  filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.2));
+  outline: none;
+  padding: 1rem;
+}

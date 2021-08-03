@@ -1,0 +1,30 @@
+.tagcard {
+  background-color: var(--blue-50);
+  border: none;
+  padding: 0rem 2rem;
+  border-radius: 3px;
+  color: var(--white);
+  font-family: var(--font-family);
+  border: solid 2px transparent;
+  font-weight: 700;
+
+  height: 3rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  font-size: var(--font-12);
+  font-weight: 400;
+
+  button {
+    background-color: transparent;
+    border: none;
+    color: var(--white);
+    margin-left: 0.9rem;
+
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+}

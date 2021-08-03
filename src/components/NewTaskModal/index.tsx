@@ -12,6 +12,7 @@ import { useUI } from "../../hooks/useUi";
 
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
+import Tags from "../Tags";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -55,6 +56,7 @@ const NewTaskModal = () => {
         </div>
         <div className={styles.newTaskModal}>
           <div className={styles.newTaskModal__left}>
+            <Tags />
             <DueDate />
 
             <InputComment />
