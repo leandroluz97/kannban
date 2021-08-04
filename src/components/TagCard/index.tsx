@@ -4,15 +4,18 @@ import CloseRoundedIcon from "@material-ui/icons/CloseRounded";
 
 interface TagCardProps {
   color: string;
+  icon?: boolean;
 }
 
-const TagCard = ({ color }: TagCardProps) => {
+const TagCard = ({ color, icon = true }: TagCardProps) => {
   return (
     <div className={styles.tagcard} style={{ backgroundColor: color }}>
       <p>Awsome</p>
-      <button>
-        <CloseRoundedIcon fontSize="medium" />
-      </button>
+      {icon && (
+        <button>
+          <CloseRoundedIcon fontSize="medium" />
+        </button>
+      )}
     </div>
   );
 };

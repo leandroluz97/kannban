@@ -24,6 +24,7 @@ const ListOption = ({
   optionRef,
   color,
 }: ListOptionType) => {
+  
   useEffect(() => {
     //handle close calendar when clicked outsite
     const handler = (event: any) => {

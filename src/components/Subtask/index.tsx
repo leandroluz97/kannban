@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import CloseRoundedIcon from "@material-ui/icons/CloseRounded";
 import styles from "./styles.module.scss";
 import { Checkbox, withStyles } from "@material-ui/core";
@@ -24,22 +24,48 @@ const CustomCheckbox = withStyles({
 });
 
 const Subtask = () => {
+  const [state, setstate] = useState("");
   const CheckBox = CustomCheckbox((props) => {
     return <Checkbox color="default" {...props} disableRipple size="medium" />;
   });
 
+  const tes = useRef<HTMLParagraphElement | null>(null);
+
+  function handleOnBlur() {
+    console.log(tes.current?.innerText);
+    setstate(tes.current?.innerText ? tes.current?.innerText : "");
+    tes.current?.blur();
+  }
+
+  function handleOnKeyPress(event: any) {
+    if (event.key === "Enter") {
+      console.log(tes.current?.innerText);
+      setstate(tes.current?.innerText ? tes.current?.innerText : "");
+      tes.current?.blur();
+    }
+  }
+
   return (
     <div className={styles.subtask}>
-      <form>
+      <div className={styles.subtask__form}>
         <CheckBox key={Math.random() * 1000 + 1} />
 
         <div className={styles.subtask__todo}>
-          <input type="text " />
+          {/*<input type="text " />*/}
+          <p
+            contentEditable={true}
+            onBlur={handleOnBlur}
+            ref={tes}
+            onKeyDown={handleOnKeyPress}
+            suppressContentEditableWarning={true}
+          >
+            {state}
+          </p>
         </div>
         <button>
           <CloseRoundedIcon fontSize="large" />
         </button>
-      </form>
+      </div>
     </div>
   );
 };

@@ -6,9 +6,11 @@ import Dashboard from "../pages/Dashboard";
 import styles from "./styles.module.scss";
 import { Switch, Route, Redirect } from "react-router-dom";
 import SideBar from "../components/SideBar";
+import { useAuth } from "../hooks/useAuth";
 
 const Routes = () => {
-  const currentUser = true;
+  const { currentUser } = useAuth();
+
   let routes = (
     <Switch>
       <div className={styles.auth}>

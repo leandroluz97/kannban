@@ -10,12 +10,25 @@
 
   &__todo {
     padding-left: 1rem;
-    width: 100%;
+    width: 90%;
+    color: var(--white);
+
+    p {
+      font-size: var(--font-15);
+      border: solid 2px transparent;
+      outline: none;
+      border-radius: 3px;
+
+      &:focus {
+        border: solid 2px var(--blue-10);
+      }
+    }
   }
 
-  form {
+  &__form {
     display: flex;
     align-items: center;
+    justify-content: space-between;
 
     svg {
       color: var(--gray-100);

@@ -29,10 +29,10 @@ const Tags = () => {
             paperRef={tagRefs}
           >
             <div className={styles.tags__insidePaper}>
-              <TagCard color="#8B18D1" />
-              <TagCard color="#3399AF" />
-              <TagCard color="#D03737" />
-              <TagCard color="#C2D118" />
+              <TagCard color="#8B18D1" icon={false} />
+              <TagCard color="#3399AF" icon={false} />
+              <TagCard color="#D03737" icon={false} />
+              <TagCard color="#C2D118" icon={false} />
             </div>
           </PaperCard>
         )}
