@@ -96,6 +96,19 @@ body {
   height: 200px;
 }
 
+.toastify {
+  color: white !important;
+  font-size: 1.5rem;
+  font-weight: 100;
+
+  &__error {
+  }
+
+  &__success {
+    background-color: #335adc !important;
+  }
+}
+
 /* width */
 ::-webkit-scrollbar {
   width: 5px;

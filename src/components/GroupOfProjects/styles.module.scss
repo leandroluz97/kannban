@@ -1,73 +1,4 @@
-.sidebar {
-  width: 100%;
-  max-width: 280px;
-  min-height: 100%;
-  height: 100vh;
-  // max-width: 100px;
-  //min-height: 100%;
-  height: 100vh;
-  background-color: var(--blue);
-  border-right: solid 1px var(--blue-plus);
-  padding: 1rem 0;
-  position: relative;
-  overflow: hidden;
-
-  transition: max-width 0.3s ease;
-
-  &__logo {
-    text-align: center;
-  }
-
-  &__logout {
-    background-color: transparent;
-    color: var(--gray-150);
-    border: none;
-
-    display: flex;
-    align-items: center;
-    padding: 0.5rem 1rem;
-    margin-bottom: 3rem;
-    margin-left: 1rem;
-    font-family: var(--font-family);
-    cursor: pointer;
-
-    border-radius: 3px;
-
-    span {
-      padding-left: 2rem;
-    }
-
-    &:hover {
-      background-color: rgba(255, 0, 0, 0.274);
-
-      svg,
-      span {
-        color: red;
-      }
-    }
-  }
-
-  &__profile {
-    padding-left: 2rem;
-    margin-top: 1.5rem;
-    margin-bottom: 1rem;
-    display: flex;
-
-    align-items: center;
-
-    p {
-      font-size: var(--font-16);
-      color: var(--gray-100);
-      font-weight: 600;
-      margin-left: 1rem;
-
-      width: 200px;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
-    }
-  }
-
+.groupOfProject {
   &__group {
     display: flex;
     align-items: center;
@@ -125,6 +56,31 @@
     position: relative;
   }
 
+  &__project {
+    ul {
+      li {
+        list-style: none;
+        a {
+          color: var(--gray-200);
+          font-size: var(--font-14);
+          padding: 0.5rem;
+          cursor: pointer;
+          text-decoration: none;
+          display: block;
+          padding-left: 6rem;
+
+          span {
+            display: block;
+            width: 180px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+          }
+        }
+      }
+    }
+  }
+
   &__new {
     background-color: var(--blue-100);
     border-radius: 5px;
@@ -160,47 +116,6 @@
     &:hover {
       background-color: var(--blue-plus);
       cursor: pointer;
-    }
-  }
-
-  &__add {
-    border-top: solid 2px var(--gray-500);
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    background-color: var(--blue);
-
-    &:hover {
-      background-color: var(--blue-plus);
-    }
-    button {
-      background-color: transparent;
-      border: none;
-      color: var(--violet);
-      cursor: pointer;
-      width: 100%;
-      padding: 1.5rem;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      div {
-        height: 3.5rem;
-        width: 3.5rem;
-        background-color: var(--blue-900);
-        border-radius: 100px;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      span {
-        font-size: 1.5rem;
-        font-weight: 700;
-        margin-left: 1.5rem;
-      }
     }
   }
 }

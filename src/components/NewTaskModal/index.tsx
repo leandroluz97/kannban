@@ -29,11 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const NewTaskModal = () => {
-  const [modalIsOpen, setModalIsOpen] = useState<boolean>(true);
-
   const { setTaskModalOpen, taskModalOpen } = useUI();
-
-  const classes = useStyles();
 
   function closeModal() {
     setTaskModalOpen(false);

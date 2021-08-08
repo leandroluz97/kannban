@@ -12,9 +12,19 @@ import { useUI } from "../../hooks/useUi";
 import Input from "../Input";
 
 const NewTaskModal = () => {
+  const [inputValue, setInputValue] = useState("");
   const { groupModalOpen, setGroupModalOpen } = useUI();
 
   function closeModal() {
+    setGroupModalOpen(false);
+  }
+
+  function handleNewGroup(e: React.SyntheticEvent) {
+    e.preventDefault();
+
+    if (inputValue.trim().length < 1) return;
+
+    console.log(inputValue);
     setGroupModalOpen(false);
   }
 
@@ -30,8 +40,13 @@ const NewTaskModal = () => {
         <button className={styles.section__close} onClick={closeModal}>
           <CloseRoundedIcon fontSize="large" />
         </button>
-        <form action="">
-          <input type="text" placeholder="Type group name here..." />
+        <form action="" onClick={handleNewGroup}>
+          <input
+            type="text"
+            placeholder="Type group name here..."
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+          />
           <input type="submit" value="Create group" />
         </form>
       </section>

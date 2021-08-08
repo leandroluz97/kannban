@@ -22,14 +22,18 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import firebase from "../../config/firebase-config";
 import { useRef } from "react";
 import InputProject from "../InputProject/input";
+import GroupOfProjects from "../GroupOfProjects";
+
 import { useUI } from "../../hooks/useUi";
 import { useHistory } from "react-router";
+import { useData } from "../../hooks/useData";
 
 const SideBar = () => {
   const [colapse, setColapse] = useState(false);
   const [newProject, setNewProject] = useState(false);
 
   const { groupModalOpen, setGroupModalOpen } = useUI();
+  const { groups } = useData();
 
   const projectNameRef = useRef<HTMLDivElement | null>(null);
 
@@ -38,14 +42,6 @@ const SideBar = () => {
   }, []);
 
   let history = useHistory();
-
-  function handleNewGroup() {
-    setNewProject(true);
-  }
-
-  function handleNewProjectBlur() {
-    setNewProject(false);
-  }
 
   function handleLogout() {
     firebase
@@ -113,167 +109,9 @@ const SideBar = () => {
       </div>
 
       <div className={stylescss.sidebar__projects}>
-        <div className={stylescss.sidebar__project}>
-          <div className={stylescss.sidebar__group}>
-            <IoMdFolder size={20} />
-            <span>Web Development</span>
-
-            <button onClick={handleNewGroup}>
-              <AddRoundedIcon fontSize="large" />
-            </button>
-          </div>
-
-          <ul>
-            <li>
-              <NavLink
-                to="/http"
-                activeClassName={stylescss.sidebar__groupActive}
-              >
-                Https
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/client-side"
-                activeClassName={stylescss.sidebar__groupActive}
-              >
-                Client Side
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/reactjs"
-                activeClassName={stylescss.sidebar__groupActive}
-              >
-                ReactJS
-              </NavLink>
-            </li>
-            {newProject && (
-              <li>
-                <InputProject handleBlur={handleNewProjectBlur} />
-              </li>
-            )}
-            {/*newProject */}
-            {/*<div
-                className={stylescss.sidebar__new}
-                onBlur={handleNewProjectBlur}
-                tabIndex={-1}
-                ref={projectNameRef}
-              ></div> */}
-          </ul>
-        </div>
-        {/*<div className={stylescss.sidebar__project}>
-          <div className={stylescss.sidebar__group}>
-            <IoMdFolder size={20} />
-            <span>Javascript</span>
-
-            <button onClick={handleNewGroup}>
-              <AddRoundedIcon fontSize="large" />
-            </button>
-          </div>
-          <ul>
-            <li>
-              <NavLink
-                to="/http"
-                activeClassName={stylescss.sidebar__groupActive}
-              >
-                Https
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/client-side"
-                activeClassName={stylescss.sidebar__groupActive}
-              >
-                Client Side
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/reactjs"
-                activeClassName={stylescss.sidebar__groupActive}
-              >
-                ReactJS
-              </NavLink>
-            </li>
-          </ul>
-        </div>
-        <div className={stylescss.sidebar__project}>
-          <div className={stylescss.sidebar__group}>
-            <IoMdFolder size={20} />
-            <span>Web services</span>
-
-            <button onClick={handleNewGroup}>
-              <AddRoundedIcon fontSize="large" />
-            </button>
-          </div>
-
-          <ul>
-            <li>
-              <NavLink
-                to="/http"
-                activeClassName={stylescss.sidebar__groupActive}
-              >
-                Https
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/client-side"
-                activeClassName={stylescss.sidebar__groupActive}
-              >
-                Client Side
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/reactjs"
-                activeClassName={stylescss.sidebar__groupActive}
-              >
-                ReactJS
-              </NavLink>
-            </li>
-          </ul>
-        </div>
-
-        <div className={stylescss.sidebar__project}>
-          <NavLink
-            to="/javascript"
-            className={stylescss.sidebar__group}
-            activeClassName={stylescss.sidebar__groupActive}
-          >
-            <IoMdFolder size={20} />
-            <span>Javascript</span>
-            <IoIosAdd size={20} onClick={handleNewGroup} />
-          </NavLink>
-
-          <ul>
-            <li>
-              <NavLink
-                to="/oop "
-                activeClassName={stylescss.sidebar__groupActive}
-              >
-                OOP
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/function-programming"
-                activeClassName={stylescss.sidebar__groupActive}
-              >
-                <span>Function Programming</span>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/dom-manipulation"
-                activeClassName={stylescss.sidebar__groupActive}
-              >
-                <span>DOM Manipulation</span>
-              </NavLink>
-            </li>
-          </ul>
-        </div>*/}
+        {groups.map((group) => (
+          <GroupOfProjects name={group.name} key={group.id} id={group.id} />
+        ))}
       </div>
 
       <div
@@ -296,3 +134,51 @@ const SideBar = () => {
 };
 
 export default SideBar;
+
+/*
+
+{groups.map((group) => (
+          <div className={stylescss.sidebar__project} key={group.id}>
+            <div className={stylescss.sidebar__group}>
+              <IoMdFolder size={20} />
+              <span>{group.name}</span>
+
+              <button onClick={handleNewModalGroup}>
+                <AddRoundedIcon fontSize="large" />
+              </button>
+            </div>
+
+            <ul>
+              <li>
+                <NavLink
+                  to="/http"
+                  activeClassName={stylescss.sidebar__groupActive}
+                >
+                  Https
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/client-side"
+                  activeClassName={stylescss.sidebar__groupActive}
+                >
+                  Client Side
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/reactjs"
+                  activeClassName={stylescss.sidebar__groupActive}
+                >
+                  ReactJS
+                </NavLink>
+              </li>
+              {newProject && (
+                <li>
+                  <InputProject handleBlur={handleNewProjectBlur} />
+                </li>
+              )}
+            </ul>
+          </div>
+        ))}
+*/

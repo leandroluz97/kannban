@@ -89,12 +89,6 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
       let docRef = db.collection("users").doc(user?.uid);
       const doc = await docRef.get();
 
-      //get all categories
-      let catRef = await db
-        .collection("categories")
-        .where("color", "!=", null)
-        .get();
-
       //check if user exists
       if (!doc.exists) {
         const ref = db.collection("users");
@@ -109,11 +103,6 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
 
         //create user doc w/ email index
         ref.doc(user?.uid).set(userData);
-
-        //add all category to user
-        catRef.forEach((category) => {
-          ref.doc(user?.uid).collection("categories").add(category.data());
-        });
 
         //set current user
         setCurrentUser(userData);
@@ -139,12 +128,6 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
       //get user
       let docRef = db.collection("users").where("email", "==", email);
 
-      //get all categories
-      let catRef = await db
-        .collection("categories")
-        .where("color", "!=", null)
-        .get();
-
       const user = await firebase
         .auth()
         .createUserWithEmailAndPassword(email, password);
@@ -169,11 +152,6 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
 
         //create user doc w/ email index
         ref.doc(user.user?.uid).set(userData);
-
-        //add all category to user
-        catRef.forEach((category) => {
-          ref.doc(user.user?.uid).collection("categories").add(category.data());
-        });
 
         setCurrentUser(userData);
       }
