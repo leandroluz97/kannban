@@ -63,6 +63,13 @@ const SideBar = () => {
         <img src={colapse ? kannbanIcon : kannbanImg} alt="kannban logo" />
       </div>
 
+      <div
+        className={stylescss.sidebar__colapse}
+        onClick={() => setColapse(!colapse)}
+      >
+        <img src={colapse ? uncolapseImg : colapseImg} alt="colapse" />
+      </div>
+
       <div className={stylescss.sidebar__profile}>
         <img src={profileImg} alt="profile" />
         <p>Leandro Luz </p>
@@ -110,15 +117,13 @@ const SideBar = () => {
 
       <div className={stylescss.sidebar__projects}>
         {groups.map((group) => (
-          <GroupOfProjects name={group.name} key={group.id} id={group.id} />
+          <GroupOfProjects
+            name={group.name}
+            key={group.groupId}
+            id={group.groupId}
+            projects={group.projects}
+          />
         ))}
-      </div>
-
-      <div
-        className={stylescss.sidebar__colapse}
-        onClick={() => setColapse(!colapse)}
-      >
-        <img src={colapse ? uncolapseImg : colapseImg} alt="colapse" />
       </div>
 
       <div className={stylescss.sidebar__add}>

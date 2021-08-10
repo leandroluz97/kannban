@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { KeyboardEvent, useEffect, useMemo, useState } from "react";
 import styles from "./styles.module.scss";
 
 import AddRoundedIcon from "@material-ui/icons/AddRounded";
@@ -22,24 +22,31 @@ import { useUI } from "../../hooks/useUi";
 import { useHistory } from "react-router";
 import { useData } from "../../hooks/useData";
 
+interface projectData {
+  name: string;
+  id: string;
+  group: string;
+}
 interface GroupOfProjectsProps {
   name: string;
   id: string;
+  projects: projectData[];
 }
 
-const GroupOfProjects = ({ name, id }: GroupOfProjectsProps) => {
+const GroupOfProjects = ({ name, id, projects }: GroupOfProjectsProps) => {
   const [newProject, setNewProject] = useState(false);
 
-  const { projects } = useData();
+  const { setStorageProjectName } = useData();
 
   //const filteredProjects = projects.filter((project) => project.group === name);
-
+  /*
   const filteredProjects = useMemo(() => {
     return projects.filter((project) => project.group === name);
   }, [projects]);
-
-  function handleNewModalGroup() {
+*/
+  function handleNewGroupInput() {
     setNewProject(true);
+    setStorageProjectName(name);
   }
 
   function handleNewProjectBlur() {
@@ -52,13 +59,13 @@ const GroupOfProjects = ({ name, id }: GroupOfProjectsProps) => {
         <IoMdFolder size={20} />
         <span>{name}</span>
 
-        <button onClick={handleNewModalGroup}>
+        <button onClick={handleNewGroupInput}>
           <AddRoundedIcon fontSize="large" />
         </button>
       </div>
 
       <ul>
-        {filteredProjects.map((project) => (
+        {projects.map((project) => (
           <li key={project.id}>
             <NavLink
               to={`/project/${project.id}`}

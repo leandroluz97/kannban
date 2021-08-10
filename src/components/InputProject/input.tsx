@@ -1,4 +1,5 @@
 import React, { KeyboardEvent, useEffect, useRef, useState } from "react";
+import { useData } from "../../hooks/useData";
 import styles from "./styles.module.scss";
 
 interface InputProjectType {
@@ -9,6 +10,8 @@ const InputProject = ({ handleBlur }: InputProjectType) => {
   const [projectName, setprojectName] = useState("");
   const inputEl = useRef<HTMLInputElement | null>(null);
 
+  const { addProject } = useData();
+
   useEffect(() => {
     inputEl.current?.focus();
   }, []);
@@ -17,14 +20,16 @@ const InputProject = ({ handleBlur }: InputProjectType) => {
     setprojectName(e.target.value);
   }
 
-  function handleOnKeyPress(event: KeyboardEvent<HTMLInputElement>) {
-    if (event.key === "Enter" && !event.shiftKey && projectName.length > 2) {
-      // handleCloseTextFied();
-    }
-  }
-
   function handleOnBlur() {
     handleBlur();
+  }
+
+  function handleOnKeyPress(event: KeyboardEvent<HTMLInputElement>) {
+    if (event.key === "Enter" && !event.shiftKey && projectName.length > 2) {
+      addProject(projectName);
+
+      handleBlur();
+    }
   }
   return (
     <div className={styles.inputProject}>

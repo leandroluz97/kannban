@@ -9,9 +9,12 @@
   background-color: var(--blue);
   border-right: solid 1px var(--blue-plus);
   padding: 1rem 0;
+  padding-bottom: 0;
   position: relative;
-  overflow: hidden;
+  overflow-y: hidden;
 
+  display: flex;
+  flex-direction: column;
   transition: max-width 0.3s ease;
 
   &__logo {
@@ -25,6 +28,7 @@
 
     display: flex;
     align-items: center;
+    align-self: flex-start;
     padding: 0.5rem 1rem;
     margin-bottom: 3rem;
     margin-left: 1rem;
@@ -118,11 +122,8 @@
   &__projects {
     margin-top: 3rem;
 
-    height: 1000px;
-    max-height: 60%;
     overflow-y: scroll;
-
-    position: relative;
+    flex: 1;
   }
 
   &__new {
@@ -134,14 +135,12 @@
     z-index: 999;
     right: 10px;
     top: 40px;
-    //left: calc(100% - 25px);
-    //top: 30px;
     filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.2));
     outline: none;
   }
 
   &__projects > div:last-child {
-    padding-bottom: 20rem;
+    //padding-bottom: 20rem;
   }
 
   &__colapse {
@@ -149,13 +148,12 @@
     align-items: center;
     justify-content: center;
     background-color: var(--blue);
+    align-self: flex-end;
 
     border-radius: 3px;
-    height: 30px;
+    padding: 1rem;
     width: 30px;
-    position: absolute;
-    bottom: 80px;
-    right: 10px;
+    margin-right: 0.5rem;
 
     &:hover {
       background-color: var(--blue-plus);
@@ -165,8 +163,7 @@
 
   &__add {
     border-top: solid 2px var(--gray-500);
-    position: absolute;
-    bottom: 0;
+
     width: 100%;
     background-color: var(--blue);
 
@@ -215,6 +212,10 @@
     span {
       display: none;
     }
+  }
+
+  .sidebar__colapse {
+    align-self: center;
   }
 
   .sidebar__profile {
