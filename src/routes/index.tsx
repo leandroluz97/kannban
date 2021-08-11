@@ -30,7 +30,7 @@ const Routes = () => {
         </div>
         <div className={styles.routes}>
           <Switch>
-            <Route path="/dashboard" component={Dashboard} />
+            <Route path="/project/:id" component={Dashboard} />
           </Switch>
         </div>
       </div>

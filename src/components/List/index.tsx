@@ -11,7 +11,11 @@ import { useEffect } from "react";
 import ListOption from "../ListOption";
 import ChangeColors from "../ChangleColors";
 
-const List = () => {
+interface ListProps {
+  name: string;
+  color: string;
+}
+const List = ({ name, color }: ListProps) => {
   const [addNewCard, setAddNewCard] = useState(false);
   const [moreOption, setMoreOption] = useState(false);
   const [changeColor, setChangeColor] = useState(false);
@@ -41,10 +45,10 @@ const List = () => {
 
   return (
     <section className={styles.list}>
-      <header>
+      <header style={{ borderBottomColor: `#${color}` }}>
         <div className={styles.list__left}>
           <DragIndicatorIcon className={styles.list__drag} />
-          <h2>TO DO</h2>
+          <h2>{name}</h2>
         </div>
 
         <div className={styles.list__right}>

@@ -1,19 +1,24 @@
 import { ChangeEvent, useState, FormEvent } from "react";
 import AddRoundedIcon from "@material-ui/icons/AddRounded";
 import styles from "./styles.module.scss";
+import { useData } from "../../hooks/useData";
 
 const ListFrom = () => {
   const [listName, setListName] = useState("");
+
+  const { addList } = useData();
 
   function handleInput(e: ChangeEvent<HTMLInputElement>) {
     setListName(e.target.value);
   }
 
-  function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-
-    if (listName.length < 1) return;
-    console.log("yess");
+    try {
+      if (listName.length < 1) return;
+      await addList(listName);
+      setListName("");
+    } catch (error) {}
   }
   return (
     <div>
