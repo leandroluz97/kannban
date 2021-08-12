@@ -23,6 +23,7 @@ import Spinner from "../Spinner";
 const NewTaskModal = () => {
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
   const { groupModalOpen, setGroupModalOpen } = useUI();
   const { addGroup } = useData();
 

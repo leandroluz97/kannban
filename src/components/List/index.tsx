@@ -10,6 +10,7 @@ import InputCard from "../InputCard";
 import { useEffect } from "react";
 import ListOption from "../ListOption";
 import ChangeColors from "../ChangleColors";
+import PaperCard from "../PaperCard";
 
 interface ListProps {
   name: string;
@@ -22,6 +23,17 @@ const List = ({ name, color }: ListProps) => {
 
   const optionRef = useRef<HTMLDivElement | null>(null);
   const colorRef = useRef<HTMLDivElement | null>(null);
+
+  const colors = [
+    "#8B18D1",
+    "#3399AF",
+    "#D03737",
+    "#C2D118",
+    "#33AF47",
+    "#D18718",
+    "#18D183",
+    "#3350B9",
+  ];
 
   function handleCloseAddNewCardTextField() {
     setAddNewCard(false);
@@ -62,19 +74,38 @@ const List = ({ name, color }: ListProps) => {
         </div>
 
         {moreOption && (
-          <ListOption
-            handleColor={handleColors}
-            optionRef={optionRef}
-            handleMoreOtionOnBlur={handleMoreOtionOnBlur}
-            color={true}
-          />
+          <PaperCard
+            paperRef={optionRef}
+            color="var(--blue-100)"
+            handleBlur={handleMoreOtionOnBlur}
+            top="3.11"
+            left="25"
+          >
+            <div className={styles.list__actions}>
+              <button>Rename</button>
+              <button onClick={handleColors}>Change Color</button>
+              <button>Delete</button>
+            </div>
+          </PaperCard>
         )}
         {changeColor && (
-          <ChangeColors
-            colorRef={colorRef}
-            handleColorOnBlur={handleColorOnBlur}
-            ChangeListColor={handleChangeListColor}
-          />
+          <PaperCard
+            paperRef={colorRef}
+            color="var(--blue-100)"
+            handleBlur={handleColorOnBlur}
+            top="3.11"
+            left="25"
+          >
+            <div className={styles.list__changeColor}>
+              {colors.map((color) => (
+                <button
+                  key={color}
+                  style={{ backgroundColor: color }}
+                  onClick={() => handleChangeListColor(color)}
+                ></button>
+              ))}
+            </div>
+          </PaperCard>
         )}
       </header>
       <section className={styles.list__body}>

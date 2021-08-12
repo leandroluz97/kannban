@@ -15,6 +15,8 @@ interface UiProps {
   setTaskModalOpen: (value: boolean) => void;
   groupModalOpen: boolean;
   setGroupModalOpen: (value: boolean) => void;
+  deleteProjectModalOpen: boolean;
+  setDeleteProjectModalOpen: (value: boolean) => void;
 }
 
 //Context
@@ -24,6 +26,8 @@ const UiContext = createContext<UiProps>({} as UiProps);
 export const UiProvider = ({ children }: UiProviderType) => {
   const [taskModalOpen, setTaskModalOpen] = useState<boolean>(false);
   const [groupModalOpen, setGroupModalOpen] = useState<boolean>(false);
+  const [deleteProjectModalOpen, setDeleteProjectModalOpen] =
+    useState<boolean>(false);
   const [darkTheme, setDarkTheme] = useState(false);
 
   return (
@@ -33,6 +37,8 @@ export const UiProvider = ({ children }: UiProviderType) => {
         setTaskModalOpen,
         groupModalOpen,
         setGroupModalOpen,
+        deleteProjectModalOpen,
+        setDeleteProjectModalOpen,
       }}
     >
       {children}

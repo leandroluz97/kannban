@@ -24,7 +24,6 @@ const ListOption = ({
   optionRef,
   color,
 }: ListOptionType) => {
-  
   useEffect(() => {
     //handle close calendar when clicked outsite
     const handler = (event: any) => {
@@ -52,7 +51,7 @@ const ListOption = ({
         ref={optionRef}
       >
         <button>Rename</button>
-        {color && <button onClick={handleColor}>Change Color</button>}
+        <button onClick={handleColor}>Change Color</button>
         <button>Delete</button>
       </div>
     </>

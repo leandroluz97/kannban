@@ -8,6 +8,7 @@ interface PaperCardProps {
   handleBlur: () => void;
   left: string;
   top: string;
+  color: string;
 }
 
 const PaperCard = ({
@@ -16,6 +17,7 @@ const PaperCard = ({
   handleBlur,
   left,
   top,
+  color,
 }: PaperCardProps) => {
   useEffect(() => {
     //handle close calendar when clicked outsite
@@ -40,7 +42,7 @@ const PaperCard = ({
       className={styles.papercard}
       tabIndex={-1}
       ref={paperRef}
-      style={{ left: `${left}rem`, top: `${top}rem` }}
+      style={{ left: `${left}rem`, top: `${top}rem`, backgroundColor: color }}
     >
       {children}
     </div>

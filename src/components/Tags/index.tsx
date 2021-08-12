@@ -27,6 +27,7 @@ const Tags = () => {
             left="0"
             handleBlur={handleBlur}
             paperRef={tagRefs}
+            color="var(--blue-50)"
           >
             <div className={styles.tags__insidePaper}>
               <TagCard color="#8B18D1" icon={false} />

@@ -1,9 +1,12 @@
 import { useRef, useState } from "react";
 import styles from "./styles.module.scss";
+
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import SearchIcon from "@material-ui/icons/Search";
-import ListOption from "../ListOption";
+
 import { useData } from "../../hooks/useData";
+import PaperCard from "../PaperCard";
+import { useUI } from "../../hooks/useUi";
 
 const Header = () => {
   const [moreOption, setMoreOption] = useState(false);
@@ -11,8 +14,21 @@ const Header = () => {
 
   const { selectedProject } = useData();
 
+  const { setDeleteProjectModalOpen } = useUI();
+
+  let tagRefs = useRef<HTMLDivElement | null>(null);
+
   function handleMoreOtionOnBlur() {
     setMoreOption(false);
+  }
+
+  function handleBlur() {
+    setMoreOption(false);
+  }
+
+  function handleOpenConfirmation() {
+    setDeleteProjectModalOpen(true);
+    handleMoreOtionOnBlur();
   }
 
   return (
@@ -23,11 +39,18 @@ const Header = () => {
           <MoreHorizIcon fontSize="large" />
         </button>
         {moreOption && (
-          <ListOption
-            color={false}
-            optionRef={optionRef}
-            handleMoreOtionOnBlur={handleMoreOtionOnBlur}
-          />
+          <PaperCard
+            top="3.11"
+            left="17.5"
+            handleBlur={handleBlur}
+            paperRef={tagRefs}
+            color="var(--blue-100)"
+          >
+            <div className={styles.header__actions}>
+              <button>Edit</button>
+              <button onClick={() => handleOpenConfirmation()}>Delete</button>
+            </div>
+          </PaperCard>
         )}
       </div>
 
@@ -42,3 +65,9 @@ const Header = () => {
 };
 
 export default Header;
+
+/* <ListOption
+            color={false}
+            optionRef={optionRef}
+            handleMoreOtionOnBlur={handleMoreOtionOnBlur}
+         />*/

@@ -6,6 +6,7 @@ import "./styles/global.scss";
 import Routes from "./routes";
 import NewTaskModal from "./components/NewTaskModal";
 import NewGroupModal from "./components/NewGroupModal";
+import DeleteProjectModal from "./components/DeleteProjectModal";
 
 import { AuthProvider } from "./hooks/useAuth";
 import { UiProvider } from "./hooks/useUi";
@@ -20,6 +21,7 @@ function App() {
         <DataProvider>
           <Router>
             <>
+              <DeleteProjectModal />
               <NewTaskModal />
               <NewGroupModal />
               <Routes />

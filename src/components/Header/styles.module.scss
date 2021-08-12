@@ -37,6 +37,27 @@
     }
   }
 
+  &__actions {
+    width: 20rem;
+
+    button {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 1rem 1rem;
+      background-color: transparent;
+      color: var(--white);
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+      font-family: var(--font-family);
+
+      &:hover {
+        background-color: var(--blue-plus);
+      }
+    }
+  }
+
   &__search {
     margin-left: 2rem;
     display: flex;

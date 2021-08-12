@@ -2,7 +2,7 @@
   border: solid 2px var(--blue-plus);
   background-color: var(--blue-900);
   border-radius: 3px;
-  // max-width: 290px;
+  max-width: 290px;
   //min-height: 100%;
   display: flex;
   flex-direction: column;
@@ -53,6 +53,42 @@
     color: var(--gray-200);
     cursor: -webkit-grab;
     cursor: grab;
+  }
+
+  &__actions {
+    width: 20rem;
+
+    button {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 1rem 1rem;
+      background-color: transparent;
+      color: var(--white);
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+      font-family: var(--font-family);
+
+      &:hover {
+        background-color: var(--blue-plus);
+      }
+    }
+  }
+
+  &__changeColor {
+    display: grid;
+    grid-template-columns: repeat(4, 30px);
+    column-gap: 15px;
+    row-gap: 15px;
+
+    button {
+      width: 30px;
+      height: 30px;
+      border: solid 2px var(--white);
+      border-radius: 4px;
+      cursor: pointer;
+    }
   }
 
   &__body {
