@@ -15,8 +15,9 @@ import PaperCard from "../PaperCard";
 interface ListProps {
   name: string;
   color: string;
+  id: string;
 }
-const List = ({ name, color }: ListProps) => {
+const List = ({ name, color, id }: ListProps) => {
   const [addNewCard, setAddNewCard] = useState(false);
   const [moreOption, setMoreOption] = useState(false);
   const [changeColor, setChangeColor] = useState(false);
@@ -51,10 +52,12 @@ const List = ({ name, color }: ListProps) => {
     setChangeColor(true);
     setMoreOption(false);
   }
+
   async function handleChangeListColor(color: string) {
     setChangeColor(false);
   }
 
+  function handleListDelete(id: string) {}
   return (
     <section className={styles.list}>
       <header style={{ borderBottomColor: `#${color}` }}>
@@ -84,7 +87,7 @@ const List = ({ name, color }: ListProps) => {
             <div className={styles.list__actions}>
               <button>Rename</button>
               <button onClick={handleColors}>Change Color</button>
-              <button>Delete</button>
+              <button onClick={() => handleListDelete(id)}>Delete</button>
             </div>
           </PaperCard>
         )}

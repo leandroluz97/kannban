@@ -2,25 +2,37 @@ import React, { useState } from "react";
 import styles from "./styles.module.scss";
 
 import Modal from "react-modal";
+import { useHistory } from "react-router-dom";
 
 import CloseRoundedIcon from "@material-ui/icons/CloseRounded";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 import { useUI } from "../../hooks/useUi";
+import { useData } from "../../hooks/useData";
 
 const DeleteProjectModal = () => {
   const [inputValue, setInputValue] = useState("");
   const [isLoadingDelete, setIsLoadingDelete] = useState(false);
 
   const { setDeleteProjectModalOpen, deleteProjectModalOpen } = useUI();
+  const { archiveProject, selectedProject } = useData();
+
+  let history = useHistory();
 
   function closeModal() {
     setDeleteProjectModalOpen(false);
   }
 
-  function handleDeleteProject() {
-    console.log("Project Deleted");
-    setDeleteProjectModalOpen(false);
+  async function handleDeleteProject() {
+    setIsLoadingDelete(true);
+
+    try {
+      await archiveProject(selectedProject.id);
+
+      setIsLoadingDelete(false);
+      setDeleteProjectModalOpen(false);
+      history.push("/gettingstarted");
+    } catch (error) {}
   }
 
   return (
@@ -39,15 +51,9 @@ const DeleteProjectModal = () => {
           <h2>Are you sure you want to delete this Project?</h2>
 
           <div className={styles.confirmation__actions}>
-            {isLoadingDelete ? (
-              <button type="button" disabled>
-                <CircularProgress disableShrink size={20} />
-              </button>
-            ) : (
-              <button type="button" onClick={closeModal}>
-                Cancel
-              </button>
-            )}
+            <button type="button" onClick={closeModal}>
+              Cancel
+            </button>
 
             {isLoadingDelete ? (
               <button type="button" disabled>

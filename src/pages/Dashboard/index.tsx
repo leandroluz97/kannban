@@ -6,7 +6,7 @@ import List from "../../components/List";
 import ListFrom from "../../components/ListForm";
 import styles from "./styles.module.scss";
 
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { useData } from "../../hooks/useData";
 
 interface ID {
@@ -15,7 +15,7 @@ interface ID {
 const Dashboard = () => {
   // const [lists, setLists] = useState([1, 2, 3, 4, 5, 6, 7]);
 
-  const { getLists, lists, getProject } = useData();
+  const { getLists, lists, getProject, selectedProject } = useData();
 
   let params: ID = useParams();
 
@@ -34,7 +34,12 @@ const Dashboard = () => {
       </div>
       <div className={styles.dashboard__lists}>
         {lists.map((list) => (
-          <List key={list.id} color={list.color} name={list.name} />
+          <List
+            key={list.id}
+            color={list.color}
+            name={list.name}
+            id={list.id}
+          />
         ))}
 
         <ListFrom />

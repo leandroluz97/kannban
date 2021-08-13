@@ -21,12 +21,14 @@ interface DataProviderPropsType {
 interface ProjectSelf {
   name: string;
   id: string;
+  isActive: boolean;
 }
 
 interface ProjectData {
   name: string;
   id: string;
   group: string;
+  isActive: boolean;
 }
 
 interface JoinedType {
@@ -50,6 +52,7 @@ interface contextProps {
   selectedProject: ProjectSelf;
   getProject: (id: string) => Promise<void>;
   addList: (name: string) => Promise<void>;
+  archiveProject: (id: string) => Promise<void>;
 }
 
 //context
@@ -98,12 +101,15 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
         dataOfGroup[item.data().name] = { name: item.data().name, id: item.id };
       });
 
-      collectionProjects.forEach((item) => {
-        dataOfProjects.push({
-          group: item.data().group,
-          name: item.data().name,
-          id: item.id,
-        });
+      collectionProjects.forEach((project) => {
+        if (project.data().isActive) {
+          dataOfProjects.push({
+            group: project.data().group,
+            name: project.data().name,
+            id: project.id,
+            isActive: project.data().isActive,
+          });
+        }
       });
 
       const groupOfProjects = groupProjectsByGroupName(dataOfProjects);
@@ -170,7 +176,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
         .collection("users")
         .doc(user?.uid)
         .collection("projects")
-        .add({ name: projectName, group: storageProjectName });
+        .add({ name: projectName, group: storageProjectName, isActive: true });
 
       const returnedProject = await collectionProject.get();
 
@@ -179,8 +185,6 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
         id: returnedProject.id,
         group: storageProjectName,
       } as ProjectData;
-
-      console.log(newGroup);
 
       const dataOfGroups = groups.map((group) => {
         if (group.name === newGroup.group) {
@@ -216,12 +220,50 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
         .doc(id)
         .get();
 
-      const returnedProject = {
-        name: getProjectDB.data()?.name,
-        id: getProjectDB.id,
-      } as ProjectSelf;
+      if (getProjectDB.data()?.isActive) {
+        const returnedProject = {
+          name: getProjectDB.data()?.name,
+          id: getProjectDB.id,
+          isActive: getProjectDB.data()?.isActive,
+        } as ProjectSelf;
 
-      setSelectedProject(returnedProject);
+        setSelectedProject(returnedProject);
+
+        return;
+      }
+
+      setSelectedProject({} as ProjectSelf);
+    } catch (error) {
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+    }
+  }
+
+  async function archiveProject(id: string) {
+    // inicialize firebase firestore
+    let db = firebase.firestore();
+
+    try {
+      //get the authenticate user
+      const user = firebase.auth().currentUser;
+
+      // fetching groups
+      let getProjectDB = await db
+        .collection("users")
+        .doc(user?.uid)
+        .collection("projects")
+        .doc(id)
+        .update({ isActive: false });
+
+      const archiveProject = groups.reduce((acc, group) => {
+        group.projects = group.projects.filter((project) => project.id !== id);
+        acc = [...acc, group];
+        return acc;
+      }, [] as JoinedType[]) as JoinedType[];
+
+      setGroups(archiveProject);
     } catch (error) {
       toast.error(error.message, {
         bodyClassName: "toastify__error",
@@ -314,6 +356,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
         selectedProject,
         getProject,
         addList,
+        archiveProject,
       }}
     >
       {children}

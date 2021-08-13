@@ -14,10 +14,13 @@ const ListFrom = () => {
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
+    const inputName = listName;
+
     try {
       if (listName.length < 1) return;
-      await addList(listName);
+
       setListName("");
+      await addList(inputName);
     } catch (error) {}
   }
   return (
