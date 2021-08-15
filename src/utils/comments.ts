@@ -1,54 +1,52 @@
 import firebase from "../config/firebase-config";
 import { toast } from "react-toastify";
 
-interface SubTaskType {
-  subtask: string;
+interface CommentType {
+  comment: string;
   id: string;
   createdAt: string;
-  isDone: boolean;
 }
 
-export default class Subtasks {
+export default class Comments {
   db: firebase.firestore.Firestore;
   user: firebase.User | null;
-  subtasks: SubTaskType[];
+  comments: CommentType[];
   projectId: string;
   taskId: string;
 
   constructor(projectId: string, taskId: string) {
     this.db = firebase.firestore();
     this.user = firebase.auth().currentUser;
-    this.subtasks = [];
+    this.comments = [];
     this.projectId = projectId;
     this.taskId = taskId;
   }
 
-  async getSubtasks() {
+  async getComments() {
     try {
       //Get all the Subtasks from Database
-      let subTasksDB = await this.db
+      let commentsDB = await this.db
         .collection("users")
         .doc(this.user?.uid)
         .collection("projects")
         .doc(this.projectId)
         .collection("tasks")
         .doc(this.taskId)
-        .collection("subtasks")
+        .collection("comments")
         .get();
 
       //Normalize all subtask
-      subTasksDB.forEach((subtaskDB) => {
-        let subtask: SubTaskType = {
-          subtask: subtaskDB.data().subtask,
-          createdAt: subtaskDB.data().createdAt,
-          isDone: subtaskDB.data().isDone,
-          id: subtaskDB.id,
+      commentsDB.forEach((commentDB) => {
+        let comment: CommentType = {
+          comment: commentDB.data().subtask,
+          createdAt: commentDB.data().createdAt,
+          id: commentDB.id,
         };
 
-        this.subtasks.push(subtask);
+        this.comments.push(comment);
       });
 
-      return this.subtasks;
+      return this.comments;
     } catch (error) {
       toast.error(error.message, {
         bodyClassName: "toastify__error",
@@ -57,28 +55,27 @@ export default class Subtasks {
     }
   }
 
-  async addSubtask(subtask: string) {
+  async addComment(comment: string) {
     try {
       //Get all the Subtasks from Database
-      let subTaskDB = await this.db
+      let commentDB = await this.db
         .collection("users")
         .doc(this.user?.uid)
         .collection("projects")
         .doc(this.projectId)
         .collection("tasks")
         .doc(this.taskId)
-        .collection("subtasks")
-        .add({ subtask: subtask, isDone: false, createdAt: "ffff" })
+        .collection("comment")
+        .add({ comment: comment, createdAt: "ffff" })
         .then((data) => data.get());
 
-      const newSubtask = {
-        subtask: subTaskDB.data()?.subtask,
-        createdAt: subTaskDB.data()?.createdAt,
-        isDone: subTaskDB.data()?.isDone,
-        id: subTaskDB.id,
-      } as SubTaskType;
+      const newComment = {
+        comment: commentDB.data()?.comment,
+        createdAt: commentDB.data()?.createdAt,
+        id: commentDB.id,
+      } as CommentType;
 
-      return newSubtask;
+      return newComment;
     } catch (error) {
       toast.error(error.message, {
         bodyClassName: "toastify__error",
@@ -87,33 +84,10 @@ export default class Subtasks {
     }
   }
 
-  async updateSubtask(id: string, isDone: boolean, subtask: string) {
+  async deleteComment(id: string) {
     try {
       //Get all the Subtasks from Database
-      let subTaskDB = await this.db
-        .collection("users")
-        .doc(this.user?.uid)
-        .collection("projects")
-        .doc(this.projectId)
-        .collection("tasks")
-        .doc(this.taskId)
-        .collection("subtasks")
-        .doc(id)
-        .update({ isDone: subtask });
-
-      //Normalize all subtask
-    } catch (error) {
-      toast.error(error.message, {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
-    }
-  }
-
-  async deleteSubtask(id: string) {
-    try {
-      //Get all the Subtasks from Database
-      let subTaskDB = await this.db
+      let commentDB = await this.db
         .collection("users")
         .doc(this.user?.uid)
         .collection("projects")

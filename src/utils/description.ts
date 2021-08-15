@@ -1,54 +1,50 @@
 import firebase from "../config/firebase-config";
 import { toast } from "react-toastify";
 
-interface SubTaskType {
-  subtask: string;
+interface DescriptionType {
+  description: string;
   id: string;
-  createdAt: string;
-  isDone: boolean;
 }
 
-export default class Subtasks {
+export default class Descriptions {
   db: firebase.firestore.Firestore;
   user: firebase.User | null;
-  subtasks: SubTaskType[];
+  description: DescriptionType;
   projectId: string;
   taskId: string;
 
   constructor(projectId: string, taskId: string) {
     this.db = firebase.firestore();
     this.user = firebase.auth().currentUser;
-    this.subtasks = [];
+    this.description = {} as DescriptionType;
     this.projectId = projectId;
     this.taskId = taskId;
   }
 
-  async getSubtasks() {
+  async getDescription() {
     try {
       //Get all the Subtasks from Database
-      let subTasksDB = await this.db
+      let descriptionDB = await this.db
         .collection("users")
         .doc(this.user?.uid)
         .collection("projects")
         .doc(this.projectId)
         .collection("tasks")
         .doc(this.taskId)
-        .collection("subtasks")
+        .collection("description")
         .get();
 
       //Normalize all subtask
-      subTasksDB.forEach((subtaskDB) => {
-        let subtask: SubTaskType = {
-          subtask: subtaskDB.data().subtask,
-          createdAt: subtaskDB.data().createdAt,
-          isDone: subtaskDB.data().isDone,
-          id: subtaskDB.id,
+      descriptionDB.forEach((description) => {
+        let desc: DescriptionType = {
+          description: description.data().description,
+          id: description.id,
         };
 
-        this.subtasks.push(subtask);
+        this.description = desc;
       });
 
-      return this.subtasks;
+      return this.description;
     } catch (error) {
       toast.error(error.message, {
         bodyClassName: "toastify__error",
@@ -57,7 +53,7 @@ export default class Subtasks {
     }
   }
 
-  async addSubtask(subtask: string) {
+  async addDescription(description: string) {
     try {
       //Get all the Subtasks from Database
       let subTaskDB = await this.db
@@ -68,17 +64,15 @@ export default class Subtasks {
         .collection("tasks")
         .doc(this.taskId)
         .collection("subtasks")
-        .add({ subtask: subtask, isDone: false, createdAt: "ffff" })
+        .add({ description: description })
         .then((data) => data.get());
 
-      const newSubtask = {
-        subtask: subTaskDB.data()?.subtask,
-        createdAt: subTaskDB.data()?.createdAt,
-        isDone: subTaskDB.data()?.isDone,
+      const newDescription = {
+        description: subTaskDB.data()?.description,
         id: subTaskDB.id,
-      } as SubTaskType;
+      } as DescriptionType;
 
-      return newSubtask;
+      return newDescription;
     } catch (error) {
       toast.error(error.message, {
         bodyClassName: "toastify__error",
@@ -87,42 +81,19 @@ export default class Subtasks {
     }
   }
 
-  async updateSubtask(id: string, isDone: boolean, subtask: string) {
+  async updateDescription(id: string, description: string) {
     try {
       //Get all the Subtasks from Database
-      let subTaskDB = await this.db
+      let descriptionDB = await this.db
         .collection("users")
         .doc(this.user?.uid)
         .collection("projects")
         .doc(this.projectId)
         .collection("tasks")
         .doc(this.taskId)
-        .collection("subtasks")
+        .collection("description")
         .doc(id)
-        .update({ isDone: subtask });
-
-      //Normalize all subtask
-    } catch (error) {
-      toast.error(error.message, {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
-    }
-  }
-
-  async deleteSubtask(id: string) {
-    try {
-      //Get all the Subtasks from Database
-      let subTaskDB = await this.db
-        .collection("users")
-        .doc(this.user?.uid)
-        .collection("projects")
-        .doc(this.projectId)
-        .collection("tasks")
-        .doc(this.taskId)
-        .collection("subtasks")
-        .doc(id)
-        .delete();
+        .update({ description: description });
 
       //Normalize all subtask
     } catch (error) {

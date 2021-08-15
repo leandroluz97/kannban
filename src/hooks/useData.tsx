@@ -14,6 +14,8 @@ import {
   joinGroupAndProjects,
 } from "../utils/normarlization";
 
+import Subtasks from "../utils/subtasks";
+
 interface DataProviderPropsType {
   children: ReactNode;
 }
@@ -341,6 +343,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
   }
 
   async function getTask(id: string, projectId: string) {
+    const sub = new Subtasks(selectedProject.id, id);
     // inicialize firebase firestore
     let db = firebase.firestore();
 
@@ -393,12 +396,16 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
 
       console.log(subtasks);
 
+      const t = await sub.getSubtasks();
+
       //setTasks(dataOfTask);
     } catch (error) {
       toast.error(error.message, {
         bodyClassName: "toastify__error",
         className: "toastify",
       });
+
+      console.log(error);
     }
   }
 

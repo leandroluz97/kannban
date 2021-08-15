@@ -1,54 +1,48 @@
 import firebase from "../config/firebase-config";
 import { toast } from "react-toastify";
 
-interface SubTaskType {
-  subtask: string;
+interface ListType {
+  name: string;
   id: string;
-  createdAt: string;
-  isDone: boolean;
+  color: string;
 }
 
-export default class Subtasks {
+export default class Lists {
   db: firebase.firestore.Firestore;
   user: firebase.User | null;
-  subtasks: SubTaskType[];
+  lists: ListType[];
   projectId: string;
-  taskId: string;
 
-  constructor(projectId: string, taskId: string) {
+  constructor(projectId: string) {
     this.db = firebase.firestore();
     this.user = firebase.auth().currentUser;
-    this.subtasks = [];
+    this.lists = [];
     this.projectId = projectId;
-    this.taskId = taskId;
   }
 
-  async getSubtasks() {
+  async getLists() {
     try {
-      //Get all the Subtasks from Database
-      let subTasksDB = await this.db
+      //Get  all Lists from Database
+      let listsDB = await this.db
         .collection("users")
         .doc(this.user?.uid)
         .collection("projects")
         .doc(this.projectId)
-        .collection("tasks")
-        .doc(this.taskId)
-        .collection("subtasks")
+        .collection("lists")
         .get();
 
       //Normalize all subtask
-      subTasksDB.forEach((subtaskDB) => {
-        let subtask: SubTaskType = {
-          subtask: subtaskDB.data().subtask,
-          createdAt: subtaskDB.data().createdAt,
-          isDone: subtaskDB.data().isDone,
-          id: subtaskDB.id,
+      listsDB.forEach((listDB) => {
+        let subtask: ListType = {
+          name: listDB.data().name,
+          color: listDB.data().color,
+          id: listDB.id,
         };
 
-        this.subtasks.push(subtask);
+        this.lists.push(subtask);
       });
 
-      return this.subtasks;
+      return this.lists;
     } catch (error) {
       toast.error(error.message, {
         bodyClassName: "toastify__error",
@@ -57,28 +51,25 @@ export default class Subtasks {
     }
   }
 
-  async addSubtask(subtask: string) {
+  async addList(ListName: string, color: string) {
     try {
       //Get all the Subtasks from Database
-      let subTaskDB = await this.db
+      let listDB = await this.db
         .collection("users")
         .doc(this.user?.uid)
         .collection("projects")
         .doc(this.projectId)
-        .collection("tasks")
-        .doc(this.taskId)
-        .collection("subtasks")
-        .add({ subtask: subtask, isDone: false, createdAt: "ffff" })
+        .collection("lists")
+        .add({ name: ListName, color: color })
         .then((data) => data.get());
 
-      const newSubtask = {
-        subtask: subTaskDB.data()?.subtask,
-        createdAt: subTaskDB.data()?.createdAt,
-        isDone: subTaskDB.data()?.isDone,
-        id: subTaskDB.id,
-      } as SubTaskType;
+      const newList = {
+        name: listDB.data()?.subtask,
+        color: listDB.data()?.color,
+        id: listDB.id,
+      } as ListType;
 
-      return newSubtask;
+      return newList;
     } catch (error) {
       toast.error(error.message, {
         bodyClassName: "toastify__error",
@@ -87,21 +78,17 @@ export default class Subtasks {
     }
   }
 
-  async updateSubtask(id: string, isDone: boolean, subtask: string) {
+  async updateList(id: string, name: boolean, color: string) {
     try {
-      //Get all the Subtasks from Database
-      let subTaskDB = await this.db
+      //Update list in Database
+      let listDB = await this.db
         .collection("users")
         .doc(this.user?.uid)
         .collection("projects")
         .doc(this.projectId)
-        .collection("tasks")
-        .doc(this.taskId)
-        .collection("subtasks")
+        .collection("lists")
         .doc(id)
-        .update({ isDone: subtask });
-
-      //Normalize all subtask
+        .update({ name: name, color: color });
     } catch (error) {
       toast.error(error.message, {
         bodyClassName: "toastify__error",
@@ -112,15 +99,13 @@ export default class Subtasks {
 
   async deleteSubtask(id: string) {
     try {
-      //Get all the Subtasks from Database
+      //Delete list from Database
       let subTaskDB = await this.db
         .collection("users")
         .doc(this.user?.uid)
         .collection("projects")
         .doc(this.projectId)
-        .collection("tasks")
-        .doc(this.taskId)
-        .collection("subtasks")
+        .collection("lists")
         .doc(id)
         .delete();
 
