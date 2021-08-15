@@ -66,7 +66,7 @@ const NewTaskModal = () => {
         <button className={styles.section__close} onClick={closeModal}>
           <CloseRoundedIcon fontSize="large" />
         </button>
-        <form action="" onClick={handleNewGroup}>
+        <form onSubmit={handleNewGroup}>
           <input
             type="text"
             placeholder="Type group name here..."

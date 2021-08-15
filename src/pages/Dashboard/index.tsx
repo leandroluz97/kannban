@@ -39,6 +39,7 @@ const Dashboard = () => {
             color={list.color}
             name={list.name}
             id={list.id}
+            tasks={list.tasks}
           />
         ))}
 

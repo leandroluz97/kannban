@@ -11,19 +11,35 @@ import { useEffect } from "react";
 import ListOption from "../ListOption";
 import ChangeColors from "../ChangleColors";
 import PaperCard from "../PaperCard";
+import { useData } from "../../hooks/useData";
+import { useParams } from "react-router-dom";
+
+interface TasksType {
+  name: string;
+  id: string;
+}
 
 interface ListProps {
   name: string;
   color: string;
   id: string;
+  tasks: TasksType[];
 }
-const List = ({ name, color, id }: ListProps) => {
+
+interface ID {
+  id: string;
+}
+const List = ({ name, color, id, tasks }: ListProps) => {
   const [addNewCard, setAddNewCard] = useState(false);
   const [moreOption, setMoreOption] = useState(false);
   const [changeColor, setChangeColor] = useState(false);
+  const [deleteConfirmation, setDeleteConfirmation] = useState(false);
 
   const optionRef = useRef<HTMLDivElement | null>(null);
   const colorRef = useRef<HTMLDivElement | null>(null);
+  const deleteConfirmationRef = useRef<HTMLDivElement | null>(null);
+
+  const { deleteList } = useData();
 
   const colors = [
     "#8B18D1",
@@ -57,7 +73,13 @@ const List = ({ name, color, id }: ListProps) => {
     setChangeColor(false);
   }
 
-  function handleListDelete(id: string) {}
+  async function handleListDelete(id: string) {
+    await deleteList(id);
+  }
+
+  function handleDeleteConfirmationOnBlur() {
+    setDeleteConfirmation(false);
+  }
   return (
     <section className={styles.list}>
       <header style={{ borderBottomColor: `#${color}` }}>
@@ -87,7 +109,9 @@ const List = ({ name, color, id }: ListProps) => {
             <div className={styles.list__actions}>
               <button>Rename</button>
               <button onClick={handleColors}>Change Color</button>
-              <button onClick={() => handleListDelete(id)}>Delete</button>
+              <button onClick={() => setDeleteConfirmation(true)}>
+                Delete
+              </button>
             </div>
           </PaperCard>
         )}
@@ -110,13 +134,33 @@ const List = ({ name, color, id }: ListProps) => {
             </div>
           </PaperCard>
         )}
+        {deleteConfirmation && (
+          <PaperCard
+            paperRef={deleteConfirmationRef}
+            color="var(--blue-100)"
+            handleBlur={handleDeleteConfirmationOnBlur}
+            top="3.11"
+            left="25"
+          >
+            <div className={styles.list__confirmation}>
+              <h2>Delete List?</h2>
+              <p>If you delete this list, you won't be able to recover it.</p>
+              <button
+                key={color}
+                style={{ backgroundColor: color }}
+                onClick={() => handleListDelete(id)}
+              >
+                Delete
+              </button>
+            </div>
+          </PaperCard>
+        )}
       </header>
       <section className={styles.list__body}>
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
+        {tasks.map((task) => (
+          <Card key={task.id} title={task.name} id={task.id} />
+        ))}
+
         {addNewCard && (
           <ListCard handleCloseTextFied={handleCloseAddNewCardTextField} />
         )}

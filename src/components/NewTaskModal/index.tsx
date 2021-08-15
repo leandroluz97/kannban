@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./styles.module.scss";
 import Modal from "react-modal";
 import InputSubTask from "../InputSubTask";
@@ -13,6 +13,7 @@ import { useUI } from "../../hooks/useUi";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Tags from "../Tags";
+import { useData } from "../../hooks/useData";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -30,6 +31,9 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const NewTaskModal = () => {
   const { setTaskModalOpen, taskModalOpen } = useUI();
+  const { getTask } = useData();
+
+  useEffect(() => {}, []);
 
   function closeModal() {
     setTaskModalOpen(false);
@@ -63,21 +67,6 @@ const NewTaskModal = () => {
             <Subtask key="44w" />
 
             <InputComment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
             <Comment />
             <Comment />
             <Comment />

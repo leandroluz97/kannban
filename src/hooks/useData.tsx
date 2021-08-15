@@ -37,11 +37,18 @@ interface JoinedType {
   projects: ProjectData[];
 }
 
+interface TasksType {
+  name: string;
+  id: string;
+}
+
 interface ListsType {
   name: string;
   id: string;
   color: string;
+  tasks: TasksType[];
 }
+
 interface contextProps {
   groups: JoinedType[];
   addGroup: (groupName: string) => Promise<void>;
@@ -53,6 +60,9 @@ interface contextProps {
   getProject: (id: string) => Promise<void>;
   addList: (name: string) => Promise<void>;
   archiveProject: (id: string) => Promise<void>;
+  deleteList: (id: string) => Promise<void>;
+  getTask: (id: string, projectId: string) => Promise<void>;
+  tasks: TasksType[];
 }
 
 //context
@@ -67,6 +77,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
     {} as ProjectSelf
   );
   const [lists, setLists] = useState<ListsType[]>([]);
+  const [tasks, setTasks] = useState<TasksType[]>([]);
 
   useEffect(() => {
     getProjects();
@@ -280,6 +291,15 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       //get the authenticate user
       const user = firebase.auth().currentUser;
 
+      // fetching tasks
+      let allTasks = await db
+        .collection("users")
+        .doc(user?.uid)
+        .collection("projects")
+        .doc(id)
+        .collection("tasks")
+        .get();
+
       // fetching groups
       let listsProject = await db
         .collection("users")
@@ -290,16 +310,90 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
         .get();
 
       const dataOfLists = [] as any;
+      const dataOfTask = {} as any;
+
+      allTasks.forEach((task) => {
+        const listIDKey = task.data().listId.trim();
+
+        dataOfTask[listIDKey] = dataOfTask.listId || [];
+        dataOfTask[listIDKey].push({
+          name: task.data().name,
+          id: task.id,
+        });
+      });
 
       listsProject.forEach((list) => {
         dataOfLists.push({
           name: list.data().name,
           id: list.id,
           color: list.data().color,
+          tasks: dataOfTask[list.id],
         });
       });
 
       setLists(dataOfLists);
+    } catch (error) {
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+    }
+  }
+
+  async function getTask(id: string, projectId: string) {
+    // inicialize firebase firestore
+    let db = firebase.firestore();
+
+    try {
+      //get the authenticate user
+      const user = firebase.auth().currentUser;
+
+      // fetching tasks
+      let taskBD = await db
+        .collection("users")
+        .doc(user?.uid)
+        .collection("projects")
+        .doc(selectedProject.id)
+        .collection("tasks")
+        .doc(id);
+
+      // fetching tasks
+      let subTasksDB = await db
+        .collection("users")
+        .doc(user?.uid)
+        .collection("projects")
+        .doc(selectedProject.id)
+        .collection("tasks")
+        .doc(id)
+        .collection("subtasks")
+        .get();
+
+      // fetching tasks
+      let commentsDB = await db
+        .collection("users")
+        .doc(user?.uid)
+        .collection("projects")
+        .doc(selectedProject.id)
+        .collection("tasks")
+        .doc(id)
+        .collection("comments")
+        .get();
+
+      const task = [] as TasksType[];
+      const subtasks = [] as any[];
+      const comments = [] as any[];
+
+      subTasksDB.forEach((subtask) => {
+        subtasks.push(subtask.data());
+      });
+
+      commentsDB.forEach((subtask) => {
+        comments.push(subtask.data());
+      });
+
+      console.log(subtasks);
+
+      //setTasks(dataOfTask);
     } catch (error) {
       toast.error(error.message, {
         bodyClassName: "toastify__error",
@@ -344,6 +438,40 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
     }
   }
 
+  async function deleteList(id: string) {
+    // inicialize firebase firestore
+    let db = firebase.firestore();
+
+    try {
+      //get the authenticate user
+      const user = firebase.auth().currentUser;
+
+      // fetching groups
+      let listDB = await db
+        .collection("users")
+        .doc(user?.uid)
+        .collection("projects")
+        .doc(selectedProject.id)
+        .collection("lists")
+        .doc(id)
+        .delete();
+
+      const allLists = lists.filter((list) => list.id !== id);
+
+      setLists(allLists);
+
+      toast.error("List Deleted!", {
+        bodyClassName: "toastify__success",
+        className: "toastify",
+      });
+    } catch (error) {
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+    }
+  }
+
   return (
     <DataContext.Provider
       value={{
@@ -357,6 +485,9 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
         getProject,
         addList,
         archiveProject,
+        deleteList,
+        getTask,
+        tasks,
       }}
     >
       {children}
