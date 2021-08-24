@@ -40,8 +40,8 @@ export default class Projects {
       projectsDB.forEach((projectDB) => {
         let project: ProjectType = {
           name: projectDB.data().name,
-          group: projectDB.data().createdAt,
-          isActive: projectDB.data().isDone,
+          group: projectDB.data().group,
+          isActive: projectDB.data().isActive,
           createdAt: projectDB.data().createdAt,
           id: projectDB.id,
         };

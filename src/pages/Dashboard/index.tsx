@@ -15,7 +15,7 @@ interface ID {
 const Dashboard = () => {
   // const [lists, setLists] = useState([1, 2, 3, 4, 5, 6, 7]);
 
-  const { getLists, lists, getProject, selectedProject } = useData();
+  const { getLists, lists, getProject, selectedProject, getTasks } = useData();
 
   let params: ID = useParams();
 
@@ -23,6 +23,7 @@ const Dashboard = () => {
     async function getListsOnLoad() {
       await getLists(params.id);
       await getProject(params.id);
+      await getTasks();
     }
     getListsOnLoad();
   }, [params]);
@@ -39,7 +40,6 @@ const Dashboard = () => {
             color={list.color}
             name={list.name}
             id={list.id}
-            tasks={list.tasks}
           />
         ))}
 

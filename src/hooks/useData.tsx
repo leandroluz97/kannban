@@ -9,6 +9,10 @@ import { toast } from "react-toastify";
 
 //imports
 import firebase from "../config/firebase-config";
+import Projects from "../utils/projects";
+import Groups from "../utils/groups";
+import Tasks from "../utils/tasks";
+
 import {
   groupProjectsByGroupName,
   joinGroupAndProjects,
@@ -34,6 +38,7 @@ interface ProjectData {
 }
 
 interface JoinedType {
+  createdAt: string;
   name: string;
   groupId: string;
   projects: ProjectData[];
@@ -42,13 +47,23 @@ interface JoinedType {
 interface TasksType {
   name: string;
   id: string;
+  listId: string;
 }
 
 interface ListsType {
   name: string;
   id: string;
   color: string;
-  tasks: TasksType[];
+  //tasks: TasksType[];
+}
+
+interface GroupType {
+  name: string;
+  id: string;
+  createdAt: string;
+}
+interface KeyType {
+  key: GroupType;
 }
 
 interface contextProps {
@@ -64,7 +79,9 @@ interface contextProps {
   archiveProject: (id: string) => Promise<void>;
   deleteList: (id: string) => Promise<void>;
   getTask: (id: string, projectId: string) => Promise<void>;
+  getTasks: () => Promise<void>;
   tasks: TasksType[];
+  addTask: (taskName: string, listId: string) => Promise<void>;
 }
 
 //context
@@ -89,9 +106,14 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
     // inicialize firebase firestore
     let db = firebase.firestore();
 
+    const projectClasse = new Projects();
+    const groupClasse = new Groups();
+
     try {
       //get the authenticate user
       const user = firebase.auth().currentUser;
+
+      /*
 
       //fetching projects
       let collectionProjects = await db
@@ -106,27 +128,33 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
         .doc(user?.uid)
         .collection("groups")
         .get();
+*/
+      let collectionGroups = await groupClasse.getGroups();
+      let collectionProjects = await projectClasse.getProjects();
 
-      const dataOfGroup = {} as any;
-      const dataOfProjects: ProjectData[] = [];
+      const dataOfGroup = collectionGroups?.reduce((acc: any, group) => {
+        acc[group.name] = {
+          name: group.name,
+          id: group.id,
+          createdAt: group.createdAt,
+        };
+        return acc;
+      }, {});
 
-      collectionGroups.forEach((item) => {
-        dataOfGroup[item.data().name] = { name: item.data().name, id: item.id };
-      });
-
-      collectionProjects.forEach((project) => {
-        if (project.data().isActive) {
-          dataOfProjects.push({
-            group: project.data().group,
-            name: project.data().name,
+      let dataOfProjects = collectionProjects?.reduce((acc: any, project) => {
+        if (project.isActive) {
+          acc.push({
+            group: project.group,
+            name: project.name,
             id: project.id,
-            isActive: project.data().isActive,
+            isActive: project.isActive,
           });
         }
-      });
+
+        return acc;
+      }, []);
 
       const groupOfProjects = groupProjectsByGroupName(dataOfProjects);
-
       const joinedGroupProjects = joinGroupAndProjects({
         groups: dataOfGroup,
         projects: groupOfProjects,
@@ -146,26 +174,28 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
     // inicialize firebase firestore
     let db = firebase.firestore();
 
+    const groupClass = new Groups();
+
     try {
       //get the authenticate user
       const user = firebase.auth().currentUser;
-
+      /*
       // fetching groups
       let collectionGroups = await db
         .collection("users")
         .doc(user?.uid)
         .collection("groups")
         .add({ name: groupName });
-
-      const returnedGroup = await collectionGroups.get();
+*/
+      const returnedGroup = await groupClass.addGroup(groupName);
 
       const newGroup = {
-        name: returnedGroup.data()?.name,
-        groupId: returnedGroup.id,
+        name: returnedGroup?.name,
+        id: returnedGroup?.id,
         projects: [],
-      } as JoinedType;
+      };
 
-      const dataOfGroups: JoinedType[] = [...groups, newGroup];
+      const dataOfGroups = [...groups, newGroup] as JoinedType[];
 
       setGroups(dataOfGroups);
     } catch (error) {
@@ -179,6 +209,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
   async function addProject(projectName: string) {
     // inicialize firebase firestore
     let db = firebase.firestore();
+    const projectClass = new Projects();
 
     try {
       //get the authenticate user
@@ -191,17 +222,20 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
         .collection("projects")
         .add({ name: projectName, group: storageProjectName, isActive: true });
 
-      const returnedProject = await collectionProject.get();
+      const returnedProject = await projectClass.addProject(
+        projectName,
+        storageProjectName
+      );
 
-      const newGroup = {
-        name: returnedProject.data()?.name,
-        id: returnedProject.id,
+      const newProject = {
+        name: returnedProject?.name,
+        id: returnedProject?.id,
         group: storageProjectName,
       } as ProjectData;
 
       const dataOfGroups = groups.map((group) => {
-        if (group.name === newGroup.group) {
-          group.projects = [...group.projects, newGroup];
+        if (group.name === newProject.group) {
+          group.projects = [...group.projects, newProject];
         }
         return group;
       }) as JoinedType[];
@@ -314,22 +348,25 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       const dataOfLists = [] as any;
       const dataOfTask = {} as any;
 
+      /*
       allTasks.forEach((task) => {
         const listIDKey = task.data().listId.trim();
 
-        dataOfTask[listIDKey] = dataOfTask.listId || [];
+        dataOfTask[listIDKey] = dataOfTask[listIDKey] || [];
+
         dataOfTask[listIDKey].push({
           name: task.data().name,
           id: task.id,
         });
       });
+*/
 
       listsProject.forEach((list) => {
         dataOfLists.push({
           name: list.data().name,
           id: list.id,
           color: list.data().color,
-          tasks: dataOfTask[list.id],
+          //tasks: dataOfTask[list.id],
         });
       });
 
@@ -339,73 +376,6 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
         bodyClassName: "toastify__error",
         className: "toastify",
       });
-    }
-  }
-
-  async function getTask(id: string, projectId: string) {
-    const sub = new Subtasks(selectedProject.id, id);
-    // inicialize firebase firestore
-    let db = firebase.firestore();
-
-    try {
-      //get the authenticate user
-      const user = firebase.auth().currentUser;
-
-      // fetching tasks
-      let taskBD = await db
-        .collection("users")
-        .doc(user?.uid)
-        .collection("projects")
-        .doc(selectedProject.id)
-        .collection("tasks")
-        .doc(id);
-
-      // fetching tasks
-      let subTasksDB = await db
-        .collection("users")
-        .doc(user?.uid)
-        .collection("projects")
-        .doc(selectedProject.id)
-        .collection("tasks")
-        .doc(id)
-        .collection("subtasks")
-        .get();
-
-      // fetching tasks
-      let commentsDB = await db
-        .collection("users")
-        .doc(user?.uid)
-        .collection("projects")
-        .doc(selectedProject.id)
-        .collection("tasks")
-        .doc(id)
-        .collection("comments")
-        .get();
-
-      const task = [] as TasksType[];
-      const subtasks = [] as any[];
-      const comments = [] as any[];
-
-      subTasksDB.forEach((subtask) => {
-        subtasks.push(subtask.data());
-      });
-
-      commentsDB.forEach((subtask) => {
-        comments.push(subtask.data());
-      });
-
-      console.log(subtasks);
-
-      const t = await sub.getSubtasks();
-
-      //setTasks(dataOfTask);
-    } catch (error) {
-      toast.error(error.message, {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
-
-      console.log(error);
     }
   }
 
@@ -479,6 +449,54 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
     }
   }
 
+  async function getTask(id: string, projectId: string) {
+    const sub = new Subtasks(selectedProject.id, id);
+    // inicialize firebase firestore
+    let db = firebase.firestore();
+
+    try {
+      //get the authenticate user
+      const user = firebase.auth().currentUser;
+
+      //setTasks(dataOfTask);
+    } catch (error) {
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+
+      console.log(error);
+    }
+  }
+
+  async function getTasks() {
+    try {
+      const taskClass = new Tasks();
+      const allTasks = await taskClass.getTasks();
+
+      setTasks(allTasks as TasksType[]);
+    } catch (error) {}
+  }
+
+  async function addTask(taskName: string, listId: string) {
+    try {
+      const taskClass = new Tasks();
+
+      const newTask = await taskClass.addTask(taskName, listId);
+
+      const allTask = [...tasks, newTask] as TasksType[];
+
+      setTasks(allTask);
+    } catch (error) {
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+
+      console.log(error);
+    }
+  }
+
   return (
     <DataContext.Provider
       value={{
@@ -494,7 +512,9 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
         archiveProject,
         deleteList,
         getTask,
+        getTasks,
         tasks,
+        addTask,
       }}
     >
       {children}

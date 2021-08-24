@@ -62,7 +62,7 @@ export default class Groups {
         name: groupsDB.data()?.name,
         createdAt: groupsDB.data()?.createdAt,
         id: groupsDB.id,
-      };
+      } as GroupType;
 
       return newGroup;
     } catch (error) {

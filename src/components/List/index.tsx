@@ -23,13 +23,12 @@ interface ListProps {
   name: string;
   color: string;
   id: string;
-  tasks: TasksType[];
 }
 
 interface ID {
   id: string;
 }
-const List = ({ name, color, id, tasks }: ListProps) => {
+const List = ({ name, color, id }: ListProps) => {
   const [addNewCard, setAddNewCard] = useState(false);
   const [moreOption, setMoreOption] = useState(false);
   const [changeColor, setChangeColor] = useState(false);
@@ -39,7 +38,9 @@ const List = ({ name, color, id, tasks }: ListProps) => {
   const colorRef = useRef<HTMLDivElement | null>(null);
   const deleteConfirmationRef = useRef<HTMLDivElement | null>(null);
 
-  const { deleteList } = useData();
+  const { deleteList, tasks } = useData();
+
+  const allTasks = tasks.filter((task) => task.listId === id);
 
   const colors = [
     "#8B18D1",
@@ -157,12 +158,15 @@ const List = ({ name, color, id, tasks }: ListProps) => {
         )}
       </header>
       <section className={styles.list__body}>
-        {tasks.map((task) => (
+        {allTasks.map((task) => (
           <Card key={task.id} title={task.name} id={task.id} />
         ))}
 
         {addNewCard && (
-          <ListCard handleCloseTextFied={handleCloseAddNewCardTextField} />
+          <ListCard
+            handleCloseTextFied={handleCloseAddNewCardTextField}
+            listId={id}
+          />
         )}
       </section>
     </section>

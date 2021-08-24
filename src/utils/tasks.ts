@@ -4,19 +4,18 @@ import { toast } from "react-toastify";
 interface TaskType {
   name: string;
   id: string;
+  listId: string;
 }
 
 export default class Tasks {
   db: firebase.firestore.Firestore;
   user: firebase.User | null;
   tasks: TaskType[];
-  projectId: string;
 
-  constructor(projectId: string) {
+  constructor() {
     this.db = firebase.firestore();
     this.user = firebase.auth().currentUser;
     this.tasks = [];
-    this.projectId = projectId;
   }
 
   async getTasks() {
@@ -25,8 +24,6 @@ export default class Tasks {
       let tasksDB = await this.db
         .collection("users")
         .doc(this.user?.uid)
-        .collection("projects")
-        .doc(this.projectId)
         .collection("tasks")
         .get();
 
@@ -35,6 +32,7 @@ export default class Tasks {
         let task: TaskType = {
           name: taskDB.data().name,
           id: taskDB.id,
+          listId: taskDB.data().listId,
         };
 
         this.tasks.push(task);
@@ -49,21 +47,20 @@ export default class Tasks {
     }
   }
 
-  async addTask(taskName: string) {
+  async addTask(taskName: string, listId: string) {
     try {
       //Get all the Subtasks from Database
       let taskDB = await this.db
         .collection("users")
         .doc(this.user?.uid)
-        .collection("projects")
-        .doc(this.projectId)
         .collection("tasks")
-        .add({ name: taskName })
+        .add({ name: taskName, listId: listId })
         .then((data) => data.get());
 
       const newTask = {
         name: taskDB.data()?.name,
         id: taskDB.id,
+        listId: taskDB.data()?.listId,
       } as TaskType;
 
       return newTask;
@@ -81,8 +78,6 @@ export default class Tasks {
       let taskDB = await this.db
         .collection("users")
         .doc(this.user?.uid)
-        .collection("projects")
-        .doc(this.projectId)
         .collection("tasks")
         .doc(id)
         .update({ name: taskName });
@@ -100,8 +95,6 @@ export default class Tasks {
       let subTaskDB = await this.db
         .collection("users")
         .doc(this.user?.uid)
-        .collection("projects")
-        .doc(this.projectId)
         .collection("tasks")
         .doc(id)
         .delete();

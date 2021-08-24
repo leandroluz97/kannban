@@ -9,14 +9,18 @@ import {
 } from "react";
 import AddRoundedIcon from "@material-ui/icons/AddRounded";
 import styles from "./styles.module.scss";
+import { useData } from "../../hooks/useData";
 
 interface ListCard {
   handleCloseTextFied: () => void;
+  listId: string;
 }
 
-const ListCard = ({ handleCloseTextFied }: ListCard) => {
+const ListCard = ({ handleCloseTextFied, listId }: ListCard) => {
   const [cardName, setCardName] = useState("");
   const inputEl = useRef<HTMLTextAreaElement | null>(null);
+
+  const { addTask } = useData();
 
   useEffect(() => {
     inputEl.current?.focus();
@@ -26,8 +30,9 @@ const ListCard = ({ handleCloseTextFied }: ListCard) => {
     setCardName(e.target.value);
   }
 
-  function handleOnKeyPress(event: KeyboardEvent) {
+  async function handleOnKeyPress(event: KeyboardEvent) {
     if (event.key === "Enter" && !event.shiftKey && cardName.length > 2) {
+      await addTask(cardName, listId);
       handleCloseTextFied();
     }
   }
