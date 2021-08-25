@@ -5,6 +5,8 @@ interface TaskType {
   name: string;
   id: string;
   listId: string;
+  dueTime: string;
+  description: string;
 }
 
 export default class Tasks {
@@ -33,6 +35,8 @@ export default class Tasks {
           name: taskDB.data().name,
           id: taskDB.id,
           listId: taskDB.data().listId,
+          dueTime: taskDB.data().dueTime,
+          description: taskDB.data().description,
         };
 
         this.tasks.push(task);
@@ -61,6 +65,8 @@ export default class Tasks {
         name: taskDB.data()?.name,
         id: taskDB.id,
         listId: taskDB.data()?.listId,
+        dueTime: taskDB.data()?.dueTime,
+        description: taskDB.data()?.description,
       } as TaskType;
 
       return newTask;
@@ -72,7 +78,12 @@ export default class Tasks {
     }
   }
 
-  async updateTask(id: string, taskName: string) {
+  async updateTask(
+    id: string,
+    taskName: string,
+    dueTime: string,
+    description: string
+  ) {
     try {
       //Update Task in Database
       let taskDB = await this.db
@@ -80,7 +91,7 @@ export default class Tasks {
         .doc(this.user?.uid)
         .collection("tasks")
         .doc(id)
-        .update({ name: taskName });
+        .update({ name: taskName, dueTime: dueTime, description: description });
     } catch (error) {
       toast.error(error.message, {
         bodyClassName: "toastify__error",

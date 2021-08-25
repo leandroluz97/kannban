@@ -11,14 +11,12 @@ export default class Comments {
   db: firebase.firestore.Firestore;
   user: firebase.User | null;
   comments: CommentType[];
-  projectId: string;
   taskId: string;
 
-  constructor(projectId: string, taskId: string) {
+  constructor(taskId: string) {
     this.db = firebase.firestore();
     this.user = firebase.auth().currentUser;
     this.comments = [];
-    this.projectId = projectId;
     this.taskId = taskId;
   }
 
@@ -28,8 +26,6 @@ export default class Comments {
       let commentsDB = await this.db
         .collection("users")
         .doc(this.user?.uid)
-        .collection("projects")
-        .doc(this.projectId)
         .collection("tasks")
         .doc(this.taskId)
         .collection("comments")
@@ -61,8 +57,6 @@ export default class Comments {
       let commentDB = await this.db
         .collection("users")
         .doc(this.user?.uid)
-        .collection("projects")
-        .doc(this.projectId)
         .collection("tasks")
         .doc(this.taskId)
         .collection("comment")
@@ -90,8 +84,6 @@ export default class Comments {
       let commentDB = await this.db
         .collection("users")
         .doc(this.user?.uid)
-        .collection("projects")
-        .doc(this.projectId)
         .collection("tasks")
         .doc(this.taskId)
         .collection("subtasks")

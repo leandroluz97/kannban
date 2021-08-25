@@ -12,6 +12,9 @@ import firebase from "../config/firebase-config";
 import Projects from "../utils/projects";
 import Groups from "../utils/groups";
 import Tasks from "../utils/tasks";
+import Tags from "../utils/tags";
+import Comments from "../utils/comments";
+import Lists from "../utils/lists";
 
 import {
   groupProjectsByGroupName,
@@ -19,6 +22,7 @@ import {
 } from "../utils/normarlization";
 
 import Subtasks from "../utils/subtasks";
+import { Description } from "@material-ui/icons";
 
 interface DataProviderPropsType {
   children: ReactNode;
@@ -48,6 +52,26 @@ interface TasksType {
   name: string;
   id: string;
   listId: string;
+  dueTime: string;
+  description: string;
+}
+
+interface CommentType {
+  comment: string;
+  id: string;
+  createdAt: string;
+}
+
+interface SubTaskType {
+  subtask: string;
+  id: string;
+  createdAt: string;
+}
+
+interface TagType {
+  tag: string;
+  color: string;
+  id: string;
 }
 
 interface ListsType {
@@ -78,7 +102,7 @@ interface contextProps {
   addList: (name: string) => Promise<void>;
   archiveProject: (id: string) => Promise<void>;
   deleteList: (id: string) => Promise<void>;
-  getTask: (id: string, projectId: string) => Promise<void>;
+  getTask: (id: string) => Promise<void>;
   getTasks: () => Promise<void>;
   tasks: TasksType[];
   addTask: (taskName: string, listId: string) => Promise<void>;
@@ -97,38 +121,21 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
   );
   const [lists, setLists] = useState<ListsType[]>([]);
   const [tasks, setTasks] = useState<TasksType[]>([]);
+  const [tags, setTags] = useState<TasksType[]>([]);
+  const [comments, setComments] = useState<CommentType[]>([]);
+  const [subTaks, setSubTaks] = useState<SubTaskType[]>([]);
 
   useEffect(() => {
     getProjects();
   }, []);
 
   async function getProjects() {
-    // inicialize firebase firestore
-    let db = firebase.firestore();
-
+    //Instances of classes
     const projectClasse = new Projects();
     const groupClasse = new Groups();
 
     try {
-      //get the authenticate user
-      const user = firebase.auth().currentUser;
-
-      /*
-
-      //fetching projects
-      let collectionProjects = await db
-        .collection("users")
-        .doc(user?.uid)
-        .collection("projects")
-        .get();
-
-      // fetching groups
-      let collectionGroups = await db
-        .collection("users")
-        .doc(user?.uid)
-        .collection("groups")
-        .get();
-*/
+      //Get Groups and Projects from Database
       let collectionGroups = await groupClasse.getGroups();
       let collectionProjects = await projectClasse.getProjects();
 
@@ -177,16 +184,6 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
     const groupClass = new Groups();
 
     try {
-      //get the authenticate user
-      const user = firebase.auth().currentUser;
-      /*
-      // fetching groups
-      let collectionGroups = await db
-        .collection("users")
-        .doc(user?.uid)
-        .collection("groups")
-        .add({ name: groupName });
-*/
       const returnedGroup = await groupClass.addGroup(groupName);
 
       const newGroup = {
@@ -207,21 +204,9 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
   }
 
   async function addProject(projectName: string) {
-    // inicialize firebase firestore
-    let db = firebase.firestore();
     const projectClass = new Projects();
 
     try {
-      //get the authenticate user
-      const user = firebase.auth().currentUser;
-
-      // fetching groups
-      let collectionProject = await db
-        .collection("users")
-        .doc(user?.uid)
-        .collection("projects")
-        .add({ name: projectName, group: storageProjectName, isActive: true });
-
       const returnedProject = await projectClass.addProject(
         projectName,
         storageProjectName
@@ -252,26 +237,19 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
   }
 
   async function getProject(id: string) {
-    // inicialize firebase firestore
-    let db = firebase.firestore();
+    //Instance of classes
+    const projectClass = new Projects();
 
     try {
-      //get the authenticate user
-      const user = firebase.auth().currentUser;
+      //Get Project from Database
+      const projectDB: any = await projectClass.getProject(id);
 
-      // fetching groups
-      let getProjectDB = await db
-        .collection("users")
-        .doc(user?.uid)
-        .collection("projects")
-        .doc(id)
-        .get();
-
-      if (getProjectDB.data()?.isActive) {
+      //If the project is not archived show it as an active project
+      if (projectDB.data()?.isActive) {
         const returnedProject = {
-          name: getProjectDB.data()?.name,
-          id: getProjectDB.id,
-          isActive: getProjectDB.data()?.isActive,
+          name: projectDB.data()?.name,
+          id: projectDB.id,
+          isActive: projectDB.data()?.isActive,
         } as ProjectSelf;
 
         setSelectedProject(returnedProject);
@@ -289,28 +267,22 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
   }
 
   async function archiveProject(id: string) {
-    // inicialize firebase firestore
-    let db = firebase.firestore();
+    //Instance of classes
+    const projectClass = new Projects();
 
     try {
-      //get the authenticate user
-      const user = firebase.auth().currentUser;
+      //Update Project in Database
+      await projectClass.archiveProject(id);
 
-      // fetching groups
-      let getProjectDB = await db
-        .collection("users")
-        .doc(user?.uid)
-        .collection("projects")
-        .doc(id)
-        .update({ isActive: false });
-
-      const archiveProject = groups.reduce((acc, group) => {
+      //Archived Project
+      const archivedProject = groups.reduce((acc, group) => {
         group.projects = group.projects.filter((project) => project.id !== id);
         acc = [...acc, group];
         return acc;
       }, [] as JoinedType[]) as JoinedType[];
 
-      setGroups(archiveProject);
+      //Update State
+      setGroups(archivedProject);
     } catch (error) {
       toast.error(error.message, {
         bodyClassName: "toastify__error",
@@ -320,57 +292,15 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
   }
 
   async function getLists(id: string) {
-    // inicialize firebase firestore
-    let db = firebase.firestore();
+    //Instance of classes
+    const listClass = new Lists(selectedProject.id);
 
     try {
-      //get the authenticate user
-      const user = firebase.auth().currentUser;
+      //Add list in Database
+      let listDB: any = await listClass.getLists();
 
-      // fetching tasks
-      let allTasks = await db
-        .collection("users")
-        .doc(user?.uid)
-        .collection("projects")
-        .doc(id)
-        .collection("tasks")
-        .get();
-
-      // fetching groups
-      let listsProject = await db
-        .collection("users")
-        .doc(user?.uid)
-        .collection("projects")
-        .doc(id)
-        .collection("lists")
-        .get();
-
-      const dataOfLists = [] as any;
-      const dataOfTask = {} as any;
-
-      /*
-      allTasks.forEach((task) => {
-        const listIDKey = task.data().listId.trim();
-
-        dataOfTask[listIDKey] = dataOfTask[listIDKey] || [];
-
-        dataOfTask[listIDKey].push({
-          name: task.data().name,
-          id: task.id,
-        });
-      });
-*/
-
-      listsProject.forEach((list) => {
-        dataOfLists.push({
-          name: list.data().name,
-          id: list.id,
-          color: list.data().color,
-          //tasks: dataOfTask[list.id],
-        });
-      });
-
-      setLists(dataOfLists);
+      //Update State
+      setLists(listDB);
     } catch (error) {
       toast.error(error.message, {
         bodyClassName: "toastify__error",
@@ -380,31 +310,20 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
   }
 
   async function addList(name: string) {
-    // inicialize firebase firestore
-    let db = firebase.firestore();
+    //Instance of classes
+    const listClass = new Lists(selectedProject.id);
 
     try {
-      //get the authenticate user
-      const user = firebase.auth().currentUser;
+      //Add list in Database
+      let listDB: any = await listClass.addList(name, "8B18D1");
 
-      // fetching groups
-      let listDB = await db
-        .collection("users")
-        .doc(user?.uid)
-        .collection("projects")
-        .doc(selectedProject.id)
-        .collection("lists")
-        .add({ name: name, color: "8B18D1" });
-
-      const returnedlistDB = await listDB.get();
-
-      const returnedList = {
-        name: returnedlistDB.data()?.name,
-        id: returnedlistDB.id,
-        color: returnedlistDB.data()?.color,
+      const newList = {
+        name: listDB.data()?.name,
+        id: listDB.id,
+        color: listDB.data()?.color,
       } as ListsType;
 
-      const allLists: ListsType[] = [...lists, returnedList];
+      const allLists: ListsType[] = [...lists, newList];
 
       setLists(allLists);
     } catch (error) {
@@ -416,25 +335,17 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
   }
 
   async function deleteList(id: string) {
-    // inicialize firebase firestore
-    let db = firebase.firestore();
+    //Instance of classes
+    const listClass = new Lists(selectedProject.id);
 
     try {
-      //get the authenticate user
-      const user = firebase.auth().currentUser;
+      //Delete list in Database
+      await listClass.deleteList(id);
 
-      // fetching groups
-      let listDB = await db
-        .collection("users")
-        .doc(user?.uid)
-        .collection("projects")
-        .doc(selectedProject.id)
-        .collection("lists")
-        .doc(id)
-        .delete();
-
+      //Delete List in State
       const allLists = lists.filter((list) => list.id !== id);
 
+      //Update State
       setLists(allLists);
 
       toast.error("List Deleted!", {
@@ -449,17 +360,24 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
     }
   }
 
-  async function getTask(id: string, projectId: string) {
-    const sub = new Subtasks(selectedProject.id, id);
-    // inicialize firebase firestore
-    let db = firebase.firestore();
+  async function getTask(id: string) {
+    //Instance of classes
+    const subtaskClass = new Subtasks(selectedProject.id, id);
+    const comentsClass = new Comments(id);
+    const tagsClass = new Tags(id);
 
     try {
-      //get the authenticate user
-      const user = firebase.auth().currentUser;
+      //Get subtasks comments and tags from Database
+      const allSubtasks: any = await subtaskClass.getSubtasks();
+      const allComments: any = await comentsClass.getComments();
+      const allTags: any = await tagsClass.getTags();
 
-      //setTasks(dataOfTask);
+      //Update States
+      setSubTaks(allSubtasks);
+      setComments(allComments);
+      setTags(allTags);
     } catch (error) {
+      //handle toast error
       toast.error(error.message, {
         bodyClassName: "toastify__error",
         className: "toastify",

@@ -14,7 +14,7 @@ const Card = ({ title, id }: CartProps) => {
 
   function handleOpenTask() {
     setTaskModalOpen(true);
-    getTask(id, "hdhdhdhd");
+    getTask(id);
   }
 
   return (

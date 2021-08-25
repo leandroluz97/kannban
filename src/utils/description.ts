@@ -10,14 +10,12 @@ export default class Descriptions {
   db: firebase.firestore.Firestore;
   user: firebase.User | null;
   description: DescriptionType;
-  projectId: string;
   taskId: string;
 
-  constructor(projectId: string, taskId: string) {
+  constructor(taskId: string) {
     this.db = firebase.firestore();
     this.user = firebase.auth().currentUser;
     this.description = {} as DescriptionType;
-    this.projectId = projectId;
     this.taskId = taskId;
   }
 
@@ -27,8 +25,6 @@ export default class Descriptions {
       let descriptionDB = await this.db
         .collection("users")
         .doc(this.user?.uid)
-        .collection("projects")
-        .doc(this.projectId)
         .collection("tasks")
         .doc(this.taskId)
         .collection("description")
@@ -59,11 +55,9 @@ export default class Descriptions {
       let subTaskDB = await this.db
         .collection("users")
         .doc(this.user?.uid)
-        .collection("projects")
-        .doc(this.projectId)
         .collection("tasks")
         .doc(this.taskId)
-        .collection("subtasks")
+        .collection("description")
         .add({ description: description })
         .then((data) => data.get());
 
@@ -87,8 +81,6 @@ export default class Descriptions {
       let descriptionDB = await this.db
         .collection("users")
         .doc(this.user?.uid)
-        .collection("projects")
-        .doc(this.projectId)
         .collection("tasks")
         .doc(this.taskId)
         .collection("description")

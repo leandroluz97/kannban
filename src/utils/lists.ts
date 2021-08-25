@@ -97,7 +97,7 @@ export default class Lists {
     }
   }
 
-  async deleteSubtask(id: string) {
+  async deleteList(id: string) {
     try {
       //Delete list from Database
       let subTaskDB = await this.db

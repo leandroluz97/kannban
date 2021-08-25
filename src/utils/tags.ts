@@ -12,14 +12,12 @@ export default class Tags {
   db: firebase.firestore.Firestore;
   user: firebase.User | null;
   tags: TagType[];
-  projectId: string;
   taskId: string;
 
-  constructor(projectId: string, taskId: string) {
+  constructor(taskId: string) {
     this.db = firebase.firestore();
     this.user = firebase.auth().currentUser;
     this.tags = [];
-    this.projectId = projectId;
     this.taskId = taskId;
   }
 
@@ -29,8 +27,6 @@ export default class Tags {
       let tagsDB = await this.db
         .collection("users")
         .doc(this.user?.uid)
-        .collection("projects")
-        .doc(this.projectId)
         .collection("tasks")
         .doc(this.taskId)
         .collection("tags")
@@ -63,8 +59,6 @@ export default class Tags {
       let tagsDB = await this.db
         .collection("users")
         .doc(this.user?.uid)
-        .collection("projects")
-        .doc(this.projectId)
         .collection("tasks")
         .doc(this.taskId)
         .collection("tags")
