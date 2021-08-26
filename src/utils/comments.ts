@@ -34,13 +34,15 @@ export default class Comments {
       //Normalize all subtask
       commentsDB.forEach((commentDB) => {
         let comment: CommentType = {
-          comment: commentDB.data().subtask,
+          comment: commentDB.data().comment,
           createdAt: commentDB.data().createdAt,
           id: commentDB.id,
         };
 
         this.comments.push(comment);
       });
+
+      console.log(this.comments);
 
       return this.comments;
     } catch (error) {
@@ -59,7 +61,7 @@ export default class Comments {
         .doc(this.user?.uid)
         .collection("tasks")
         .doc(this.taskId)
-        .collection("comment")
+        .collection("comments")
         .add({ comment: comment, createdAt: "ffff" })
         .then((data) => data.get());
 
@@ -86,7 +88,7 @@ export default class Comments {
         .doc(this.user?.uid)
         .collection("tasks")
         .doc(this.taskId)
-        .collection("subtasks")
+        .collection("comments")
         .doc(id)
         .delete();
 

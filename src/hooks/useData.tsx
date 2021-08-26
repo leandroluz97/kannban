@@ -66,6 +66,7 @@ interface SubTaskType {
   subtask: string;
   id: string;
   createdAt: string;
+  isDone: boolean;
 }
 
 interface TagType {
@@ -106,6 +107,17 @@ interface contextProps {
   getTasks: () => Promise<void>;
   tasks: TasksType[];
   addTask: (taskName: string, listId: string) => Promise<void>;
+  addComment: (comment: string) => Promise<void>;
+  deleteComment: (id: string) => Promise<void>;
+  comments: CommentType[];
+  addSubtask: (subtask: string) => Promise<void>;
+  subtasks: SubTaskType[];
+  deleteSubtask: (id: string) => Promise<void>;
+  updateSubtask: (
+    id: string,
+    isDone: boolean,
+    subtask: string
+  ) => Promise<void>;
 }
 
 //context
@@ -123,7 +135,8 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
   const [tasks, setTasks] = useState<TasksType[]>([]);
   const [tags, setTags] = useState<TasksType[]>([]);
   const [comments, setComments] = useState<CommentType[]>([]);
-  const [subTaks, setSubTaks] = useState<SubTaskType[]>([]);
+  const [subtasks, setSubtasks] = useState<SubTaskType[]>([]);
+  const [selectedTask, setSelectedTask] = useState({} as TasksType);
 
   useEffect(() => {
     getProjects();
@@ -245,11 +258,11 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       const projectDB: any = await projectClass.getProject(id);
 
       //If the project is not archived show it as an active project
-      if (projectDB.data()?.isActive) {
+      if (projectDB.isActive) {
         const returnedProject = {
-          name: projectDB.data()?.name,
+          name: projectDB.name,
           id: projectDB.id,
-          isActive: projectDB.data()?.isActive,
+          isActive: projectDB.isActive,
         } as ProjectSelf;
 
         setSelectedProject(returnedProject);
@@ -293,7 +306,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
 
   async function getLists(id: string) {
     //Instance of classes
-    const listClass = new Lists(selectedProject.id);
+    const listClass = new Lists(id);
 
     try {
       //Add list in Database
@@ -313,14 +326,16 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
     //Instance of classes
     const listClass = new Lists(selectedProject.id);
 
+    console.log(name);
+
     try {
       //Add list in Database
       let listDB: any = await listClass.addList(name, "8B18D1");
 
       const newList = {
-        name: listDB.data()?.name,
+        name: listDB.name,
         id: listDB.id,
-        color: listDB.data()?.color,
+        color: listDB.color,
       } as ListsType;
 
       const allLists: ListsType[] = [...lists, newList];
@@ -362,7 +377,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
 
   async function getTask(id: string) {
     //Instance of classes
-    const subtaskClass = new Subtasks(selectedProject.id, id);
+    const subtaskClass = new Subtasks(id);
     const comentsClass = new Comments(id);
     const tagsClass = new Tags(id);
 
@@ -372,10 +387,13 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       const allComments: any = await comentsClass.getComments();
       const allTags: any = await tagsClass.getTags();
 
+      const task: any = tasks.find((task) => task.id === id);
+
       //Update States
-      setSubTaks(allSubtasks);
+      setSubtasks(allSubtasks);
       setComments(allComments);
       setTags(allTags);
+      setSelectedTask(task);
     } catch (error) {
       //handle toast error
       toast.error(error.message, {
@@ -415,6 +433,141 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
     }
   }
 
+  async function addComment(comment: string) {
+    //Instance of classes
+    const comentsClass = new Comments(selectedTask.id);
+
+    try {
+      //Get subtasks comments and tags from Database
+      const newComment: any = await comentsClass.addComment(comment);
+
+      //New array of comments
+      const allComments = [...comments, newComment];
+
+      //Update States
+      setComments(allComments);
+    } catch (error) {
+      //handle toast error
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+
+      console.log(error);
+    }
+  }
+
+  async function deleteComment(id: string) {
+    //Instance of classes
+    const comentsClass = new Comments(selectedTask.id);
+
+    try {
+      //Get subtasks comments and tags from Database
+      await comentsClass.deleteComment(id);
+
+      //New array of comments
+      const allComments = comments.filter((comment) => comment.id !== id);
+
+      //Update States
+      setComments(allComments);
+
+      toast.success("Comment Deleted!", {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+    } catch (error) {
+      //handle toast error
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+
+      console.log(error);
+    }
+  }
+
+  async function addSubtask(subtask: string) {
+    //Instance of classes
+    const subtaskClass = new Subtasks(selectedTask.id);
+
+    try {
+      //Get subtasks comments and tags from Database
+      const newSubtask: any = await subtaskClass.addSubtask(subtask);
+
+      //New array of comments
+      const allComments = [...subtasks, newSubtask];
+
+      //Update States
+      setSubtasks(allComments);
+    } catch (error) {
+      //handle toast error
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+
+      console.log(error);
+    }
+  }
+
+  async function deleteSubtask(id: string) {
+    //Instance of classes
+    const subtaskClass = new Subtasks(selectedTask.id);
+
+    try {
+      //delete subtasks from Database
+      await subtaskClass.deleteSubtask(id);
+
+      //New array of subtasks
+      const allSubtasks = subtasks.filter((subtask) => subtask.id !== id);
+
+      //Update States
+      setSubtasks(allSubtasks);
+
+      toast.success("Comment Deleted!", {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+    } catch (error) {
+      //handle toast error
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+
+      console.log(error);
+    }
+  }
+
+  async function updateSubtask(id: string, isDone: boolean, subtask: string) {
+    //Instance of classes
+    const subtaskClass = new Subtasks(selectedTask.id);
+
+    try {
+      //delete subtasks from Database
+      await subtaskClass.updateSubtask(id, isDone, subtask);
+
+      //New array of subtasks
+      const allSubtasks = subtasks.filter((subtask) => subtask.id !== id);
+
+      //Update States
+      setSubtasks(allSubtasks);
+
+      toast.success("Comment Deleted!", {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+    } catch (error) {
+      //handle toast error
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+
+      console.log(error);
+    }
+  }
+
   return (
     <DataContext.Provider
       value={{
@@ -433,6 +586,13 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
         getTasks,
         tasks,
         addTask,
+        addComment,
+        comments,
+        deleteComment,
+        addSubtask,
+        deleteSubtask,
+        subtasks,
+        updateSubtask,
       }}
     >
       {children}

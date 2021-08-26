@@ -53,7 +53,7 @@ export default class Lists {
 
   async addList(ListName: string, color: string) {
     try {
-      //Get all the Subtasks from Database
+      //Add List to Database
       let listDB = await this.db
         .collection("users")
         .doc(this.user?.uid)
@@ -64,7 +64,7 @@ export default class Lists {
         .then((data) => data.get());
 
       const newList = {
-        name: listDB.data()?.subtask,
+        name: listDB.data()?.name,
         color: listDB.data()?.color,
         id: listDB.id,
       } as ListType;

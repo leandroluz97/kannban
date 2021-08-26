@@ -12,14 +12,14 @@ export default class Subtasks {
   db: firebase.firestore.Firestore;
   user: firebase.User | null;
   subtasks: SubTaskType[];
-  projectId: string;
+
   taskId: string;
 
-  constructor(projectId: string, taskId: string) {
+  constructor(taskId: string) {
     this.db = firebase.firestore();
     this.user = firebase.auth().currentUser;
     this.subtasks = [];
-    this.projectId = projectId;
+
     this.taskId = taskId;
   }
 
@@ -29,8 +29,6 @@ export default class Subtasks {
       let subTasksDB = await this.db
         .collection("users")
         .doc(this.user?.uid)
-        .collection("projects")
-        .doc(this.projectId)
         .collection("tasks")
         .doc(this.taskId)
         .collection("subtasks")
@@ -63,8 +61,6 @@ export default class Subtasks {
       let subTaskDB = await this.db
         .collection("users")
         .doc(this.user?.uid)
-        .collection("projects")
-        .doc(this.projectId)
         .collection("tasks")
         .doc(this.taskId)
         .collection("subtasks")
@@ -93,8 +89,6 @@ export default class Subtasks {
       let subTaskDB = await this.db
         .collection("users")
         .doc(this.user?.uid)
-        .collection("projects")
-        .doc(this.projectId)
         .collection("tasks")
         .doc(this.taskId)
         .collection("subtasks")
@@ -116,8 +110,6 @@ export default class Subtasks {
       let subTaskDB = await this.db
         .collection("users")
         .doc(this.user?.uid)
-        .collection("projects")
-        .doc(this.projectId)
         .collection("tasks")
         .doc(this.taskId)
         .collection("subtasks")

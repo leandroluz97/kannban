@@ -12,9 +12,9 @@ const Card = ({ title, id }: CartProps) => {
   const { setTaskModalOpen } = useUI();
   const { getTask } = useData();
 
-  function handleOpenTask() {
+  async function handleOpenTask() {
     setTaskModalOpen(true);
-    getTask(id);
+    await getTask(id);
   }
 
   return (

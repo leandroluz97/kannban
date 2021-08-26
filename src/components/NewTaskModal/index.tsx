@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const NewTaskModal = () => {
   const { setTaskModalOpen, taskModalOpen } = useUI();
-  const { getTask } = useData();
+  const { getTask, comments, subtasks } = useData();
 
   useEffect(() => {}, []);
 
@@ -63,31 +63,26 @@ const NewTaskModal = () => {
           </div>
           <div className={styles.newTaskModal__right}>
             <InputSubTask />
-            <Subtask key="32" />
-            <Subtask key="44w" />
+            {subtasks.map((subtask) => (
+              <Subtask
+                key={subtask.id}
+                subtask={subtask.subtask}
+                isDone={subtask.isDone}
+                id={subtask.id}
+              />
+            ))}
 
             <InputComment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
+            <>
+              {comments.map((comment) => (
+                <Comment
+                  key={comment.id}
+                  comment={comment.comment}
+                  createdAt={comment.createdAt}
+                  id={comment.id}
+                />
+              ))}
+            </>
           </div>
         </div>
       </section>

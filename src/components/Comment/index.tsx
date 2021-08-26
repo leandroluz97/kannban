@@ -1,21 +1,32 @@
 import React from "react";
 import styles from "./styles.module.scss";
 import CloseRoundedIcon from "@material-ui/icons/CloseRounded";
+import { useData } from "../../hooks/useData";
 
-const Comment = () => {
+interface CommentProps {
+  comment: string;
+  id: string;
+  createdAt: string;
+}
+const Comment = ({ comment, id, createdAt }: CommentProps) => {
+  const { deleteComment } = useData();
+  const handleDelete = async () => {
+    await deleteComment(id);
+  };
+
   return (
     <div className={styles.comment}>
       <div className={styles.comment__header}>
-        <span className={styles.comment__date}>Jul 27, 2021 9:30pm</span>
-        <button>
+        <time className={styles.comment__date}>
+          Jul 27, 2021 9:30pm - {createdAt}
+        </time>
+        <button onClick={handleDelete}>
           <CloseRoundedIcon fontSize="large" />
         </button>
       </div>
 
       <div className={styles.comment__body}>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum, sed.
-        </p>
+        <p>{comment}</p>
       </div>
     </div>
   );
