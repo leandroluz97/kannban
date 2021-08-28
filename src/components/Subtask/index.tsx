@@ -1,9 +1,12 @@
 import React, { KeyboardEvent, SyntheticEvent, useRef, useState } from "react";
+import ContentEditable from "react-contenteditable";
 import CloseRoundedIcon from "@material-ui/icons/CloseRounded";
 import styles from "./styles.module.scss";
 import { Checkbox, withStyles } from "@material-ui/core";
 import { v4 as uuidv4 } from "uuid";
 import { useData } from "../../hooks/useData";
+import { useEffect } from "react";
+import { ChangeEvent } from "react";
 
 const CustomCheckbox = withStyles({
   root: {
@@ -32,7 +35,7 @@ interface SubtaskProp {
 }
 
 const Subtask = ({ subtask, id, isDone }: SubtaskProp) => {
-  const [state, setstate] = useState(subtask);
+  const [subtaskName, setsubtaskName] = useState(subtask);
   const [isChecked, setIsChecked] = useState(isDone);
 
   const { deleteSubtask, updateSubtask } = useData();
@@ -52,21 +55,11 @@ const Subtask = ({ subtask, id, isDone }: SubtaskProp) => {
 
   const subtaskRef = useRef<HTMLParagraphElement | null>(null);
 
-  async function handleOnBlur() {
-    //setstate(subtaskRef.current?.innerText ? subtaskRef.current?.innerText : "");
+  async function handleOnBlur(event: any) {
+    const text = event.target.innerText;
+
+    await updateSubtask(id, isChecked, text);
     subtaskRef.current?.blur();
-
-    await updateSubtask(id, isChecked, state);
-  }
-
-  function handleOnKeyPress(event: KeyboardEvent<HTMLParagraphElement>) {
-    setstate(subtaskRef.current?.innerText as string);
-    console.log(subtaskRef.current?.innerText);
-
-    if (event.key === "Enter") {
-      subtaskRef.current?.blur();
-    }
-    console.log(state);
   }
 
   const handleDelete = async () => {
@@ -75,7 +68,13 @@ const Subtask = ({ subtask, id, isDone }: SubtaskProp) => {
 
   async function handleCheckbox() {
     setIsChecked(!isChecked);
-    //await updateSubtask(id, isChecked, state);
+    await updateSubtask(id, !isChecked, subtaskName);
+  }
+
+  async function handleOnKeyPress(event: KeyboardEvent<HTMLParagraphElement>) {
+    if (event.key === "Enter") {
+      subtaskRef.current?.blur();
+    }
   }
 
   return (
@@ -84,17 +83,15 @@ const Subtask = ({ subtask, id, isDone }: SubtaskProp) => {
         <CheckBox key={id} />
 
         <div className={styles.subtask__todo}>
-          {/*<input type="text " />*/}
-          <p
-            contentEditable={true}
-            onBlur={handleOnBlur}
-            ref={subtaskRef}
+          <ContentEditable
+            innerRef={subtaskRef}
+            html={subtaskName}
+            disabled={false}
+            onChange={(event) => setsubtaskName(event.target.value as string)}
             onKeyDown={handleOnKeyPress}
-            suppressContentEditableWarning={true}
-            onChange={(e) => setstate("")}
-          >
-            {state}
-          </p>
+            onBlur={handleOnBlur}
+            tagName="p"
+          />
         </div>
         <button onClick={handleDelete}>
           <CloseRoundedIcon fontSize="large" />

@@ -539,16 +539,31 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
     }
   }
 
-  async function updateSubtask(id: string, isDone: boolean, subtask: string) {
+  async function updateSubtask(
+    id: string,
+    isDone: boolean,
+    subtaskName: string
+  ) {
     //Instance of classes
     const subtaskClass = new Subtasks(selectedTask.id);
 
+    console.log(id, isDone, subtaskName);
+
     try {
       //delete subtasks from Database
-      await subtaskClass.updateSubtask(id, isDone, subtask);
+      await subtaskClass.updateSubtask(id, isDone, subtaskName);
 
       //New array of subtasks
-      const allSubtasks = subtasks.filter((subtask) => subtask.id !== id);
+      const allSubtasks = subtasks.map((subtask) => {
+        if (subtask.id === id) {
+          console.log(subtaskName);
+
+          subtask.isDone = isDone;
+          subtask["subtask"] = subtaskName;
+        }
+
+        return subtask;
+      }) as SubTaskType[];
 
       //Update States
       setSubtasks(allSubtasks);

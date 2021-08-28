@@ -93,7 +93,7 @@ export default class Subtasks {
         .doc(this.taskId)
         .collection("subtasks")
         .doc(id)
-        .update({ isDone: subtask });
+        .set({ isDone: isDone, subtask: subtask, createdAt: "fff" });
 
       //Normalize all subtask
     } catch (error) {
@@ -101,6 +101,8 @@ export default class Subtasks {
         bodyClassName: "toastify__error",
         className: "toastify",
       });
+
+      console.log(error);
     }
   }
 
