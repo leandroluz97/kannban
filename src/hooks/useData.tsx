@@ -70,9 +70,10 @@ interface SubTaskType {
 }
 
 interface TagType {
-  tag: string;
+  name: string;
   color: string;
   id: string;
+  isActive: boolean;
 }
 
 interface ListsType {
@@ -94,23 +95,36 @@ interface KeyType {
 interface contextProps {
   groups: JoinedType[];
   addGroup: (groupName: string) => Promise<void>;
+
   addProject: (groupName: string) => Promise<void>;
   setStorageProjectName: (name: string) => void;
   getLists: (id: string) => Promise<void>;
-  lists: ListsType[];
-  selectedProject: ProjectSelf;
   getProject: (id: string) => Promise<void>;
-  addList: (name: string) => Promise<void>;
   archiveProject: (id: string) => Promise<void>;
+  selectedProject: ProjectSelf;
+
+  lists: ListsType[];
+  addList: (name: string) => Promise<void>;
   deleteList: (id: string) => Promise<void>;
+
   getTask: (id: string) => Promise<void>;
   getTasks: () => Promise<void>;
   tasks: TasksType[];
   selectedTask: TasksType;
   addTask: (taskName: string, listId: string) => Promise<void>;
+  updateTask: ({
+    id,
+    name,
+    listId,
+    description,
+    dueTime,
+  }: TasksType) => Promise<void>;
+  unSetTasks: () => void;
+
   addComment: (comment: string) => Promise<void>;
   deleteComment: (id: string) => Promise<void>;
   comments: CommentType[];
+
   addSubtask: (subtask: string) => Promise<void>;
   subtasks: SubTaskType[];
   deleteSubtask: (id: string) => Promise<void>;
@@ -120,14 +134,9 @@ interface contextProps {
     subtask: string,
     createdAt: string
   ) => Promise<void>;
-  updateTask: ({
-    id,
-    name,
-    listId,
-    description,
-    dueTime,
-  }: TasksType) => Promise<void>;
-  unSetTasks: () => void;
+
+  tags: TagType[];
+  updateTag: (id: string, isActive: boolean) => Promise<void>;
 }
 
 //context
@@ -143,7 +152,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
   );
   const [lists, setLists] = useState<ListsType[]>([]);
   const [tasks, setTasks] = useState<TasksType[]>([]);
-  const [tags, setTags] = useState<TasksType[]>([]);
+  const [tags, setTags] = useState<TagType[]>([]);
   const [comments, setComments] = useState<CommentType[]>([]);
   const [subtasks, setSubtasks] = useState<SubTaskType[]>([]);
   const [selectedTask, setSelectedTask] = useState({} as TasksType);
@@ -619,8 +628,6 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
     //Instance of classes
     const subtaskClass = new Subtasks(selectedTask.id);
 
-    console.log(id, isDone, subtaskName);
-
     try {
       //delete subtasks from Database
       await subtaskClass.updateSubtask(id, isDone, subtaskName, createdAt);
@@ -628,8 +635,6 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       //New array of subtasks
       const allSubtasks = subtasks.map((subtask) => {
         if (subtask.id === id) {
-          console.log(subtaskName);
-
           subtask.isDone = isDone;
           subtask["subtask"] = subtaskName;
         }
@@ -641,6 +646,41 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       setSubtasks(allSubtasks);
 
       toast.success("Comment Deleted!", {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+    } catch (error) {
+      //handle toast error
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+
+      console.log(error);
+    }
+  }
+
+  async function updateTag(id: string, isActive: boolean) {
+    //Instance of classes
+    const tagsClass = new Tags(selectedTask.id);
+
+    try {
+      //delete subtasks from Database
+      await tagsClass.updateTag(id, isActive);
+
+      //New array of subtasks
+      const allTags = tags.map((tag) => {
+        if (tag.id === id) {
+          tag.isActive = isActive;
+        }
+
+        return tag;
+      }) as TagType[];
+
+      //Update States
+      setTags(allTags);
+
+      toast.success("Tags Update!", {
         bodyClassName: "toastify__error",
         className: "toastify",
       });
@@ -683,6 +723,8 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
         deleteSubtask,
         subtasks,
         updateSubtask,
+        tags,
+        updateTag,
       }}
     >
       {children}

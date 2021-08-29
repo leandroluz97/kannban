@@ -33,4 +33,10 @@
     column-gap: 0.5rem;
     row-gap: 0.5rem;
   }
+
+  &__info {
+    color: var(--white);
+    font-size: var(--font-14);
+    padding: 2rem 0;
+  }
 }
