@@ -29,13 +29,25 @@ export default class Comments {
         .collection("tasks")
         .doc(this.taskId)
         .collection("comments")
+        .orderBy("createdAt")
         .get();
 
       //Normalize all subtask
       commentsDB.forEach((commentDB) => {
+        const date = new Date(commentDB.data()?.createdAt.toDate());
+        const options = {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "numeric",
+          minute: "numeric",
+          second: "numeric",
+        } as any;
+
+        const createdAt = date.toLocaleDateString("en-EN", options);
         let comment: CommentType = {
           comment: commentDB.data().comment,
-          createdAt: commentDB.data().createdAt,
+          createdAt: createdAt,
           id: commentDB.id,
         };
 
@@ -62,12 +74,23 @@ export default class Comments {
         .collection("tasks")
         .doc(this.taskId)
         .collection("comments")
-        .add({ comment: comment, createdAt: "ffff" })
+        .add({ comment: comment, createdAt: new Date() })
         .then((data) => data.get());
+
+      const date = new Date(commentDB.data()?.createdAt.toDate());
+      const options = {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
+      } as any;
+      const createdAt = date.toLocaleDateString("en-EN", options);
 
       const newComment = {
         comment: commentDB.data()?.comment,
-        createdAt: commentDB.data()?.createdAt,
+        createdAt: createdAt,
         id: commentDB.id,
       } as CommentType;
 

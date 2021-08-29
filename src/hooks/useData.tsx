@@ -106,6 +106,7 @@ interface contextProps {
   getTask: (id: string) => Promise<void>;
   getTasks: () => Promise<void>;
   tasks: TasksType[];
+  selectedTask: TasksType;
   addTask: (taskName: string, listId: string) => Promise<void>;
   addComment: (comment: string) => Promise<void>;
   deleteComment: (id: string) => Promise<void>;
@@ -116,8 +117,17 @@ interface contextProps {
   updateSubtask: (
     id: string,
     isDone: boolean,
-    subtask: string
+    subtask: string,
+    createdAt: string
   ) => Promise<void>;
+  updateTask: ({
+    id,
+    name,
+    listId,
+    description,
+    dueTime,
+  }: TasksType) => Promise<void>;
+  unSetTasks: () => void;
 }
 
 //context
@@ -405,6 +415,13 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
     }
   }
 
+  function unSetTasks() {
+    setSubtasks([]);
+    setComments([]);
+    setTags([]);
+    setSelectedTask({} as TasksType);
+  }
+
   async function getTasks() {
     try {
       const taskClass = new Tasks();
@@ -418,12 +435,66 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
     try {
       const taskClass = new Tasks();
 
+      //New task
       const newTask = await taskClass.addTask(taskName, listId);
+      const id = newTask?.id as string;
+
+      //Get original tags
+      const tagsClass = new Tags(id);
+      await tagsClass.getOriginalTags();
 
       const allTask = [...tasks, newTask] as TasksType[];
 
       setTasks(allTask);
     } catch (error) {
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+
+      console.log(error);
+    }
+  }
+
+  async function updateTask({
+    id,
+    name,
+    listId,
+    description,
+    dueTime,
+  }: TasksType) {
+    //Instance of classes
+    const taskClass = new Tasks();
+
+    try {
+      //delete subtasks from Database
+      await taskClass.updateTask(id, name, dueTime, description, listId);
+
+      console.log("bssssssssss");
+
+      //New array of subtasks
+      const allTasks = tasks.map((task) => {
+        if (task.id === id) {
+          task.name = name;
+          task.description = description;
+          task.dueTime = dueTime;
+          task.listId = listId;
+        }
+
+        return task;
+      }) as TasksType[];
+
+      console.log(allTasks);
+
+      //Update States
+      setTasks(allTasks);
+
+      toast.success("Comment Deleted!", {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+    } catch (error) {
+      //handle toast error
       toast.error(error.message, {
         bodyClassName: "toastify__error",
         className: "toastify",
@@ -542,7 +613,8 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
   async function updateSubtask(
     id: string,
     isDone: boolean,
-    subtaskName: string
+    subtaskName: string,
+    createdAt: string
   ) {
     //Instance of classes
     const subtaskClass = new Subtasks(selectedTask.id);
@@ -551,7 +623,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
 
     try {
       //delete subtasks from Database
-      await subtaskClass.updateSubtask(id, isDone, subtaskName);
+      await subtaskClass.updateSubtask(id, isDone, subtaskName, createdAt);
 
       //New array of subtasks
       const allSubtasks = subtasks.map((subtask) => {
@@ -598,9 +670,12 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
         archiveProject,
         deleteList,
         getTask,
+        unSetTasks,
         getTasks,
         tasks,
+        selectedTask,
         addTask,
+        updateTask,
         addComment,
         comments,
         deleteComment,

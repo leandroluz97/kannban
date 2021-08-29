@@ -44,6 +44,12 @@
       padding-right: 1rem;
 
       overflow-y: scroll;
+
+      &__info {
+        color: white;
+        text-align: center;
+        font-size: var(--font-15);
+      }
     }
   }
 }

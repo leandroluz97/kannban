@@ -32,13 +32,14 @@ export default class Subtasks {
         .collection("tasks")
         .doc(this.taskId)
         .collection("subtasks")
+        .orderBy("createdAt")
         .get();
 
       //Normalize all subtask
       subTasksDB.forEach((subtaskDB) => {
         let subtask: SubTaskType = {
           subtask: subtaskDB.data().subtask,
-          createdAt: subtaskDB.data().createdAt,
+          createdAt: subtaskDB.data().createdAt.toDate(),
           isDone: subtaskDB.data().isDone,
           id: subtaskDB.id,
         };
@@ -64,12 +65,12 @@ export default class Subtasks {
         .collection("tasks")
         .doc(this.taskId)
         .collection("subtasks")
-        .add({ subtask: subtask, isDone: false, createdAt: "ffff" })
+        .add({ subtask: subtask, isDone: false, createdAt: new Date() })
         .then((data) => data.get());
 
       const newSubtask = {
         subtask: subTaskDB.data()?.subtask,
-        createdAt: subTaskDB.data()?.createdAt,
+        createdAt: subTaskDB.data()?.createdAt.toDate().getTime(),
         isDone: subTaskDB.data()?.isDone,
         id: subTaskDB.id,
       } as SubTaskType;
@@ -83,7 +84,12 @@ export default class Subtasks {
     }
   }
 
-  async updateSubtask(id: string, isDone: boolean, subtask: string) {
+  async updateSubtask(
+    id: string,
+    isDone: boolean,
+    subtask: string,
+    createdAt: string
+  ) {
     try {
       //Get all the Subtasks from Database
       let subTaskDB = await this.db
@@ -93,7 +99,11 @@ export default class Subtasks {
         .doc(this.taskId)
         .collection("subtasks")
         .doc(id)
-        .set({ isDone: isDone, subtask: subtask, createdAt: "fff" });
+        .set({
+          isDone: isDone,
+          subtask: subtask,
+          createdAt: new Date(createdAt),
+        });
 
       //Normalize all subtask
     } catch (error) {

@@ -1,0 +1,46 @@
+.description {
+  margin-top: 3rem;
+  h3 {
+    font-size: var(--font-16);
+    color: var(--white);
+    margin-bottom: 1rem;
+  }
+  textarea {
+    resize: none;
+
+    width: 100%;
+    background-color: var(--blue-50);
+    outline: none;
+    border: none;
+    color: var(--white);
+    font-size: var(--font-16);
+    font-family: var(--font-family);
+    padding-left: 0.8rem;
+    border-radius: 4px;
+    border: solid 2px transparent;
+
+    &::placeholder {
+      color: var(--blue-150);
+    }
+
+    &:focus {
+      border: solid 2px var(--blue-10);
+    }
+  }
+
+  input[type="submit"] {
+    background-color: var(--blue-50);
+    color: var(--white);
+    border: none;
+    padding: 1rem;
+    border-radius: 3px;
+    cursor: pointer;
+    border: solid 2px transparent;
+    margin-top: 1rem;
+
+    &:hover {
+      background-color: var(--blue-50-plus);
+      border: solid 2px var(--blue-10);
+    }
+  }
+}

@@ -2,8 +2,8 @@ import firebase from "../config/firebase-config";
 import { toast } from "react-toastify";
 
 interface TagType {
-  tag: string;
-  id: string;
+  name: string;
+  id?: string;
   color: string;
   isActive: boolean;
 }
@@ -21,6 +21,37 @@ export default class Tags {
     this.taskId = taskId;
   }
 
+  async getOriginalTags() {
+    try {
+      //Get  Tags from Database
+      let tagsDB = await this.db.collection("tags").get();
+
+      //Normalize tags
+      tagsDB.forEach((tagDB) => {
+        let tag: TagType = {
+          name: tagDB.data().name,
+          isActive: tagDB.data().isActive,
+          color: tagDB.data().color,
+        };
+
+        this.db
+          .collection("users")
+          .doc(this.user?.uid)
+          .collection("tasks")
+          .doc(this.taskId)
+          .collection("tags")
+          .add(tag);
+      });
+
+      return this.tags;
+    } catch (error) {
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+    }
+  }
+
   async getTags() {
     try {
       //Get  Tags from Database
@@ -35,7 +66,7 @@ export default class Tags {
       //Normalize tags
       tagsDB.forEach((tagDB) => {
         let tag: TagType = {
-          tag: tagDB.data().tag,
+          name: tagDB.data().name,
           isActive: tagDB.data().isActive,
           color: tagDB.data().color,
           id: tagDB.id,

@@ -21,39 +21,7 @@ export default class DueTime {
     this.taskId = taskId;
   }
 
-  async getSubtasks() {
-    try {
-      //Get all the Subtasks from Database
-      let subTasksDB = await this.db
-        .collection("users")
-        .doc(this.user?.uid)
-        .collection("tasks")
-        .doc(this.taskId)
-        .collection("subtasks")
-        .get();
-
-      //Normalize all subtask
-      subTasksDB.forEach((subtaskDB) => {
-        let subtask: SubTaskType = {
-          subtask: subtaskDB.data().subtask,
-          createdAt: subtaskDB.data().createdAt,
-          isDone: subtaskDB.data().isDone,
-          id: subtaskDB.id,
-        };
-
-        this.subtasks.push(subtask);
-      });
-
-      return this.subtasks;
-    } catch (error) {
-      toast.error(error.message, {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
-    }
-  }
-
-  async addSubtask(subtask: string) {
+  async addDueTime(dueTime: string) {
     try {
       //Get all the Subtasks from Database
       let subTaskDB = await this.db
@@ -62,7 +30,7 @@ export default class DueTime {
         .collection("tasks")
         .doc(this.taskId)
         .collection("subtasks")
-        .add({ subtask: subtask, isDone: false, createdAt: "ffff" })
+        .add({ subtask: dueTime, isDone: false, createdAt: "ffff" })
         .then((data) => data.get());
 
       const newSubtask = {

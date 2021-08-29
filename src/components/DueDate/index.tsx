@@ -1,12 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useData } from "../../hooks/useData";
 import styles from "./styles.module.scss";
 
-const DueDate = () => {
+interface DueTimeProps {
+  dueDate: string;
+}
+const DueDate = ({ dueDate }: DueTimeProps) => {
+  const { selectedTask, updateTask } = useData();
+
   const [dates, setDate] = useState("");
 
-  function handleSaveDateTimeOnBlur() {
-    console.log(dates);
+  async function handleSaveDateTimeOnBlur() {
+    await updateTask({
+      id: selectedTask.id,
+      name: selectedTask.name,
+      dueTime: dates,
+      description: selectedTask.description,
+      listId: selectedTask.listId,
+    });
   }
+
   return (
     <div className={styles.date}>
       <h3>Due Date</h3>
@@ -19,9 +32,9 @@ const DueDate = () => {
         value={dates}
         onBlur={handleSaveDateTimeOnBlur}
       />
-      {dates.length > 0 ? (
+      {/*dates.length > 0 ? (
         <button onClick={() => setDate("")}>Remove</button>
-      ) : null}
+      ) : null*/}
     </div>
   );
 };

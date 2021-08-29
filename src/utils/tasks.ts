@@ -58,7 +58,7 @@ export default class Tasks {
         .collection("users")
         .doc(this.user?.uid)
         .collection("tasks")
-        .add({ name: taskName, listId: listId })
+        .add({ name: taskName, listId: listId, dueTime: "" })
         .then((data) => data.get());
 
       const newTask = {
@@ -82,7 +82,8 @@ export default class Tasks {
     id: string,
     taskName: string,
     dueTime: string,
-    description: string
+    description: string,
+    listId: string
   ) {
     try {
       //Update Task in Database
@@ -91,12 +92,18 @@ export default class Tasks {
         .doc(this.user?.uid)
         .collection("tasks")
         .doc(id)
-        .update({ name: taskName, dueTime: dueTime, description: description });
+        .update({
+          name: taskName,
+          dueTime: dueTime,
+          description: description,
+          listId: listId,
+        });
     } catch (error) {
       toast.error(error.message, {
         bodyClassName: "toastify__error",
         className: "toastify",
       });
+      console.log(error);
     }
   }
 

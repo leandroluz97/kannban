@@ -17,9 +17,7 @@ const Comment = ({ comment, id, createdAt }: CommentProps) => {
   return (
     <div className={styles.comment}>
       <div className={styles.comment__header}>
-        <time className={styles.comment__date}>
-          Jul 27, 2021 9:30pm - {createdAt}
-        </time>
+        <time className={styles.comment__date}>{createdAt}</time>
         <button onClick={handleDelete}>
           <CloseRoundedIcon fontSize="large" />
         </button>

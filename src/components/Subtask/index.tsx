@@ -32,9 +32,10 @@ interface SubtaskProp {
   subtask: string;
   isDone: boolean;
   id: string;
+  createdAt: string;
 }
 
-const Subtask = ({ subtask, id, isDone }: SubtaskProp) => {
+const Subtask = ({ subtask, id, isDone, createdAt }: SubtaskProp) => {
   const [subtaskName, setsubtaskName] = useState(subtask);
   const [isChecked, setIsChecked] = useState(isDone);
 
@@ -58,7 +59,7 @@ const Subtask = ({ subtask, id, isDone }: SubtaskProp) => {
   async function handleOnBlur(event: any) {
     const text = event.target.innerText;
 
-    await updateSubtask(id, isChecked, text);
+    await updateSubtask(id, isChecked, text, createdAt);
     subtaskRef.current?.blur();
   }
 
@@ -68,7 +69,7 @@ const Subtask = ({ subtask, id, isDone }: SubtaskProp) => {
 
   async function handleCheckbox() {
     setIsChecked(!isChecked);
-    await updateSubtask(id, !isChecked, subtaskName);
+    await updateSubtask(id, !isChecked, subtaskName, createdAt);
   }
 
   async function handleOnKeyPress(event: KeyboardEvent<HTMLParagraphElement>) {

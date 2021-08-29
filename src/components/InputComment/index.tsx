@@ -6,7 +6,7 @@ import styles from "./styles.module.scss";
 const InputComment = () => {
   const [value, setvalue] = useState("");
 
-  const { addComment } = useData();
+  const { addComment, comments } = useData();
 
   async function handleSubmit(event: SyntheticEvent) {
     event.preventDefault();
@@ -18,7 +18,7 @@ const InputComment = () => {
   }
   return (
     <div className={styles.inputComment}>
-      <h3>Comments(3)</h3>
+      <h3>Comments({comments.length})</h3>
       <form onSubmit={handleSubmit}>
         <textarea
           name=""

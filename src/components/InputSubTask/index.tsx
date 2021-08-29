@@ -6,7 +6,14 @@ import { useData } from "../../hooks/useData";
 const InputSubTask = () => {
   const [value, setValue] = useState("");
 
-  const { addSubtask } = useData();
+  const { addSubtask, subtasks } = useData();
+
+  const done = subtasks.reduce((acc, subtask) => {
+    if (subtask.isDone === true) {
+      acc++;
+    }
+    return acc;
+  }, 0);
 
   const handleSubmit = async (event: SyntheticEvent) => {
     event.preventDefault();
@@ -21,7 +28,9 @@ const InputSubTask = () => {
 
   return (
     <div className={styles.inputSubTask}>
-      <p>Subtasks (2/5)</p>
+      <p>
+        Subtasks ({done}/{subtasks.length})
+      </p>
       <div className={styles.inputSubTask__wrapper}>
         <form onSubmit={handleSubmit}>
           <AddRoundedIcon fontSize="large" />
