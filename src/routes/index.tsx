@@ -2,6 +2,7 @@ import Login from "../components/Login";
 import Signup from "../components/Signup";
 import Reset from "../components/Reset";
 import Dashboard from "../pages/Dashboard";
+import GettingStarted from "../pages/GettingStarted";
 
 import styles from "./styles.module.scss";
 import { Switch, Route, Redirect } from "react-router-dom";
@@ -31,6 +32,7 @@ const Routes = () => {
         <div className={styles.routes}>
           <Switch>
             <Route path="/project/:id" component={Dashboard} />
+            <Route path="/gettingstarted" component={GettingStarted} />
           </Switch>
         </div>
       </div>
