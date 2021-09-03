@@ -1,0 +1,66 @@
+.label {
+  color: var(--blue-10);
+  font-size: var(--font-15);
+}
+
+.input {
+  background-color: var(--blue);
+  border-radius: 3px;
+  padding: 0.5rem;
+  margin: 1rem 0;
+
+  &:hover {
+    background-color: var(--blue-100);
+  }
+
+  &__todo {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    width: 100%;
+    color: var(--white);
+
+    p {
+      font-size: var(--font-15);
+      border: solid 2px transparent;
+      outline: none;
+      border-radius: 3px;
+
+      &:focus {
+        border: solid 2px var(--blue-50);
+      }
+    }
+  }
+
+  &__form {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    svg {
+      color: var(--gray-100);
+      width: 23px;
+      height: 23px;
+    }
+
+    input {
+      background-color: transparent;
+      outline: none;
+      border: none;
+      color: var(--white);
+      font-size: var(--font-15);
+      font-family: var(--font-family);
+      width: 100%;
+    }
+    button {
+      font-size: 0;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      border-radius: 3px;
+
+      &:hover {
+        background-color: var(--blue-10);
+      }
+    }
+  }
+}
