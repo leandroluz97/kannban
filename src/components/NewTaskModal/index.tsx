@@ -37,7 +37,7 @@ const NewTaskModal = () => {
 
   useEffect(() => {}, []);
 
-  function closeModal() {
+  async function closeModal() {
     setTaskModalOpen(false);
     unSetTasks();
   }
@@ -55,7 +55,7 @@ const NewTaskModal = () => {
           <CloseRoundedIcon fontSize="large" />
         </button>
         <div className={styles.title}>
-          <InputCartTitle />
+          <InputCartTitle closeModal={closeModal} />
         </div>
         <div className={styles.newTaskModal}>
           <div className={styles.newTaskModal__left}>

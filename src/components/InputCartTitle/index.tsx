@@ -5,11 +5,11 @@ import { useState } from "react";
 import { useData } from "../../hooks/useData";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-interface InputCatdTitleProps {
-  titleCard: string;
+interface InputCardTitleProps {
+  closeModal: () => void;
 }
-const InputCartTitle = () => {
-  const { selectedTask, updateTask } = useData();
+const InputCartTitle = ({ closeModal }: InputCardTitleProps) => {
+  const { selectedTask, updateTask, deleteTask } = useData();
 
   const [title, setTitle] = useState("");
 
@@ -17,11 +17,7 @@ const InputCartTitle = () => {
     setTitle(selectedTask.name);
   }, [selectedTask]);
 
-  console.log(selectedTask);
-
   async function handleOnBlur() {
-    console.log("saved");
-
     await updateTask({
       id: selectedTask.id,
       name: title,
@@ -29,6 +25,11 @@ const InputCartTitle = () => {
       description: selectedTask.description || "",
       listId: selectedTask.listId,
     });
+  }
+
+  async function handleDeleteTask() {
+    await deleteTask(selectedTask.id);
+    closeModal();
   }
   return (
     <div className={styles.inputCartTitle}>
@@ -45,7 +46,7 @@ const InputCartTitle = () => {
           value={title}
         ></textarea>
       )}
-      <button>
+      <button onClick={handleDeleteTask}>
         <DeleteForeverIcon />
       </button>
     </div>

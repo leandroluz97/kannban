@@ -127,6 +127,7 @@ interface contextProps {
     dueTime,
   }: TasksType) => Promise<void>;
   unSetTasks: () => void;
+  deleteTask: (id: string) => Promise<void>;
 
   addComment: (comment: string) => Promise<void>;
   deleteComment: (id: string) => Promise<void>;
@@ -573,6 +574,32 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
     }
   }
 
+  async function deleteTask(id: string) {
+    //Instance of classes
+    const taskClass = new Tasks();
+
+    try {
+      //Delete Task in Database
+      await taskClass.deleteTask(id);
+
+      //Delete Task in State
+      const allTasks = tasks.filter((task) => task.id !== id);
+
+      //Update State
+      setTasks(allTasks);
+
+      toast.error("Task Deleted!", {
+        bodyClassName: "toastify__success",
+        className: "toastify",
+      });
+    } catch (error) {
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+    }
+  }
+
   async function addComment(comment: string) {
     //Instance of classes
     const comentsClass = new Comments(selectedTask.id);
@@ -762,19 +789,20 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
         addGroup,
         addProject,
         setStorageProjectName,
-        getLists,
-        lists,
         selectedProject,
         getProject,
         updateProject,
+        archiveProject,
+        getLists,
+        lists,
         addList,
         updateList,
-        archiveProject,
         deleteList,
         getTask,
         unSetTasks,
         getTasks,
         tasks,
+        deleteTask,
         selectedTask,
         addTask,
         updateTask,
