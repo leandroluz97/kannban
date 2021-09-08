@@ -145,6 +145,7 @@ interface contextProps {
 
   tags: TagType[];
   updateTag: (id: string, isActive: boolean) => Promise<void>;
+  getTags: (id: string) => Promise<void>;
 }
 
 //context
@@ -554,8 +555,6 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
         return task;
       }) as TasksType[];
 
-      console.log(allTasks);
-
       //Update States
       setTasks(allTasks);
 
@@ -782,6 +781,32 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
     }
   }
 
+  async function getTags(id: string) {
+    //Instance of classes
+    const tagsClass = new Tags(id);
+
+    try {
+      //get tasks
+      const allTags = await tagsClass.getTags();
+
+      //Update States
+      setTags(allTags as TagType[]);
+
+      toast.success("Tags Update!", {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+    } catch (error) {
+      //handle toast error
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+
+      console.log(error);
+    }
+  }
+
   return (
     <DataContext.Provider
       value={{
@@ -815,6 +840,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
         updateSubtask,
         tags,
         updateTag,
+        getTags,
       }}
     >
       {children}

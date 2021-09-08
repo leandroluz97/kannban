@@ -4,7 +4,6 @@
   background-color: var(--blue-card);
   margin: 1rem;
   border: solid 2px var(--blue-plus);
-
   cursor: pointer;
 
   p {
@@ -16,6 +15,7 @@
 
   &__tags {
     display: flex;
+    flex-wrap: wrap;
     margin-top: 1.5rem;
 
     p {
