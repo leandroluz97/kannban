@@ -13,6 +13,7 @@ import ChangeColors from "../ChangleColors";
 import PaperCard from "../PaperCard";
 import { useData } from "../../hooks/useData";
 import { useParams } from "react-router-dom";
+import ContentEditable from "react-contenteditable";
 
 interface TasksType {
   name: string;
@@ -28,19 +29,35 @@ interface ListProps {
 interface ID {
   id: string;
 }
+
+interface ParamsProps {
+  id: string;
+}
 const List = ({ name, color, id }: ListProps) => {
   const [addNewCard, setAddNewCard] = useState(false);
   const [moreOption, setMoreOption] = useState(false);
   const [changeColor, setChangeColor] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+  const [title, setTitle] = useState(name);
 
   const optionRef = useRef<HTMLDivElement | null>(null);
   const colorRef = useRef<HTMLDivElement | null>(null);
   const deleteConfirmationRef = useRef<HTMLDivElement | null>(null);
+  const titleRef = useRef<HTMLHeadingElement | null>(null);
 
-  const { deleteList, tasks } = useData();
+  const { deleteList, tasks, updateList, getProject, selectedProject } =
+    useData();
 
   const allTasks = tasks.filter((task) => task.listId === id);
+
+  let params: ParamsProps = useParams();
+
+  useEffect(() => {
+    const project = async () => {
+      await getProject(params.id);
+    };
+    project();
+  }, []);
 
   const colors = [
     "#8B18D1",
@@ -56,10 +73,12 @@ const List = ({ name, color, id }: ListProps) => {
   function handleCloseAddNewCardTextField() {
     setAddNewCard(false);
   }
+
   //event: SyntheticEvent<EventTarget>
   function handleMoreOtionOnBlur() {
     setMoreOption(false);
   }
+
   function handleColorOnBlur() {
     setChangeColor(false);
   }
@@ -81,12 +100,34 @@ const List = ({ name, color, id }: ListProps) => {
   function handleDeleteConfirmationOnBlur() {
     setDeleteConfirmation(false);
   }
+
+  async function handleOnBlur(event: any) {
+    const text = event.target.innerText;
+
+    await updateList({ id: id, name: text, color: color, listId: params.id });
+    titleRef.current?.blur();
+  }
+
+  async function handleOnKeyPress(event: any) {
+    if (event.key === "Enter") {
+      titleRef.current?.blur();
+    }
+  }
+
   return (
     <section className={styles.list}>
       <header style={{ borderBottomColor: `#${color}` }}>
         <div className={styles.list__left}>
           <DragIndicatorIcon className={styles.list__drag} />
-          <h2>{name}</h2>
+          <ContentEditable
+            innerRef={titleRef}
+            html={title ? title : ""}
+            disabled={false}
+            onChange={(event) => setTitle(event.target.value as string)}
+            onKeyDown={handleOnKeyPress}
+            onBlur={handleOnBlur}
+            tagName="h2"
+          />
         </div>
 
         <div className={styles.list__right}>

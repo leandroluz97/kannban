@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 import { useData } from "../../hooks/useData";
 import { useEffect } from "react";
 import { ChangeEvent } from "react";
+import { useAuth } from "../../hooks/useAuth";
 
 const CustomCheckbox = withStyles({
   root: {
@@ -30,16 +31,46 @@ const CustomCheckbox = withStyles({
 
 interface InputProps {
   label: string;
+  value?: string;
+  isEditable?: boolean;
+  name: string;
 }
 
-const InputSettings = ({ label }: InputProps) => {
-  const [inputValue, setInputValue] = useState("");
+interface UserProps {
+  displayname: string;
+  firstname: string;
+  lastname: string;
+  profileImage: string;
+}
+
+const InputSettings = ({
+  label,
+  value,
+  isEditable = false,
+  name,
+}: InputProps) => {
+  const [inputValue, setInputValue] = useState(value);
+
+  const { updateSettings, currentUser } = useAuth();
 
   const inputRef = useRef<HTMLParagraphElement | null>(null);
 
   async function handleOnBlur(event: any) {
     const text = event.target.innerText;
 
+    let user = {
+      displayname: currentUser?.displayName,
+      firstname: currentUser?.firstName,
+      lastname: currentUser?.lastName,
+      profileImage: currentUser?.photoURL,
+    } as UserProps;
+
+    user = {
+      ...user,
+      [name]: text,
+    };
+
+    await updateSettings(user);
     inputRef.current?.blur();
   }
 
@@ -61,12 +92,13 @@ const InputSettings = ({ label }: InputProps) => {
           <div className={styles.input__todo}>
             <ContentEditable
               innerRef={inputRef}
-              html={"Leandro Soares"}
-              disabled={false}
+              html={inputValue ? inputValue : ""}
+              disabled={isEditable}
               onChange={(event) => setInputValue(event.target.value as string)}
               onKeyDown={handleOnKeyPress}
               onBlur={handleOnBlur}
               tagName="p"
+              id={name}
             />
           </div>
         </div>

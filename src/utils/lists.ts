@@ -43,11 +43,8 @@ export default class Lists {
       });
 
       return this.lists;
-    } catch (error) {
-      toast.error(error.message, {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
+    } catch (error: any) {
+      return new Error(error.message as string);
     }
   }
 
@@ -78,8 +75,11 @@ export default class Lists {
     }
   }
 
-  async updateList(id: string, name: boolean, color: string) {
+  async updateList(id: string, name: string, color: string) {
+    console.log(this.projectId);
+
     try {
+      //throw Error("Falha na rede");
       //Update list in Database
       let listDB = await this.db
         .collection("users")
@@ -89,11 +89,10 @@ export default class Lists {
         .collection("lists")
         .doc(id)
         .update({ name: name, color: color });
-    } catch (error) {
-      toast.error(error.message, {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
+    } catch (error: any) {
+      console.log(error);
+
+      //throw new Error(error.message as string);
     }
   }
 

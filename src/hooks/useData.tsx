@@ -23,6 +23,7 @@ import {
 
 import Subtasks from "../utils/subtasks";
 import { Description } from "@material-ui/icons";
+import { ErrorCallback } from "typescript";
 
 interface DataProviderPropsType {
   children: ReactNode;
@@ -88,8 +89,12 @@ interface GroupType {
   id: string;
   createdAt: string;
 }
-interface KeyType {
-  key: GroupType;
+
+interface UpdateListType {
+  id: string;
+  name: string;
+  color: string;
+  listId: string;
 }
 
 interface contextProps {
@@ -106,6 +111,7 @@ interface contextProps {
   lists: ListsType[];
   addList: (name: string) => Promise<void>;
   deleteList: (id: string) => Promise<void>;
+  updateList: ({ id, name, color, listId }: UpdateListType) => Promise<void>;
 
   getTask: (id: string) => Promise<void>;
   getTasks: () => Promise<void>;
@@ -345,8 +351,6 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
     //Instance of classes
     const listClass = new Lists(selectedProject.id);
 
-    console.log(name);
-
     try {
       //Add list in Database
       let listDB: any = await listClass.addList(name, "8B18D1");
@@ -387,6 +391,33 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
         className: "toastify",
       });
     } catch (error) {
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+    }
+  }
+
+  async function updateList({ id, name, color, listId }: UpdateListType) {
+    //Instance of classes
+
+    const listClass = new Lists(listId);
+
+    try {
+      //Add list in Database
+      let listDB: any = await listClass.updateList(id, name, "8B18D1");
+
+      //console.log(listDB);
+
+      const allLists = lists.map((list) => {
+        if (list.id === id) {
+          list = { ...list, name: name, color: color };
+        }
+        return list;
+      }) as ListsType[];
+
+      setLists(allLists);
+    } catch (error: any) {
       toast.error(error.message, {
         bodyClassName: "toastify__error",
         className: "toastify",
@@ -478,8 +509,6 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
     try {
       //delete subtasks from Database
       await taskClass.updateTask(id, name, dueTime, description, listId);
-
-      console.log("bssssssssss");
 
       //New array of subtasks
       const allTasks = tasks.map((task) => {
@@ -707,6 +736,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
         selectedProject,
         getProject,
         addList,
+        updateList,
         archiveProject,
         deleteList,
         getTask,

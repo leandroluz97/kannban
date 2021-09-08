@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { withStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Switch, { SwitchClassKey, SwitchProps } from "@material-ui/core/Switch";
 import styles from "./styles.module.scss";
+import { useUI } from "../../hooks/useUi";
 
 interface Styles extends Partial<Record<SwitchClassKey, string>> {
   focusVisible?: string;
@@ -68,8 +69,9 @@ const IOSSwitch = withStyles((theme: Theme) =>
 
 const Switcher = () => {
   const [theme, setTheme] = useState(false);
+  const { handleSetThemeLight, darkTheme } = useUI();
 
-  let css = theme ? { right: "0.5rem" } : { right: "9rem" };
+  let css = darkTheme ? { right: "0.5rem" } : { right: "9rem" };
 
   return (
     <div className={styles.switcher}>
@@ -78,8 +80,12 @@ const Switcher = () => {
         Appearance
       </p>
 
-      <div className={styles.switcher__track} onClick={() => setTheme(!theme)}>
-        <span>{theme ? "Light" : "Dark"}</span>
+      <div
+        role="button"
+        className={styles.switcher__track}
+        onClick={() => handleSetThemeLight()}
+      >
+        <span>{darkTheme ? "Light" : "Dark"}</span>
         <div className={styles.switcher__thumb} style={css}></div>
       </div>
     </div>

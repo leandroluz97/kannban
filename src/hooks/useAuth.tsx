@@ -8,6 +8,7 @@ import {
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import firebase from "../config/firebase-config";
+import Users from "../utils/user";
 
 interface AuthProviderType {
   children: ReactNode;
@@ -42,6 +43,7 @@ interface ContextProps {
   ) => void;
   onSigninPassword: (email: string, password: string) => void;
   updateSettings: (data: EditSettingsTypes) => void;
+  getUserInfo: () => Promise<void>;
   resetPassword: (email: string) => void;
 }
 
@@ -179,33 +181,33 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
       });
     }
   }
+  async function getUserInfo() {
+    try {
+      const user = new Users();
+      const userInfo = await user.getUser();
 
+      const newUser = {
+        ...currentUser,
+        ...userInfo,
+      } as User;
+
+      console.log(newUser);
+
+      setCurrentUser(newUser);
+    } catch (error) {}
+  }
   async function updateSettings(data: EditSettingsTypes) {
-    //initialize firestore
-    let db = firebase.firestore();
-
     try {
       //current user
-      const user = firebase.auth().currentUser;
-      const email = user?.email as string;
+      const user = new Users();
+      const updatedUser = await user.updateSettings(data);
 
-      //updated user data
-      const updatedUserData = {
-        displayName: data.displayname,
-        photoURL: data.profileImage,
-        email: email,
-        userId: user?.uid,
-        firstName: data.firstname,
-        lastName: data.lastname,
+      const userData = {
+        ...currentUser,
+        ...updatedUser,
       };
 
-      //set new user information in firestore
-      let docRef = await db
-        .collection("users")
-        .doc(user?.uid)
-        .set(updatedUserData);
-
-      setCurrentUser(updatedUserData);
+      setCurrentUser(userData as User);
     } catch (error) {
       toast.error(error.message, {
         bodyClassName: "toastify__error",
@@ -242,6 +244,7 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
         onSigninPassword,
         updateSettings,
         resetPassword,
+        getUserInfo,
       }}
     >
       {!isLoading && children}

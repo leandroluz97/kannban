@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import styles from "./styles.module.scss";
 
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
@@ -8,15 +8,23 @@ import { useData } from "../../hooks/useData";
 import PaperCard from "../PaperCard";
 import { useUI } from "../../hooks/useUi";
 
-const Header = () => {
-  const [moreOption, setMoreOption] = useState(false);
-  const optionRef = useRef<HTMLDivElement | null>(null);
+import CircularProgress from "@material-ui/core/CircularProgress";
+import ContentEditable from "react-contenteditable";
 
+const Header = () => {
   const { selectedProject } = useData();
+
+  const [moreOption, setMoreOption] = useState(false);
+  const [title, setTitle] = useState(selectedProject.name);
+
+  useEffect(() => {
+    setTitle(selectedProject.name);
+  }, [selectedProject]);
 
   const { setDeleteProjectModalOpen } = useUI();
 
   let tagRefs = useRef<HTMLDivElement | null>(null);
+  const projectTitleRef = useRef<HTMLParagraphElement | null>(null);
 
   function handleMoreOtionOnBlur() {
     setMoreOption(false);
@@ -31,10 +39,37 @@ const Header = () => {
     handleMoreOtionOnBlur();
   }
 
+  async function handleOnBlur(event: any) {
+    const text = event.target.innerText;
+
+    // await updateSubtask(id, isChecked, text, createdAt);
+    projectTitleRef.current?.blur();
+  }
+
+  async function handleOnKeyPress(event: any) {
+    if (event.key === "Enter") {
+      projectTitleRef.current?.blur();
+    }
+  }
+
   return (
     <header className={styles.header}>
       <div className={styles.header__title}>
-        <h1>{selectedProject.name}</h1>
+        <h1>
+          {selectedProject.name ? (
+            <ContentEditable
+              innerRef={projectTitleRef}
+              html={title ? title : ""}
+              disabled={false}
+              onChange={(event) => setTitle(event.target.value as string)}
+              onKeyDown={handleOnKeyPress}
+              onBlur={handleOnBlur}
+              tagName="span"
+            />
+          ) : (
+            <CircularProgress size={15} />
+          )}
+        </h1>
         <button onClick={() => setMoreOption(true)}>
           <MoreHorizIcon fontSize="large" />
         </button>
