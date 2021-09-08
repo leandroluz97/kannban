@@ -106,6 +106,7 @@ interface contextProps {
   getLists: (id: string) => Promise<void>;
   getProject: (id: string) => Promise<void>;
   archiveProject: (id: string) => Promise<void>;
+  updateProject: (id: string, name: string) => Promise<void>;
   selectedProject: ProjectSelf;
 
   lists: ListsType[];
@@ -321,6 +322,36 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
 
       //Update State
       setGroups(archivedProject);
+    } catch (error) {
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+    }
+  }
+
+  async function updateProject(id: string, name: string) {
+    //Instance of classes
+    const projectClass = new Projects();
+
+    try {
+      //Update Project in Database
+      await projectClass.updateProject(id, name);
+
+      //Archived Project
+      const updatedProject = groups.reduce((acc, group) => {
+        group.projects = group.projects.map((project) => {
+          if (project.id === id) {
+            project.name = name;
+          }
+          return project;
+        });
+        acc = [...acc, group];
+        return acc;
+      }, [] as JoinedType[]);
+
+      //Update State
+      setGroups(updatedProject);
     } catch (error) {
       toast.error(error.message, {
         bodyClassName: "toastify__error",
@@ -735,6 +766,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
         lists,
         selectedProject,
         getProject,
+        updateProject,
         addList,
         updateList,
         archiveProject,

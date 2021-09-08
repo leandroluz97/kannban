@@ -12,7 +12,8 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import ContentEditable from "react-contenteditable";
 
 const Header = () => {
-  const { selectedProject } = useData();
+  const { selectedProject, updateProject } = useData();
+  const { setDeleteProjectModalOpen } = useUI();
 
   const [moreOption, setMoreOption] = useState(false);
   const [title, setTitle] = useState(selectedProject.name);
@@ -20,8 +21,6 @@ const Header = () => {
   useEffect(() => {
     setTitle(selectedProject.name);
   }, [selectedProject]);
-
-  const { setDeleteProjectModalOpen } = useUI();
 
   let tagRefs = useRef<HTMLDivElement | null>(null);
   const projectTitleRef = useRef<HTMLParagraphElement | null>(null);
@@ -42,7 +41,7 @@ const Header = () => {
   async function handleOnBlur(event: any) {
     const text = event.target.innerText;
 
-    // await updateSubtask(id, isChecked, text, createdAt);
+    await updateProject(selectedProject.id, text);
     projectTitleRef.current?.blur();
   }
 

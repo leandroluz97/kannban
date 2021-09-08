@@ -113,7 +113,24 @@ export default class Projects {
     }
   }
 
-  async updateProject(id: string, isDone: boolean, subtask: string) {}
+  async updateProject(id: string, name: string) {
+    try {
+      //Get all the Subtasks from Database
+      let projectDB = await this.db
+        .collection("users")
+        .doc(this.user?.uid)
+        .collection("projects")
+        .doc(id)
+        .update({ name: name });
+
+      //Normalize all subtask
+    } catch (error) {
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+    }
+  }
 
   async archiveProject(id: string) {
     try {
