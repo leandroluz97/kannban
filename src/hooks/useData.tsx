@@ -22,8 +22,6 @@ import {
 } from "../utils/normarlization";
 
 import Subtasks from "../utils/subtasks";
-import { Description } from "@material-ui/icons";
-import { ErrorCallback } from "typescript";
 
 interface DataProviderPropsType {
   children: ReactNode;
@@ -55,6 +53,16 @@ interface TasksType {
   listId: string;
   dueTime: string;
   description: string;
+  tags: TagType[];
+}
+
+interface TasksCard {
+  name: string;
+  id: string;
+  listId: string;
+  dueTime: string;
+  description: string;
+  tags: TagType[];
 }
 
 interface CommentType {
@@ -125,6 +133,7 @@ interface contextProps {
     listId,
     description,
     dueTime,
+    tags,
   }: TasksType) => Promise<void>;
   unSetTasks: () => void;
   deleteTask: (id: string) => Promise<void>;
@@ -160,7 +169,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
     {} as ProjectSelf
   );
   const [lists, setLists] = useState<ListsType[]>([]);
-  const [tasks, setTasks] = useState<TasksType[]>([]);
+  const [tasks, setTasks] = useState<TasksCard[]>([]);
   const [tags, setTags] = useState<TagType[]>([]);
   const [comments, setComments] = useState<CommentType[]>([]);
   const [subtasks, setSubtasks] = useState<SubTaskType[]>([]);
@@ -500,7 +509,17 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       const taskClass = new Tasks();
       const allTasks = await taskClass.getTasks();
 
-      setTasks(allTasks as TasksType[]);
+      const newAllTask = [];
+
+      for (const task of allTasks as any) {
+        const tagsClass = new Tags(task.id);
+        const allTags = await tagsClass.getTags();
+        task["tags"] = allTags;
+
+        newAllTask.push(task);
+      }
+
+      setTasks(newAllTask as TasksType[]);
     } catch (error) {}
   }
 
@@ -509,12 +528,14 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       const taskClass = new Tasks();
 
       //New task
-      const newTask = await taskClass.addTask(taskName, listId);
+      let newTask = await taskClass.addTask(taskName, listId);
       const id = newTask?.id as string;
 
       //Get original tags
       const tagsClass = new Tags(id);
       await tagsClass.getOriginalTags();
+
+      newTask = { ...newTask, tags: [] } as TasksType;
 
       const allTask = [...tasks, newTask] as TasksType[];
 
@@ -535,6 +556,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
     listId,
     description,
     dueTime,
+    tags,
   }: TasksType) {
     //Instance of classes
     const taskClass = new Tasks();
@@ -550,6 +572,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
           task.description = description;
           task.dueTime = dueTime;
           task.listId = listId;
+          task.tags = tags;
         }
 
         return task;
@@ -751,10 +774,10 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
     const tagsClass = new Tags(selectedTask.id);
 
     try {
-      //delete subtasks from Database
+      //delete tags from Database
       await tagsClass.updateTag(id, isActive);
 
-      //New array of subtasks
+      //New array of tags
       const allTags = tags.map((tag) => {
         if (tag.id === id) {
           tag.isActive = isActive;
@@ -763,9 +786,16 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
         return tag;
       }) as TagType[];
 
+      const allTasks = tasks.map((task) => {
+        if (task.id === selectedTask.id) {
+          task.tags = allTags;
+        }
+        return task;
+      }) as TasksType[];
+
       //Update States
       setTags(allTags);
-
+      setTasks(allTasks);
       toast.success("Tags Update!", {
         bodyClassName: "toastify__error",
         className: "toastify",

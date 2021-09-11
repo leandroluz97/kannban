@@ -54,7 +54,7 @@ const List = ({ name, color, id }: ListProps) => {
 
   useEffect(() => {
     const project = async () => {
-      await getProject(params.id);
+      // await getProject(params.id);
     };
     project();
   }, []);
@@ -114,6 +114,10 @@ const List = ({ name, color, id }: ListProps) => {
     }
   }
 
+  function handleRename() {
+    titleRef.current?.focus();
+  }
+
   return (
     <section className={styles.list}>
       <header style={{ borderBottomColor: `#${color}` }}>
@@ -149,7 +153,7 @@ const List = ({ name, color, id }: ListProps) => {
             left="25"
           >
             <div className={styles.list__actions}>
-              <button>Rename</button>
+              <button onClick={handleRename}>Rename</button>
               <button onClick={handleColors}>Change Color</button>
               <button onClick={() => setDeleteConfirmation(true)}>
                 Delete
@@ -200,7 +204,7 @@ const List = ({ name, color, id }: ListProps) => {
       </header>
       <section className={styles.list__body}>
         {allTasks.map((task) => (
-          <Card key={task.id} title={task.name} id={task.id} />
+          <Card key={task.id} title={task.name} id={task.id} tags={task.tags} />
         ))}
 
         {addNewCard && (

@@ -24,6 +24,7 @@ const InputCartTitle = ({ closeModal }: InputCardTitleProps) => {
       dueTime: selectedTask.dueTime,
       description: selectedTask.description || "",
       listId: selectedTask.listId,
+      tags: selectedTask.tags,
     });
   }
 

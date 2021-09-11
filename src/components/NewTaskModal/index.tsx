@@ -33,7 +33,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const NewTaskModal = () => {
   const { setTaskModalOpen, taskModalOpen } = useUI();
-  const { getTask, comments, subtasks, selectedTask, unSetTasks } = useData();
+  const { getTask, comments, subtasks, selectedTask, unSetTasks, getTags } =
+    useData();
 
   useEffect(() => {}, []);
 

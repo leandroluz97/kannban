@@ -3,21 +3,22 @@ import { useData } from "../../hooks/useData";
 import { useUI } from "../../hooks/useUi";
 import styles from "./styles.module.scss";
 
+interface TagType {
+  name: string;
+  color: string;
+  id: string;
+  isActive: boolean;
+}
+
 interface CartProps {
   title: string;
   id: string;
+  tags: TagType[];
 }
 
-const Card = ({ title, id }: CartProps) => {
+const Card = ({ title, id, tags }: CartProps) => {
   const { setTaskModalOpen } = useUI();
-  const { getTask, tags, getTags } = useData();
-
-  useEffect(() => {
-    const getTag = async () => {
-      await getTags(id);
-    };
-    getTag();
-  }, [tags]);
+  const { getTask, getTags } = useData();
 
   const isActiveTags = tags.filter((tag) => tag.isActive === true);
 

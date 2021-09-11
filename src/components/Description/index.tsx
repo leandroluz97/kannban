@@ -22,6 +22,7 @@ const Description = ({ description }: DescriptionProps) => {
       dueTime: selectedTask.dueTime,
       description: value,
       listId: selectedTask.listId,
+      tags: selectedTask.tags,
     });
   }
 
