@@ -39,6 +39,16 @@ const List = ({ name, color, id }: ListProps) => {
   const [changeColor, setChangeColor] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
   const [title, setTitle] = useState(name);
+  const [colors, seTcolors] = useState([
+    "#8B18D1",
+    "#3399AF",
+    "#D03737",
+    "#C2D118",
+    "#33AF47",
+    "#D18718",
+    "#18D183",
+    "#3350B9",
+  ]);
 
   const optionRef = useRef<HTMLDivElement | null>(null);
   const colorRef = useRef<HTMLDivElement | null>(null);
@@ -59,17 +69,6 @@ const List = ({ name, color, id }: ListProps) => {
     project();
   }, []);
 
-  const colors = [
-    "#8B18D1",
-    "#3399AF",
-    "#D03737",
-    "#C2D118",
-    "#33AF47",
-    "#D18718",
-    "#18D183",
-    "#3350B9",
-  ];
-
   function handleCloseAddNewCardTextField() {
     setAddNewCard(false);
   }
@@ -89,7 +88,13 @@ const List = ({ name, color, id }: ListProps) => {
     setMoreOption(false);
   }
 
-  async function handleChangeListColor(color: string) {
+  async function handleChangeListColor(newColor: string) {
+    await updateList({
+      id,
+      name,
+      color: newColor,
+      projectId: params.id,
+    });
     setChangeColor(false);
   }
 
@@ -104,7 +109,12 @@ const List = ({ name, color, id }: ListProps) => {
   async function handleOnBlur(event: any) {
     const text = event.target.innerText;
 
-    await updateList({ id: id, name: text, color: color, listId: params.id });
+    await updateList({
+      id: id,
+      name: text,
+      color: color,
+      projectId: params.id,
+    });
     titleRef.current?.blur();
   }
 
@@ -116,11 +126,12 @@ const List = ({ name, color, id }: ListProps) => {
 
   function handleRename() {
     titleRef.current?.focus();
+    setMoreOption(false);
   }
 
   return (
     <section className={styles.list}>
-      <header style={{ borderBottomColor: `#${color}` }}>
+      <header style={{ borderBottomColor: `${color}` }}>
         <div className={styles.list__left}>
           <DragIndicatorIcon className={styles.list__drag} />
           <ContentEditable
@@ -191,11 +202,7 @@ const List = ({ name, color, id }: ListProps) => {
             <div className={styles.list__confirmation}>
               <h2>Delete List?</h2>
               <p>If you delete this list, you won't be able to recover it.</p>
-              <button
-                key={color}
-                style={{ backgroundColor: color }}
-                onClick={() => handleListDelete(id)}
-              >
+              <button key={color} onClick={() => handleListDelete(id)}>
                 Delete
               </button>
             </div>

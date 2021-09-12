@@ -76,8 +76,6 @@ export default class Lists {
   }
 
   async updateList(id: string, name: string, color: string) {
-    console.log(this.projectId);
-
     try {
       //throw Error("Falha na rede");
       //Update list in Database

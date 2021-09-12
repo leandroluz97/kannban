@@ -9,6 +9,7 @@ import styles from "./styles.module.scss";
 import { Switch, Route, Redirect } from "react-router-dom";
 import SideBar from "../components/SideBar";
 import { useAuth } from "../hooks/useAuth";
+import Archive from "../pages/Archive";
 
 const Routes = () => {
   const { currentUser } = useAuth();
@@ -32,9 +33,10 @@ const Routes = () => {
         </div>
         <div className={styles.routes}>
           <Switch>
-            <Route path="/project/:id" component={Dashboard} />
             <Route path="/gettingstarted" component={GettingStarted} />
+            <Route path="/project/:id" component={Dashboard} />
             <Route path="/settings" component={Settings} />
+            <Route path="/archive" component={Archive} />
           </Switch>
         </div>
       </div>

@@ -51,6 +51,11 @@ const Header = () => {
     }
   }
 
+  function handleRename() {
+    projectTitleRef.current?.focus();
+    setMoreOption(false);
+  }
+
   return (
     <header className={styles.header}>
       <div className={styles.header__title}>
@@ -81,7 +86,7 @@ const Header = () => {
             color="var(--blue-100)"
           >
             <div className={styles.header__actions}>
-              <button>Edit</button>
+              <button onClick={() => handleRename()}>Edit</button>
               <button onClick={() => handleOpenConfirmation()}>Delete</button>
             </div>
           </PaperCard>

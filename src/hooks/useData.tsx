@@ -102,7 +102,7 @@ interface UpdateListType {
   id: string;
   name: string;
   color: string;
-  listId: string;
+  projectId: string;
 }
 
 interface contextProps {
@@ -120,7 +120,7 @@ interface contextProps {
   lists: ListsType[];
   addList: (name: string) => Promise<void>;
   deleteList: (id: string) => Promise<void>;
-  updateList: ({ id, name, color, listId }: UpdateListType) => Promise<void>;
+  updateList: ({ id, name, color, projectId }: UpdateListType) => Promise<void>;
 
   getTask: (id: string) => Promise<void>;
   getTasks: () => Promise<void>;
@@ -341,6 +341,23 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
     }
   }
 
+  async function getArchivedProjects(id: string) {
+    //Instance of classes
+    const projectClass = new Projects();
+
+    try {
+      //Update Project in Database
+      // await projectClass.getArchivedProject();
+      //Update State
+      //setGroups(archivedProject);
+    } catch (error) {
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+    }
+  }
+
   async function updateProject(id: string, name: string) {
     //Instance of classes
     const projectClass = new Projects();
@@ -440,14 +457,13 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
     }
   }
 
-  async function updateList({ id, name, color, listId }: UpdateListType) {
+  async function updateList({ id, name, color, projectId }: UpdateListType) {
     //Instance of classes
-
-    const listClass = new Lists(listId);
+    const listClass = new Lists(projectId);
 
     try {
       //Add list in Database
-      let listDB: any = await listClass.updateList(id, name, "8B18D1");
+      let listDB: any = await listClass.updateList(id, name, color);
 
       //console.log(listDB);
 
