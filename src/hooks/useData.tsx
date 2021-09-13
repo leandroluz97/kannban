@@ -33,6 +33,14 @@ interface ProjectSelf {
   isActive: boolean;
 }
 
+interface ProjectType {
+  name: string;
+  group: string;
+  id: string;
+  isActive: boolean;
+  createdAt: string;
+}
+
 interface ProjectData {
   name: string;
   id: string;
@@ -116,6 +124,8 @@ interface contextProps {
   archiveProject: (id: string) => Promise<void>;
   updateProject: (id: string, name: string) => Promise<void>;
   selectedProject: ProjectSelf;
+  archivedProjects: ProjectType[];
+  getArchivedProjects: () => Promise<void>;
 
   lists: ListsType[];
   addList: (name: string) => Promise<void>;
@@ -165,9 +175,9 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
   //const [projects, setProjects] = useState<projectData[]>([]);
   const [groups, setGroups] = useState<JoinedType[]>([]);
   const [storageProjectName, setStorageProjectName] = useState<string>("");
-  const [selectedProject, setSelectedProject] = useState<ProjectSelf>(
-    {} as ProjectSelf
-  );
+  const [selectedProject, setSelectedProject] = useState({} as ProjectSelf);
+  const [archivedProjects, setArchivedProjects] = useState<ProjectType[]>([]);
+
   const [lists, setLists] = useState<ListsType[]>([]);
   const [tasks, setTasks] = useState<TasksCard[]>([]);
   const [tags, setTags] = useState<TagType[]>([]);
@@ -341,15 +351,15 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
     }
   }
 
-  async function getArchivedProjects(id: string) {
+  async function getArchivedProjects() {
     //Instance of classes
     const projectClass = new Projects();
 
     try {
-      //Update Project in Database
-      // await projectClass.getArchivedProject();
+      const allArchivedProjects = await projectClass.getArchivedProjects();
+
       //Update State
-      //setGroups(archivedProject);
+      setArchivedProjects(allArchivedProjects as ProjectType[]);
     } catch (error) {
       toast.error(error.message, {
         bodyClassName: "toastify__error",
@@ -864,6 +874,8 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
         getProject,
         updateProject,
         archiveProject,
+        archivedProjects,
+        getArchivedProjects,
         getLists,
         lists,
         addList,

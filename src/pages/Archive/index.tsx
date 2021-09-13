@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ArchivedProject from "../../components/ArchivedProject";
 import { useData } from "../../hooks/useData";
 import styles from "./styles.module.scss";
@@ -9,16 +9,20 @@ interface ProjectosType {
 }
 
 const Archive = () => {
-  const projectos: ProjectosType[] = [
-    { name: "Http", id: "ghh12" },
-    { name: "Javascript", id: "ghh13" },
-  ];
+  const { archivedProjects, getArchivedProjects } = useData();
+
+  useEffect(() => {
+    (async function () {
+      await getArchivedProjects();
+    })();
+  }, []);
+
   return (
     <div className={styles.archive}>
       <div className={styles.archive__inputs}>
-        {projectos.map((projecto) => (
-          <div key={projecto.id}>
-            <ArchivedProject name={projecto.name} id={projecto.id} />
+        {archivedProjects.map((project) => (
+          <div key={project.id}>
+            <ArchivedProject name={project.name} id={project.id} />
           </div>
         ))}
       </div>

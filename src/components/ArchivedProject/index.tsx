@@ -1,7 +1,5 @@
-import React, { KeyboardEvent, SyntheticEvent, useRef, useState } from "react";
-import ContentEditable from "react-contenteditable";
-
 import styles from "./styles.module.scss";
+import UnarchiveIcon from "@material-ui/icons/Unarchive";
 
 interface ArchivedProjectProps {
   id: string;
@@ -13,7 +11,9 @@ const ArchivedProject = ({ id, name }: ArchivedProjectProps) => {
     <>
       <div className={styles.archived}>
         <p>{name}</p>
-        <button>Restore</button>
+        <button>
+          <UnarchiveIcon fontSize={"large"} /> <span>Restore</span>
+        </button>
       </div>
     </>
   );

@@ -151,6 +151,38 @@ export default class Projects {
     }
   }
 
+  async getArchivedProjects() {
+    try {
+      //Get all Projects from Database
+      let projectsDB = await this.db
+        .collection("users")
+        .doc(this.user?.uid)
+        .collection("projects")
+        .where("isActive", "==", false)
+        .get();
+
+      //Normalize Project data
+      projectsDB.forEach((projectDB) => {
+        let project: ProjectType = {
+          name: projectDB.data().name,
+          group: projectDB.data().group,
+          isActive: projectDB.data().isActive,
+          createdAt: projectDB.data().createdAt,
+          id: projectDB.id,
+        };
+
+        this.projects.push(project);
+      });
+
+      return this.projects;
+    } catch (error) {
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+    }
+  }
+
   async deleteProject(id: string) {
     try {
       //Delete Project  from Database
