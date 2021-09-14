@@ -126,6 +126,7 @@ interface contextProps {
   selectedProject: ProjectSelf;
   archivedProjects: ProjectType[];
   getArchivedProjects: () => Promise<void>;
+  restoreProject: (id: string) => Promise<void>;
 
   lists: ListsType[];
   addList: (name: string) => Promise<void>;
@@ -343,6 +344,50 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
 
       //Update State
       setGroups(archivedProject);
+    } catch (error) {
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+    }
+  }
+
+  async function restoreProject(id: string) {
+    //Instance of classes
+    const projectClass = new Projects();
+
+    let archivedProject = archivedProjects.find(
+      (project) => project.id === id
+    ) as ProjectType;
+
+    archivedProject = {
+      ...archivedProject,
+      isActive: true,
+    };
+
+    try {
+      //Update Project in Database
+      await projectClass.restoreProject(id);
+
+      //Archived Project
+      const allGroups = groups.reduce((acc, group) => {
+        if (group.name === archivedProject.group) {
+          group.projects.push(archivedProject);
+        }
+
+        acc.push(group);
+        return acc;
+      }, [] as JoinedType[]);
+
+      const newArchivedProject = archivedProjects.filter(
+        (project) => project.id !== id
+      );
+
+      console.log(allGroups);
+
+      //Update State
+      setGroups(allGroups);
+      setArchivedProjects(newArchivedProject);
     } catch (error) {
       toast.error(error.message, {
         bodyClassName: "toastify__error",
@@ -876,6 +921,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
         archiveProject,
         archivedProjects,
         getArchivedProjects,
+        restoreProject,
         getLists,
         lists,
         addList,

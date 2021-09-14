@@ -151,6 +151,25 @@ export default class Projects {
     }
   }
 
+  async restoreProject(id: string) {
+    try {
+      //Get all the Subtasks from Database
+      let projectDB = await this.db
+        .collection("users")
+        .doc(this.user?.uid)
+        .collection("projects")
+        .doc(id)
+        .update({ isActive: true });
+
+      //Normalize all subtask
+    } catch (error) {
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+    }
+  }
+
   async getArchivedProjects() {
     try {
       //Get all Projects from Database
