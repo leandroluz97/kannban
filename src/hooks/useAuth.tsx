@@ -24,15 +24,16 @@ interface User {
 }
 
 interface EditSettingsTypes {
-  displayname: string;
-  firstname: string;
-  lastname: string;
-  profileImage: string;
+  displayName?: string;
+  firstName?: string;
+  lastName?: string;
+  profileImage?: string;
 }
 
 interface ContextProps {
   currentUser: User | null;
   setCurrentUser: (value: User | null) => void;
+  currentUserOnSettings: User | null;
   isLoading: boolean;
   onSubmitGmail: () => void;
   onSignupPassword: (
@@ -53,6 +54,7 @@ const AuthContext = createContext<ContextProps>({} as ContextProps);
 //Provider
 export const AuthProvider = ({ children }: AuthProviderType) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [currentUserOnSettings, setCurrentUserOnSettings] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -66,7 +68,7 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
         let docRef = db.collection("users").doc(user?.uid);
         const doc = await docRef.get();
 
-        setCurrentUser(doc.data() as User);
+        setCurrentUserOnSettings(doc.data() as User);
       })();
     });
 
@@ -108,6 +110,7 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
 
         //set current user
         setCurrentUser(userData);
+        setCurrentUserOnSettings(userData);
       }
     } catch (error) {
       toast.error(error.message, {
@@ -156,6 +159,7 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
         ref.doc(user.user?.uid).set(userData);
 
         setCurrentUser(userData);
+        setCurrentUserOnSettings(userData)
       }
     } catch (error) {
       toast.error(error.message, {
@@ -187,15 +191,13 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
       const userInfo = await user.getUser();
 
       const newUser = {
-        ...currentUser,
         ...userInfo,
       } as User;
 
-      console.log(newUser);
-
-      setCurrentUser(newUser);
-    } catch (error) {}
+      setCurrentUserOnSettings(newUser);
+    } catch (error) { }
   }
+
   async function updateSettings(data: EditSettingsTypes) {
     try {
       //current user
@@ -203,11 +205,11 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
       const updatedUser = await user.updateSettings(data);
 
       const userData = {
-        ...currentUser,
-        ...updatedUser,
+        ...currentUserOnSettings,
+        ...data
       };
 
-      setCurrentUser(userData as User);
+      setCurrentUserOnSettings(userData as User);
     } catch (error) {
       toast.error(error.message, {
         bodyClassName: "toastify__error",
@@ -238,6 +240,7 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
       value={{
         currentUser,
         setCurrentUser,
+        currentUserOnSettings,
         isLoading,
         onSubmitGmail,
         onSignupPassword,

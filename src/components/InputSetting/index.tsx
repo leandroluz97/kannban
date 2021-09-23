@@ -37,9 +37,9 @@ interface InputProps {
 }
 
 interface UserProps {
-  displayname: string;
-  firstname: string;
-  lastname: string;
+  displayName: string;
+  firstName: string;
+  lastName: string;
   profileImage: string;
 }
 
@@ -51,30 +51,27 @@ const InputSettings = ({
 }: InputProps) => {
   const [inputValue, setInputValue] = useState(value);
 
-  const { updateSettings, currentUser } = useAuth();
+  useEffect(() => {
+    //setInputValue(value as string)
+  }, [])
+
+  const { updateSettings, currentUser, currentUserOnSettings } = useAuth();
 
   const inputRef = useRef<HTMLParagraphElement | null>(null);
 
   async function handleOnBlur(event: any) {
     const text = event.target.innerText;
 
-    let user = {
-      displayname: currentUser?.displayName,
-      firstname: currentUser?.firstName,
-      lastname: currentUser?.lastName,
-      profileImage: currentUser?.photoURL,
-    } as UserProps;
 
-    user = {
-      ...user,
-      [name]: text,
+    let field = {
+      [event.target.id]: text,
     };
 
-    await updateSettings(user);
+    await updateSettings(field);
     inputRef.current?.blur();
   }
 
-  const handleDelete = async () => {};
+  const handleDelete = async () => { };
 
   async function handleOnKeyPress(event: KeyboardEvent<HTMLParagraphElement>) {
     if (event.key === "Enter") {

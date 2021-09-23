@@ -4,57 +4,63 @@ import InputSetting from "../../components/InputSetting";
 import Switcher from "../../components/Switcher";
 import { useAuth } from "../../hooks/useAuth";
 import Users from "../../utils/user";
+import { CircularProgress } from "@material-ui/core";
 
 const Settings = () => {
-  const { currentUser, setCurrentUser, getUserInfo } = useAuth();
+  const { getUserInfo, currentUserOnSettings } = useAuth();
 
   useEffect(() => {
     async function getUser() {
-      // await getUserInfo();
+      await getUserInfo();
     }
     getUser();
   }, []);
 
+
   return (
-    <div className={styles.settings}>
-      <div className={styles.settings__inputs}>
-        <div>
-          <img src={currentUser?.photoURL} alt="perfil" />
-        </div>
-        <div>
-          <InputSetting
-            label="Name"
-            value={currentUser?.displayName}
-            name="displayname"
-          />
-        </div>
-        <div>
-          <InputSetting
-            label="First Name"
-            value={currentUser?.firstName as string}
-            name="firstname"
-          />
-        </div>
-        <div>
-          <InputSetting
-            label="Last Name"
-            value={currentUser?.lastName as string}
-            name="lastname"
-          />
-        </div>
-        <div>
-          <InputSetting
-            label="Email"
-            value={currentUser?.email as string}
-            name="email"
-            isEditable={true}
-          />
-        </div>
-        <div>
-          <Switcher />
-        </div>
-      </div>
-    </div>
+    <>
+      {currentUserOnSettings?.email ?
+        <div className={styles.settings}>
+          <div className={styles.settings__inputs}>
+            <div>
+              <img src={currentUserOnSettings?.photoURL} alt="perfil" />
+            </div>
+            <div>
+              {currentUserOnSettings?.displayName && <InputSetting
+                label="Name"
+                value={currentUserOnSettings?.displayName}
+                name="displayName"
+              />}
+            </div>
+            <div>
+              {currentUserOnSettings?.firstName && <InputSetting
+                label="First Name"
+                value={currentUserOnSettings?.firstName as string}
+                name="firstName"
+              />}
+            </div>
+            <div>
+              {currentUserOnSettings?.lastName && <InputSetting
+                label="Last Name"
+                value={currentUserOnSettings?.lastName as string}
+                name="lastName"
+              />}
+            </div>
+            <div>
+              {currentUserOnSettings?.email && <InputSetting
+                label="Email"
+                value={currentUserOnSettings?.email as string}
+                name="email"
+                isEditable={true}
+              />}
+            </div>
+            <div>
+              <Switcher />
+            </div>
+          </div>
+        </div> : <div className={styles.progress__wrapper}><CircularProgress size={30} /></div>}
+    </>
+
   );
 };
 

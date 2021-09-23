@@ -154,6 +154,7 @@
     padding: 1rem;
     width: 30px;
     margin-right: 0.5rem;
+    margin-top: 1rem;
 
     &:hover {
       background-color: var(--blue-plus);
@@ -209,6 +210,7 @@
   transition: max-width 0.3s ease;
 
   .sidebar__logout {
+    margin-left: 1.3rem;
     span {
       display: none;
     }
@@ -216,6 +218,7 @@
 
   .sidebar__colapse {
     align-self: center;
+    margin-right: 0rem;
   }
 
   .sidebar__profile {

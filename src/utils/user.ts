@@ -11,10 +11,10 @@ interface User {
 }
 
 interface EditSettingsTypes {
-  displayname: string;
-  firstname: string;
-  lastname: string;
-  profileImage: string;
+  displayName?: string;
+  firstName?: string;
+  lastName?: string;
+  profileImage?: string;
 }
 
 export default class Users {
@@ -40,20 +40,15 @@ export default class Users {
   async updateSettings(userInfo: EditSettingsTypes) {
     try {
       //updated user data
-      const updatedUserData = {
-        displayName: userInfo.displayname ? userInfo.displayname : "",
-        photoURL: userInfo.profileImage ? userInfo.profileImage : "",
-        firstName: userInfo.firstname ? userInfo.firstname : "",
-        lastName: userInfo.lastname ? userInfo.lastname : "",
-      };
+
 
       //set new user information in firestore
       let docRef = await this.db
         .collection("users")
         .doc(this.user?.uid)
-        .update(updatedUserData);
+        .update(userInfo);
 
-      return updatedUserData;
+      //return updatedUserData;
     } catch (error) {
       console.log(error);
     }
