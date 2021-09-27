@@ -29,11 +29,11 @@ import { useHistory } from "react-router";
 import { useData } from "../../hooks/useData";
 import { useAuth } from "../../hooks/useAuth";
 
-const SideBar = () => {
+const SideBarMobile = () => {
 
-  const [colapse, setColapse] = useState(false);
 
-  const { setGroupModalOpen } = useUI();
+
+  const { setGroupModalOpen, colapse } = useUI();
   const { groups } = useData();
   const { currentUserOnSettings } = useAuth();
 
@@ -63,13 +63,6 @@ const SideBar = () => {
     <div className={sidebarStyle}>
       <div className={stylescss.sidebar__logo}>
         <img src={colapse ? kannbanIcon : kannbanImg} alt="kannban logo" />
-      </div>
-
-      <div
-        className={stylescss.sidebar__colapse}
-        onClick={() => setColapse(!colapse)}
-      >
-        <img src={colapse ? uncolapseImg : colapseImg} alt="colapse" />
       </div>
 
       <div className={stylescss.sidebar__profile}>
@@ -140,52 +133,4 @@ const SideBar = () => {
   );
 };
 
-export default SideBar;
-
-/*
-
-{groups.map((group) => (
-          <div className={stylescss.sidebar__project} key={group.id}>
-            <div className={stylescss.sidebar__group}>
-              <IoMdFolder size={20} />
-              <span>{group.name}</span>
-
-              <button onClick={handleNewModalGroup}>
-                <AddRoundedIcon fontSize="large" />
-              </button>
-            </div>
-
-            <ul>
-              <li>
-                <NavLink
-                  to="/http"
-                  activeClassName={stylescss.sidebar__groupActive}
-                >
-                  Https
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  to="/client-side"
-                  activeClassName={stylescss.sidebar__groupActive}
-                >
-                  Client Side
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  to="/reactjs"
-                  activeClassName={stylescss.sidebar__groupActive}
-                >
-                  ReactJS
-                </NavLink>
-              </li>
-              {newProject && (
-                <li>
-                  <InputProject handleBlur={handleNewProjectBlur} />
-                </li>
-              )}
-            </ul>
-          </div>
-        ))}
-*/
+export default SideBarMobile;

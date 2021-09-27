@@ -210,6 +210,9 @@ const List = ({ name, color, id }: ListProps) => {
         )}
       </header>
       <section className={styles.list__body}>
+        {
+          allTasks.length < 1 && <p>You don't have any task</p>
+        }
         {allTasks.map((task) => (
           <Card key={task.id} title={task.name} id={task.id} tags={task.tags} />
         ))}

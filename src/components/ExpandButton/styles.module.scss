@@ -1,0 +1,31 @@
+.expandButton{
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 10;
+
+    border-radius: 100px;
+    background-color: var(--violet);
+    border: none;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    width: 50px;
+
+    box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.3);
+
+    svg{
+        color:white;
+    }
+
+    display: none;
+}
+
+@media(max-width:425px){
+    .expandButton{
+        display: flex;
+    }
+}
+

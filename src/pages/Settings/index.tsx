@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import styles from "./styles.module.scss";
 import InputSetting from "../../components/InputSetting";
 import Switcher from "../../components/Switcher";
 import { useAuth } from "../../hooks/useAuth";
-import Users from "../../utils/user";
 import { CircularProgress } from "@material-ui/core";
 
 const Settings = () => {

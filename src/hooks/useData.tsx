@@ -116,6 +116,7 @@ interface UpdateListType {
 interface contextProps {
   groups: JoinedType[];
   addGroup: (groupName: string) => Promise<void>;
+  getProjects: () => Promise<void>;
 
   addProject: (groupName: string) => Promise<void>;
   setStorageProjectName: (name: string) => void;
@@ -591,7 +592,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       }
 
       setTasks(newAllTask as TasksType[]);
-    } catch (error) {}
+    } catch (error) { }
   }
 
   async function addTask(taskName: string, listId: string) {
@@ -913,6 +914,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       value={{
         groups,
         addGroup,
+        getProjects,
         addProject,
         setStorageProjectName,
         selectedProject,

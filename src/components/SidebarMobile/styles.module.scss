@@ -1,6 +1,6 @@
 .sidebar {
   width: 100%;
-  max-width: 280px;
+ // max-width: 280px;
   min-height: 100%;
   height: 100vh;
   // max-width: 100px;
@@ -10,12 +10,16 @@
   border-right: solid 1px var(--blue-plus);
   padding: 1rem 0;
   padding-bottom: 0;
-  position: relative;
+  position: fixed;
   overflow-y: hidden;
+  z-index: 9;
+  top: 0;
 
   display: flex;
   flex-direction: column;
-  transition: max-width 0.3s ease;
+
+  transform: translateX(-200%);
+  transition: transform 0.3s ease;
 
   &__logo {
     text-align: center;
@@ -203,66 +207,15 @@
   }
 }
 
-.colapse {
-  width: 280px;
-  max-width: 70px;
 
-  transition: max-width 0.3s ease;
 
-  .sidebar__logout {
-    margin-left: 1.3rem;
-    span {
-      display: none;
-    }
-  }
-
-  .sidebar__colapse {
-    align-self: center;
-    margin-right: 0rem;
-  }
-
-  .sidebar__profile {
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    p {
-      display: none;
-    }
-  }
-  .sidebar__menu {
-    a {
-      padding: 1rem;
-      text-align: center;
-      display: flex;
-      justify-content: center;
-
-      span {
-        display: none;
-      }
-    }
-  }
-
-  .sidebar__projects {
-    //display: none;
-
-    opacity: 0;
-    visibility: hidden;
-  }
-
-  .sidebar__add {
-    display: none;
-
-    button {
-      span {
-        display: none;
-        background-color: red;
-      }
-    }
-  }
-}
 
 @media(max-width:426px){
   .sidebar{
-      display: none;
+     display: flex;
   }
+}
+
+.colapse {
+  transform: translateX(0);
 }

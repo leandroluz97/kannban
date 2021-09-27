@@ -19,6 +19,9 @@ interface UiProps {
   setDeleteProjectModalOpen: (value: boolean) => void;
   handleSetThemeLight: () => void;
   darkTheme: boolean;
+  colapse: boolean;
+  setColapse: (value: boolean) => void;
+
 }
 
 //Context
@@ -31,6 +34,7 @@ export const UiProvider = ({ children }: UiProviderType) => {
   const [deleteProjectModalOpen, setDeleteProjectModalOpen] =
     useState<boolean>(false);
   const [darkTheme, setDarkTheme] = useState(false);
+  const [colapse, setColapse] = useState(false);
 
   useEffect(() => {
     //colors
@@ -110,6 +114,8 @@ export const UiProvider = ({ children }: UiProviderType) => {
         setDeleteProjectModalOpen,
         handleSetThemeLight,
         darkTheme,
+        colapse,
+        setColapse
       }}
     >
       {children}

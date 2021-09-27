@@ -16,20 +16,22 @@ Modal.setAppElement("#root");
 
 function App() {
   return (
-    <AuthProvider>
-      <UiProvider>
-        <DataProvider>
-          <Router>
-            <>
+    <>
+      <AuthProvider>
+        <UiProvider>
+          <DataProvider>
+            <Router>
+
               <DeleteProjectModal />
               <NewTaskModal />
               <NewGroupModal />
               <Routes />
-            </>
-          </Router>
-        </DataProvider>
-      </UiProvider>
-    </AuthProvider>
+
+            </Router>
+          </DataProvider>
+        </UiProvider>
+      </AuthProvider>
+    </>
   );
 }
 

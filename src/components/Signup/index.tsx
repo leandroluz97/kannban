@@ -46,7 +46,7 @@ const Signup = () => {
     try {
       await onSubmitGmail();
 
-      history.push("/dashboard");
+      history.push("/gettingstarted");
       reset();
     } catch (error) {
       console.log(error.message);
@@ -57,7 +57,7 @@ const Signup = () => {
     try {
       await onSubmitGmail();
 
-      history.push("/dashboard");
+      history.push("/gettingstarted");
     } catch (error) {
       toast.error(error.message, {
         bodyClassName: "toastify__error",

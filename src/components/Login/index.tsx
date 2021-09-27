@@ -44,7 +44,7 @@ const Login = () => {
     try {
       await onSigninPassword(data.email, data.password);
 
-      history.push("/dashboard");
+      history.push("/gettingstarted");
       reset();
       setIsLoading(false);
     } catch (error) {
@@ -56,7 +56,7 @@ const Login = () => {
     try {
       await onSubmitGmail();
 
-      history.push("/dashboard");
+      history.push("/gettingstarted");
     } catch (error) {
       toast.error(error.message, {
         bodyClassName: "toastify__error",

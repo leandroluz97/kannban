@@ -4,6 +4,7 @@ import Started from "../../utils/gettingStarted";
 import styles from "./styles.module.scss";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
+import { useData } from "../../hooks/useData";
 
 interface StartedType {
   title: string;
@@ -14,11 +15,13 @@ interface StartedType {
 
 const GettingStarted = () => {
   const [started, setStarted] = useState({} as StartedType);
+  const { getProjects } = useData()
 
   useEffect(() => {
     const getStart = async () => {
       const gettingStarted = new Started();
       const data = await gettingStarted.getGettingStarted();
+      await getProjects()
 
       setStarted(data as StartedType);
     };
