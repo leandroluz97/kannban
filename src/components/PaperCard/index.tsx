@@ -6,8 +6,6 @@ interface PaperCardProps {
   children: ReactNode;
   paperRef: any;
   handleBlur: () => void;
-  left: string;
-  top: string;
   color: string;
 }
 
@@ -15,8 +13,6 @@ const PaperCard = ({
   children,
   paperRef,
   handleBlur,
-  left,
-  top,
   color,
 }: PaperCardProps) => {
   useEffect(() => {
@@ -42,7 +38,7 @@ const PaperCard = ({
       className={styles.papercard}
       tabIndex={-1}
       ref={paperRef}
-      style={{ left: `${left}rem`, top: `${top}rem`, backgroundColor: color }}
+      style={{ backgroundColor: color }}
     >
       {children}
     </div>

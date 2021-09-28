@@ -6,6 +6,12 @@
   row-gap: 0.5rem;
   position: relative;
 
+  &__paperCardWrapper{
+    position: absolute; 
+    left: 0rem;
+    top: 3.11rem;
+  }
+
   &__select {
     background-color: var(--blue-50);
     border: none;

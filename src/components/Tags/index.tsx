@@ -48,30 +48,30 @@ const Tags = () => {
         </button>
 
         {paperTag && (
-          <PaperCard
-            top="3.11"
-            left="0"
-            handleBlur={handleBlur}
-            paperRef={tagRefs}
-            color="var(--blue-50)"
-          >
-            <div className={styles.tags__insidePaper}>
-              {isActiveTags.unavailable.length > 0 ? (
-                isActiveTags.unavailable.map((tag) => (
-                  <TagCard
-                    isActive={tag.isActive}
-                    id={tag.id}
-                    key={tag.id}
-                    color={tag.color}
-                    name={tag.name}
-                    icon={false}
-                  />
-                ))
-              ) : (
-                <p className={styles.tags__info}>No tags available</p>
-              )}
-            </div>
-          </PaperCard>
+          <div className={styles.tags__paperCardWrapper}>
+            <PaperCard
+              handleBlur={handleBlur}
+              paperRef={tagRefs}
+              color="var(--blue-50)"
+            >
+              <div className={styles.tags__insidePaper}>
+                {isActiveTags.unavailable.length > 0 ? (
+                  isActiveTags.unavailable.map((tag) => (
+                    <TagCard
+                      isActive={tag.isActive}
+                      id={tag.id}
+                      key={tag.id}
+                      color={tag.color}
+                      name={tag.name}
+                      icon={false}
+                    />
+                  ))
+                ) : (
+                  <p className={styles.tags__info}>No tags available</p>
+                )}
+              </div>
+            </PaperCard>
+          </div>
         )}
 
         {isActiveTags.available.map((tag) => (

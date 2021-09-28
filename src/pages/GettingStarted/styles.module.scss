@@ -47,3 +47,12 @@
     align-content: center;
   }
 }
+
+
+@media(max-width:426px){
+  .gettingstarted{
+    &__body {
+      padding: 2rem 2rem;
+    }
+  }
+}

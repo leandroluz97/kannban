@@ -104,6 +104,11 @@ const List = ({ name, color, id }: ListProps) => {
 
   function handleDeleteConfirmationOnBlur() {
     setDeleteConfirmation(false);
+    setMoreOption(false);
+  }
+
+  function handleConfirmation() {
+    setDeleteConfirmation(true)
   }
 
   async function handleOnBlur(event: any) {
@@ -156,62 +161,61 @@ const List = ({ name, color, id }: ListProps) => {
         </div>
 
         {moreOption && (
-          <PaperCard
-            paperRef={optionRef}
-            color="var(--blue-100)"
-            handleBlur={handleMoreOtionOnBlur}
-            top="3.11"
-            left="25"
-          >
-            <div className={styles.list__actions}>
-              <button onClick={handleRename}>Rename</button>
-              <button onClick={handleColors}>Change Color</button>
-              <button onClick={() => setDeleteConfirmation(true)}>
-                Delete
-              </button>
-            </div>
-          </PaperCard>
+          <div className={styles.list__paperCardWrapper} >
+            <PaperCard
+              paperRef={optionRef}
+              color="var(--blue-100)"
+              handleBlur={handleMoreOtionOnBlur}
+            >
+              <div className={styles.list__actions}>
+                <button onClick={handleRename}>Rename</button>
+                <button onClick={handleColors}>Change Color</button>
+                <button onClick={handleConfirmation}>
+                  Delete
+                </button>
+              </div>
+            </PaperCard>
+          </div>
+
         )}
         {changeColor && (
-          <PaperCard
-            paperRef={colorRef}
-            color="var(--blue-100)"
-            handleBlur={handleColorOnBlur}
-            top="3.11"
-            left="25"
-          >
-            <div className={styles.list__changeColor}>
-              {colors.map((color) => (
-                <button
-                  key={color}
-                  style={{ backgroundColor: color }}
-                  onClick={() => handleChangeListColor(color)}
-                ></button>
-              ))}
-            </div>
-          </PaperCard>
+          <div className={styles.list__paperCardColors} >
+            <PaperCard paperRef={colorRef} color="var(--blue-100)" handleBlur={handleColorOnBlur}>
+              <div className={styles.list__changeColor}>
+                {colors.map((color) => (
+                  <button
+                    key={color}
+                    style={{ backgroundColor: color }}
+                    onClick={() => handleChangeListColor(color)}
+                  ></button>
+                ))}
+              </div>
+            </PaperCard>
+          </div>
+
         )}
         {deleteConfirmation && (
-          <PaperCard
-            paperRef={deleteConfirmationRef}
-            color="var(--blue-100)"
-            handleBlur={handleDeleteConfirmationOnBlur}
-            top="3.11"
-            left="25"
-          >
-            <div className={styles.list__confirmation}>
-              <h2>Delete List?</h2>
-              <p>If you delete this list, you won't be able to recover it.</p>
-              <button key={color} onClick={() => handleListDelete(id)}>
-                Delete
-              </button>
-            </div>
-          </PaperCard>
+          <div className={styles.list__paperCardDelete} >
+            <PaperCard
+              paperRef={deleteConfirmationRef}
+              color="var(--blue-100)"
+              handleBlur={handleDeleteConfirmationOnBlur}
+            >
+              <div className={styles.list__confirmation}>
+                <h2>Delete List?</h2>
+                <p>If you delete this list, you won't be able to recover it.</p>
+                <button key={color} onClick={() => handleListDelete(id)}>
+                  Delete
+                </button>
+              </div>
+            </PaperCard>
+          </div>
+
         )}
       </header>
       <section className={styles.list__body}>
         {
-          allTasks.length < 1 && <p>You don't have any task</p>
+          allTasks.length < 1 && <p className={styles.list__body__emptyText} >You don't have any task yet...</p>
         }
         {allTasks.map((task) => (
           <Card key={task.id} title={task.name} id={task.id} tags={task.tags} />

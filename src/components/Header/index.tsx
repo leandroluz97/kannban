@@ -78,18 +78,18 @@ const Header = () => {
           <MoreHorizIcon fontSize="large" />
         </button>
         {moreOption && (
-          <PaperCard
-            top="3.11"
-            left="17.5"
-            handleBlur={handleBlur}
-            paperRef={tagRefs}
-            color="var(--blue-100)"
-          >
-            <div className={styles.header__actions}>
-              <button onClick={() => handleRename()}>Edit</button>
-              <button onClick={() => handleOpenConfirmation()}>Delete</button>
-            </div>
-          </PaperCard>
+          <div className={styles.header__paperCardWrapper}>
+            <PaperCard
+              handleBlur={handleBlur}
+              paperRef={tagRefs}
+              color="var(--blue-100)"
+            >
+              <div className={styles.header__actions}>
+                <button onClick={() => handleRename()}>Edit</button>
+                <button onClick={() => handleOpenConfirmation()}>Delete</button>
+              </div>
+            </PaperCard>
+          </div>
         )}
       </div>
 

@@ -1,6 +1,7 @@
 .settings {
   margin: 6rem 10rem;
   width: 100%;
+
   &__inputs {
     width: 100%;
     max-width: 500px;
@@ -19,4 +20,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+@media(max-width:426px){
+  .settings {
+    margin: 2rem 2rem;
+  }
 }

@@ -86,6 +86,24 @@
     }
   }
 
+  &__paperCardWrapper{
+    position: absolute; 
+    left: 25rem;
+    top: 3.11rem;
+  }
+
+  &__paperCardColors{
+    position: absolute; 
+    left: 25rem;
+    top: 3.11rem;
+  }
+
+  &__paperCardDelete{
+    position: absolute; 
+    left: 25rem;
+    top: 3.11rem;
+  }
+
   &__changeColor {
     display: grid;
     grid-template-columns: repeat(4, 30px);
@@ -157,5 +175,74 @@
     //height: 80vh;
     height: 90%;
     overflow-y: auto;
+
+    &__emptyText{
+      text-align: center;
+      color: var(--blue-10);
+    }
+  }
+}
+
+
+@media(max-width:426px){
+  .list{
+    max-width: 100%;
+
+    &__paperCardWrapper{
+      left:16rem;
+      top: 3.11rem;
+    }
+
+    &__paperCardColors{
+      left:19.5rem;
+      top: 3.11rem;
+    }
+  
+    &__paperCardDelete{
+      left:11rem;
+      top: 3.11rem;
+    }
+  }
+}
+
+@media(max-width:376px){
+  .list{
+ 
+
+    &__paperCardWrapper{
+      left:11rem;
+      top: 3.11rem;
+    }
+
+    &__paperCardColors{
+      left:14.5rem;
+      top: 3.11rem;
+    }
+  
+    &__paperCardDelete{
+      left: 6rem;
+      top: 3.11rem;
+    }
+  }
+}
+
+@media(max-width:321px){
+  .list{
+ 
+
+    &__paperCardWrapper{
+      left:5.5rem;
+      top: 3.11rem;
+    }
+
+    &__paperCardColors{
+      left:9.3rem;
+      top: 3.11rem;
+    }
+  
+    &__paperCardDelete{
+      left: 1rem;
+      top: 3.11rem;
+    }
   }
 }

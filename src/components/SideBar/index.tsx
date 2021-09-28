@@ -73,7 +73,7 @@ const SideBar = () => {
       </div>
 
       <div className={stylescss.sidebar__profile}>
-        <img src={profileImg} alt="profile" />
+        <img src={currentUserOnSettings?.photoURL ? currentUserOnSettings?.photoURL : profileImg} alt="profile" />
         <p>{currentUserOnSettings?.displayName}</p>
       </div>
 
