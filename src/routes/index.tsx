@@ -18,14 +18,14 @@ const Routes = () => {
 
   let routes = (
     <>
-      <Switch>
-        <div className={styles.auth}>
+      <div className={styles.auth}>
+        <Switch>
           <Route path="/login" component={Login} />
           <Route path="/signup" component={Signup} />
           <Route path="/resetPassword" component={Reset} />
           <Redirect to="/login" />
-        </div>
-      </Switch>
+        </Switch>
+      </div>
     </>
   );
 
@@ -40,15 +40,23 @@ const Routes = () => {
             <ExpandButton />
             <SideBarMobile />
             <Switch>
-              <Route path="/gettingstarted" component={GettingStarted} />
-              <Route path="/project/:id" component={Dashboard} />
-              <Route path="/settings" component={Settings} />
+              <Route
+                path="/gettingstarted"
+                component={GettingStarted}
+              />
+              <Route
+                path="/project/:id"
+                component={Dashboard}
+              />
+              <Route
+                path="/settings"
+                component={Settings}
+              />
               <Route path="/archive" component={Archive} />
             </Switch>
           </div>
         </div>
       </>
-
     );
   }
 

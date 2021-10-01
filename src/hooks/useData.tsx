@@ -22,6 +22,11 @@ import {
 } from "../utils/normarlization";
 
 import Subtasks from "../utils/subtasks";
+import { getLastPosition } from "../utils/getLastPosition";
+import {
+  getLeftToRightDirection,
+  getRightToLeftDirection,
+} from "../utils/getDirection";
 
 interface DataProviderPropsType {
   children: ReactNode;
@@ -61,6 +66,7 @@ interface TasksType {
   listId: string;
   dueTime: string;
   description: string;
+  position: number;
   tags: TagType[];
 }
 
@@ -70,6 +76,7 @@ interface TasksCard {
   listId: string;
   dueTime: string;
   description: string;
+  position: number;
   tags: TagType[];
 }
 
@@ -97,7 +104,7 @@ interface ListsType {
   name: string;
   id: string;
   color: string;
-  //tasks: TasksType[];
+  position: number;
 }
 
 interface GroupType {
@@ -123,7 +130,10 @@ interface contextProps {
   getLists: (id: string) => Promise<void>;
   getProject: (id: string) => Promise<void>;
   archiveProject: (id: string) => Promise<void>;
-  updateProject: (id: string, name: string) => Promise<void>;
+  updateProject: (
+    id: string,
+    name: string
+  ) => Promise<void>;
   selectedProject: ProjectSelf;
   archivedProjects: ProjectType[];
   getArchivedProjects: () => Promise<void>;
@@ -132,13 +142,25 @@ interface contextProps {
   lists: ListsType[];
   addList: (name: string) => Promise<void>;
   deleteList: (id: string) => Promise<void>;
-  updateList: ({ id, name, color, projectId }: UpdateListType) => Promise<void>;
+  updateList: ({
+    id,
+    name,
+    color,
+    projectId,
+  }: UpdateListType) => Promise<void>;
+  switchList: (
+    source: number,
+    destination: number
+  ) => Promise<void>;
 
   getTask: (id: string) => Promise<void>;
   getTasks: () => Promise<void>;
   tasks: TasksType[];
   selectedTask: TasksType;
-  addTask: (taskName: string, listId: string) => Promise<void>;
+  addTask: (
+    taskName: string,
+    listId: string
+  ) => Promise<void>;
   updateTask: ({
     id,
     name,
@@ -165,27 +187,45 @@ interface contextProps {
   ) => Promise<void>;
 
   tags: TagType[];
-  updateTag: (id: string, isActive: boolean) => Promise<void>;
+  updateTag: (
+    id: string,
+    isActive: boolean
+  ) => Promise<void>;
   getTags: (id: string) => Promise<void>;
 }
 
 //context
-const DataContext = createContext<contextProps>({} as contextProps);
+const DataContext = createContext<contextProps>(
+  {} as contextProps
+);
 
 //Provider
-export const DataProvider = ({ children }: DataProviderPropsType) => {
+export const DataProvider = ({
+  children,
+}: DataProviderPropsType) => {
   //const [projects, setProjects] = useState<projectData[]>([]);
   const [groups, setGroups] = useState<JoinedType[]>([]);
-  const [storageProjectName, setStorageProjectName] = useState<string>("");
-  const [selectedProject, setSelectedProject] = useState({} as ProjectSelf);
-  const [archivedProjects, setArchivedProjects] = useState<ProjectType[]>([]);
+  const [storageProjectName, setStorageProjectName] =
+    useState<string>("");
+  const [selectedProject, setSelectedProject] = useState(
+    {} as ProjectSelf
+  );
+  const [archivedProjects, setArchivedProjects] = useState<
+    ProjectType[]
+  >([]);
 
   const [lists, setLists] = useState<ListsType[]>([]);
   const [tasks, setTasks] = useState<TasksCard[]>([]);
   const [tags, setTags] = useState<TagType[]>([]);
-  const [comments, setComments] = useState<CommentType[]>([]);
-  const [subtasks, setSubtasks] = useState<SubTaskType[]>([]);
-  const [selectedTask, setSelectedTask] = useState({} as TasksType);
+  const [comments, setComments] = useState<CommentType[]>(
+    []
+  );
+  const [subtasks, setSubtasks] = useState<SubTaskType[]>(
+    []
+  );
+  const [selectedTask, setSelectedTask] = useState(
+    {} as TasksType
+  );
 
   useEffect(() => {
     getProjects();
@@ -199,31 +239,39 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
     try {
       //Get Groups and Projects from Database
       let collectionGroups = await groupClasse.getGroups();
-      let collectionProjects = await projectClasse.getProjects();
+      let collectionProjects =
+        await projectClasse.getProjects();
 
-      const dataOfGroup = collectionGroups?.reduce((acc: any, group) => {
-        acc[group.name] = {
-          name: group.name,
-          id: group.id,
-          createdAt: group.createdAt,
-        };
-        return acc;
-      }, {});
+      const dataOfGroup = collectionGroups?.reduce(
+        (acc: any, group) => {
+          acc[group.name] = {
+            name: group.name,
+            id: group.id,
+            createdAt: group.createdAt,
+          };
+          return acc;
+        },
+        {}
+      );
 
-      let dataOfProjects = collectionProjects?.reduce((acc: any, project) => {
-        if (project.isActive) {
-          acc.push({
-            group: project.group,
-            name: project.name,
-            id: project.id,
-            isActive: project.isActive,
-          });
-        }
+      let dataOfProjects = collectionProjects?.reduce(
+        (acc: any, project) => {
+          if (project.isActive) {
+            acc.push({
+              group: project.group,
+              name: project.name,
+              id: project.id,
+              isActive: project.isActive,
+            });
+          }
 
-        return acc;
-      }, []);
+          return acc;
+        },
+        []
+      );
 
-      const groupOfProjects = groupProjectsByGroupName(dataOfProjects);
+      const groupOfProjects =
+        groupProjectsByGroupName(dataOfProjects);
       const joinedGroupProjects = joinGroupAndProjects({
         groups: dataOfGroup,
         projects: groupOfProjects,
@@ -246,7 +294,9 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
     const groupClass = new Groups();
 
     try {
-      const returnedGroup = await groupClass.addGroup(groupName);
+      const returnedGroup = await groupClass.addGroup(
+        groupName
+      );
 
       const newGroup = {
         name: returnedGroup?.name,
@@ -254,7 +304,10 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
         projects: [],
       };
 
-      const dataOfGroups = [...groups, newGroup] as JoinedType[];
+      const dataOfGroups = [
+        ...groups,
+        newGroup,
+      ] as JoinedType[];
 
       setGroups(dataOfGroups);
     } catch (error) {
@@ -304,7 +357,9 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
 
     try {
       //Get Project from Database
-      const projectDB: any = await projectClass.getProject(id);
+      const projectDB: any = await projectClass.getProject(
+        id
+      );
 
       //If the project is not archived show it as an active project
       if (projectDB.isActive) {
@@ -337,11 +392,16 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       await projectClass.archiveProject(id);
 
       //Archived Project
-      const archivedProject = groups.reduce((acc, group) => {
-        group.projects = group.projects.filter((project) => project.id !== id);
-        acc = [...acc, group];
-        return acc;
-      }, [] as JoinedType[]) as JoinedType[];
+      const archivedProject = groups.reduce(
+        (acc, group) => {
+          group.projects = group.projects.filter(
+            (project) => project.id !== id
+          );
+          acc = [...acc, group];
+          return acc;
+        },
+        [] as JoinedType[]
+      ) as JoinedType[];
 
       //Update State
       setGroups(archivedProject);
@@ -402,10 +462,13 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
     const projectClass = new Projects();
 
     try {
-      const allArchivedProjects = await projectClass.getArchivedProjects();
+      const allArchivedProjects =
+        await projectClass.getArchivedProjects();
 
       //Update State
-      setArchivedProjects(allArchivedProjects as ProjectType[]);
+      setArchivedProjects(
+        allArchivedProjects as ProjectType[]
+      );
     } catch (error) {
       toast.error(error.message, {
         bodyClassName: "toastify__error",
@@ -466,14 +529,21 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
     //Instance of classes
     const listClass = new Lists(selectedProject.id);
 
+    const position = getLastPosition(lists) + 1;
+
     try {
       //Add list in Database
-      let listDB: any = await listClass.addList(name, "8B18D1");
+      let listDB: any = await listClass.addList(
+        name,
+        "8B18D1",
+        position
+      );
 
       const newList = {
         name: listDB.name,
         id: listDB.id,
         color: listDB.color,
+        position: position,
       } as ListsType;
 
       const allLists: ListsType[] = [...lists, newList];
@@ -496,7 +566,9 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       await listClass.deleteList(id);
 
       //Delete List in State
-      const allLists = lists.filter((list) => list.id !== id);
+      const allLists = lists.filter(
+        (list) => list.id !== id
+      );
 
       //Update State
       setLists(allLists);
@@ -513,22 +585,108 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
     }
   }
 
-  async function updateList({ id, name, color, projectId }: UpdateListType) {
+  async function updateList({
+    id,
+    name,
+    color,
+    projectId,
+  }: UpdateListType) {
     //Instance of classes
     const listClass = new Lists(projectId);
 
+    const position = 0;
+
     try {
       //Add list in Database
-      let listDB: any = await listClass.updateList(id, name, color);
+      let listDB: any = await listClass.updateList(
+        id,
+        name,
+        color,
+        position
+      );
 
       //console.log(listDB);
 
       const allLists = lists.map((list) => {
         if (list.id === id) {
-          list = { ...list, name: name, color: color };
+          list = {
+            ...list,
+            name: name,
+            color: color,
+            position: position,
+          };
         }
         return list;
       }) as ListsType[];
+
+      setLists(allLists);
+    } catch (error: any) {
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+    }
+  }
+
+  async function switchList(
+    source: number,
+    destination: number
+  ) {
+    const leftToRight = getLeftToRightDirection(
+      source,
+      destination
+    );
+
+    const rigthToLeft = getRightToLeftDirection(
+      source,
+      destination
+    );
+
+    const allLists = lists.map((list) => {
+      if (list.position === source) {
+        list.position = destination;
+        return list;
+      }
+
+      if (leftToRight(list.position)) {
+        list.position = list.position - 1;
+        return list;
+      }
+
+      if (rigthToLeft(list.position)) {
+        list.position = list.position + 1;
+        return list;
+      }
+
+      return list;
+    });
+
+    console.log(allLists);
+
+    //Instance of classes
+    //const listClass = new Lists(projectId);
+
+    try {
+      //Add list in Database
+      // let listDB: any = await listClass.updateList(
+      //   id,
+      //   name,
+      //   color,
+      //   position
+      // );
+
+      //console.log(listDB);
+
+      // const allLists = lists.map((list) => {
+      //   if (list.id === id) {
+      //     list = {
+      //       ...list,
+
+      //       position: position,
+      //     };
+      //   }
+      //   return list;
+      // }) as ListsType[];
 
       setLists(allLists);
     } catch (error: any) {
@@ -547,11 +705,15 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
 
     try {
       //Get subtasks comments and tags from Database
-      const allSubtasks: any = await subtaskClass.getSubtasks();
-      const allComments: any = await comentsClass.getComments();
+      const allSubtasks: any =
+        await subtaskClass.getSubtasks();
+      const allComments: any =
+        await comentsClass.getComments();
       const allTags: any = await tagsClass.getTags();
 
-      const task: any = tasks.find((task) => task.id === id);
+      const task: any = tasks.find(
+        (task) => task.id === id
+      );
 
       //Update States
       setSubtasks(allSubtasks);
@@ -592,15 +754,20 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       }
 
       setTasks(newAllTask as TasksType[]);
-    } catch (error) { }
+    } catch (error) {}
   }
 
   async function addTask(taskName: string, listId: string) {
+    const position = 0;
     try {
       const taskClass = new Tasks();
 
       //New task
-      let newTask = await taskClass.addTask(taskName, listId);
+      let newTask = await taskClass.addTask(
+        taskName,
+        listId,
+        position
+      );
       const id = newTask?.id as string;
 
       //Get original tags
@@ -633,9 +800,18 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
     //Instance of classes
     const taskClass = new Tasks();
 
+    const position = 0;
+
     try {
       //delete subtasks from Database
-      await taskClass.updateTask(id, name, dueTime, description, listId);
+      await taskClass.updateTask(
+        id,
+        name,
+        dueTime,
+        description,
+        listId,
+        position
+      );
 
       //New array of subtasks
       const allTasks = tasks.map((task) => {
@@ -644,6 +820,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
           task.description = description;
           task.dueTime = dueTime;
           task.listId = listId;
+          task.position = position;
           task.tags = tags;
         }
 
@@ -677,7 +854,9 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       await taskClass.deleteTask(id);
 
       //Delete Task in State
-      const allTasks = tasks.filter((task) => task.id !== id);
+      const allTasks = tasks.filter(
+        (task) => task.id !== id
+      );
 
       //Update State
       setTasks(allTasks);
@@ -700,7 +879,9 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
 
     try {
       //Get subtasks comments and tags from Database
-      const newComment: any = await comentsClass.addComment(comment);
+      const newComment: any = await comentsClass.addComment(
+        comment
+      );
 
       //New array of comments
       const allComments = [...comments, newComment];
@@ -727,7 +908,9 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       await comentsClass.deleteComment(id);
 
       //New array of comments
-      const allComments = comments.filter((comment) => comment.id !== id);
+      const allComments = comments.filter(
+        (comment) => comment.id !== id
+      );
 
       //Update States
       setComments(allComments);
@@ -753,7 +936,9 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
 
     try {
       //Get subtasks comments and tags from Database
-      const newSubtask: any = await subtaskClass.addSubtask(subtask);
+      const newSubtask: any = await subtaskClass.addSubtask(
+        subtask
+      );
 
       //New array of comments
       const allComments = [...subtasks, newSubtask];
@@ -780,7 +965,9 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       await subtaskClass.deleteSubtask(id);
 
       //New array of subtasks
-      const allSubtasks = subtasks.filter((subtask) => subtask.id !== id);
+      const allSubtasks = subtasks.filter(
+        (subtask) => subtask.id !== id
+      );
 
       //Update States
       setSubtasks(allSubtasks);
@@ -811,7 +998,12 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
 
     try {
       //delete subtasks from Database
-      await subtaskClass.updateSubtask(id, isDone, subtaskName, createdAt);
+      await subtaskClass.updateSubtask(
+        id,
+        isDone,
+        subtaskName,
+        createdAt
+      );
 
       //New array of subtasks
       const allSubtasks = subtasks.map((subtask) => {
@@ -929,6 +1121,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
         addList,
         updateList,
         deleteList,
+        switchList,
         getTask,
         unSetTasks,
         getTasks,

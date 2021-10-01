@@ -63,7 +63,10 @@ const NewTaskModal = () => {
       contentLabel="New task Modal"
     >
       <section className={styles.section}>
-        <button className={styles.section__close} onClick={closeModal}>
+        <button
+          className={styles.section__close}
+          onClick={closeModal}
+        >
           <CloseRoundedIcon fontSize="large" />
         </button>
         <form onSubmit={handleNewGroup}>
@@ -80,7 +83,7 @@ const NewTaskModal = () => {
               {/*<Spinner color="violet" />*/}
             </button>
           ) : (
-            <button type="button">Create Group</button>
+            <button type="submit">Create Group</button>
           )}
         </form>
       </section>

@@ -8,7 +8,8 @@ interface DescriptionProps {
 }
 
 const Description = ({ description }: DescriptionProps) => {
-  const { addComment, comments, selectedTask, updateTask } = useData();
+  const { addComment, comments, selectedTask, updateTask } =
+    useData();
 
   const [value, setvalue] = useState(description);
   const [focus, setFocus] = useState(false);
@@ -22,6 +23,7 @@ const Description = ({ description }: DescriptionProps) => {
       dueTime: selectedTask.dueTime,
       description: value,
       listId: selectedTask.listId,
+      position: selectedTask.position,
       tags: selectedTask.tags,
     });
   }

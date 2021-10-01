@@ -5,6 +5,7 @@ interface ListType {
   name: string;
   id: string;
   color: string;
+  position: number;
 }
 
 export default class Lists {
@@ -33,13 +34,14 @@ export default class Lists {
 
       //Normalize all subtask
       listsDB.forEach((listDB) => {
-        let subtask: ListType = {
+        let list: ListType = {
           name: listDB.data().name,
           color: listDB.data().color,
           id: listDB.id,
+          position: listDB.data().position,
         };
 
-        this.lists.push(subtask);
+        this.lists.push(list);
       });
 
       return this.lists;
@@ -48,7 +50,11 @@ export default class Lists {
     }
   }
 
-  async addList(ListName: string, color: string) {
+  async addList(
+    ListName: string,
+    color: string,
+    position: number
+  ) {
     try {
       //Add List to Database
       let listDB = await this.db
@@ -57,13 +63,18 @@ export default class Lists {
         .collection("projects")
         .doc(this.projectId)
         .collection("lists")
-        .add({ name: ListName, color: color })
+        .add({
+          name: ListName,
+          color: color,
+          position: position,
+        })
         .then((data) => data.get());
 
       const newList = {
         name: listDB.data()?.name,
         color: listDB.data()?.color,
         id: listDB.id,
+        position: listDB.data()?.position,
       } as ListType;
 
       return newList;
@@ -75,7 +86,12 @@ export default class Lists {
     }
   }
 
-  async updateList(id: string, name: string, color: string) {
+  async updateList(
+    id: string,
+    name: string,
+    color: string,
+    position: number
+  ) {
     try {
       //throw Error("Falha na rede");
       //Update list in Database
@@ -86,7 +102,11 @@ export default class Lists {
         .doc(this.projectId)
         .collection("lists")
         .doc(id)
-        .update({ name: name, color: color });
+        .update({
+          name: name,
+          color: color,
+          position: position,
+        });
     } catch (error: any) {
       console.log(error);
 

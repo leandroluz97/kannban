@@ -8,8 +8,11 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 interface InputCardTitleProps {
   closeModal: () => void;
 }
-const InputCartTitle = ({ closeModal }: InputCardTitleProps) => {
-  const { selectedTask, updateTask, deleteTask } = useData();
+const InputCartTitle = ({
+  closeModal,
+}: InputCardTitleProps) => {
+  const { selectedTask, updateTask, deleteTask } =
+    useData();
 
   const [title, setTitle] = useState("");
 
@@ -24,6 +27,7 @@ const InputCartTitle = ({ closeModal }: InputCardTitleProps) => {
       dueTime: selectedTask.dueTime,
       description: selectedTask.description || "",
       listId: selectedTask.listId,
+      position: selectedTask.position,
       tags: selectedTask.tags,
     });
   }

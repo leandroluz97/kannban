@@ -7,6 +7,7 @@ interface TaskType {
   listId: string;
   dueTime: string;
   description: string;
+  position: number;
 }
 
 export default class Tasks {
@@ -37,6 +38,7 @@ export default class Tasks {
           listId: taskDB.data().listId,
           dueTime: taskDB.data().dueTime,
           description: taskDB.data().description,
+          position: taskDB.data().position,
         };
 
         this.tasks.push(task);
@@ -51,14 +53,23 @@ export default class Tasks {
     }
   }
 
-  async addTask(taskName: string, listId: string) {
+  async addTask(
+    taskName: string,
+    listId: string,
+    position: number
+  ) {
     try {
       //Get all the Subtasks from Database
       let taskDB = await this.db
         .collection("users")
         .doc(this.user?.uid)
         .collection("tasks")
-        .add({ name: taskName, listId: listId, dueTime: "" })
+        .add({
+          name: taskName,
+          listId: listId,
+          dueTime: "",
+          position: position,
+        })
         .then((data) => data.get());
 
       const newTask = {
@@ -67,6 +78,7 @@ export default class Tasks {
         listId: taskDB.data()?.listId,
         dueTime: taskDB.data()?.dueTime,
         description: taskDB.data()?.description,
+        position: taskDB.data()?.position,
       } as TaskType;
 
       return newTask;
@@ -83,7 +95,8 @@ export default class Tasks {
     taskName: string,
     dueTime: string,
     description: string,
-    listId: string
+    listId: string,
+    position: number
   ) {
     try {
       //Update Task in Database
@@ -97,6 +110,7 @@ export default class Tasks {
           dueTime: dueTime,
           description: description,
           listId: listId,
+          position: position,
         });
     } catch (error) {
       toast.error(error.message, {

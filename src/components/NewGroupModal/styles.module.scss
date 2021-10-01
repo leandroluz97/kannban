@@ -38,7 +38,8 @@
     }
   }
 
-  button[type="button"] {
+  button[type="button"],
+  button[type="submit"] {
     background-color: var(--blue-50);
     color: var(--white);
     border: none;
@@ -55,6 +56,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
+
+    margin-left: auto;
 
     svg {
       color: var(--white);

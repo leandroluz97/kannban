@@ -14,6 +14,7 @@ import PaperCard from "../PaperCard";
 import { useData } from "../../hooks/useData";
 import { useParams } from "react-router-dom";
 import ContentEditable from "react-contenteditable";
+import { Draggable } from "react-beautiful-dnd";
 
 interface TasksType {
   name: string;
@@ -24,6 +25,7 @@ interface ListProps {
   name: string;
   color: string;
   id: string;
+  position: number;
 }
 
 interface ID {
@@ -33,11 +35,12 @@ interface ID {
 interface ParamsProps {
   id: string;
 }
-const List = ({ name, color, id }: ListProps) => {
+const List = ({ name, color, id, position }: ListProps) => {
   const [addNewCard, setAddNewCard] = useState(false);
   const [moreOption, setMoreOption] = useState(false);
   const [changeColor, setChangeColor] = useState(false);
-  const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+  const [deleteConfirmation, setDeleteConfirmation] =
+    useState(false);
   const [title, setTitle] = useState(name);
   const [colors, seTcolors] = useState([
     "#8B18D1",
@@ -52,13 +55,21 @@ const List = ({ name, color, id }: ListProps) => {
 
   const optionRef = useRef<HTMLDivElement | null>(null);
   const colorRef = useRef<HTMLDivElement | null>(null);
-  const deleteConfirmationRef = useRef<HTMLDivElement | null>(null);
+  const deleteConfirmationRef =
+    useRef<HTMLDivElement | null>(null);
   const titleRef = useRef<HTMLHeadingElement | null>(null);
 
-  const { deleteList, tasks, updateList, getProject, selectedProject } =
-    useData();
+  const {
+    deleteList,
+    tasks,
+    updateList,
+    getProject,
+    selectedProject,
+  } = useData();
 
-  const allTasks = tasks.filter((task) => task.listId === id);
+  const allTasks = tasks.filter(
+    (task) => task.listId === id
+  );
 
   let params: ParamsProps = useParams();
 
@@ -108,7 +119,7 @@ const List = ({ name, color, id }: ListProps) => {
   }
 
   function handleConfirmation() {
-    setDeleteConfirmation(true)
+    setDeleteConfirmation(true);
   }
 
   async function handleOnBlur(event: any) {
@@ -135,100 +146,143 @@ const List = ({ name, color, id }: ListProps) => {
   }
 
   return (
-    <section className={styles.list}>
-      <header style={{ borderBottomColor: `${color}` }}>
-        <div className={styles.list__left}>
-          <DragIndicatorIcon className={styles.list__drag} />
-          <ContentEditable
-            innerRef={titleRef}
-            html={title ? title : ""}
-            disabled={false}
-            onChange={(event) => setTitle(event.target.value as string)}
-            onKeyDown={handleOnKeyPress}
-            onBlur={handleOnBlur}
-            tagName="h2"
-          />
-        </div>
-
-        <div className={styles.list__right}>
-          <div onClick={() => setAddNewCard(true)}>
-            <AddRoundedIcon fontSize="large" />
-          </div>
-
-          <div onClick={() => setMoreOption(true)}>
-            <MoreHorizIcon fontSize="large" />
-          </div>
-        </div>
-
-        {moreOption && (
-          <div className={styles.list__paperCardWrapper} >
-            <PaperCard
-              paperRef={optionRef}
-              color="var(--blue-100)"
-              handleBlur={handleMoreOtionOnBlur}
+    <Draggable draggableId={id.toString()} index={position}>
+      {(provided) => (
+        <section
+          className={styles.list}
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+        >
+          <header style={{ borderBottomColor: `${color}` }}>
+            <div
+              className={styles.list__left}
+              {...provided.dragHandleProps}
             >
-              <div className={styles.list__actions}>
-                <button onClick={handleRename}>Rename</button>
-                <button onClick={handleColors}>Change Color</button>
-                <button onClick={handleConfirmation}>
-                  Delete
-                </button>
+              <DragIndicatorIcon
+                className={styles.list__drag}
+              />
+              <ContentEditable
+                innerRef={titleRef}
+                html={title ? title : ""}
+                disabled={false}
+                onChange={(event) =>
+                  setTitle(event.target.value as string)
+                }
+                onKeyDown={handleOnKeyPress}
+                onBlur={handleOnBlur}
+                tagName="h2"
+              />
+            </div>
+
+            <div className={styles.list__right}>
+              <div onClick={() => setAddNewCard(true)}>
+                <AddRoundedIcon fontSize="large" />
               </div>
-            </PaperCard>
-          </div>
 
-        )}
-        {changeColor && (
-          <div className={styles.list__paperCardColors} >
-            <PaperCard paperRef={colorRef} color="var(--blue-100)" handleBlur={handleColorOnBlur}>
-              <div className={styles.list__changeColor}>
-                {colors.map((color) => (
-                  <button
-                    key={color}
-                    style={{ backgroundColor: color }}
-                    onClick={() => handleChangeListColor(color)}
-                  ></button>
-                ))}
+              <div onClick={() => setMoreOption(true)}>
+                <MoreHorizIcon fontSize="large" />
               </div>
-            </PaperCard>
-          </div>
+            </div>
 
-        )}
-        {deleteConfirmation && (
-          <div className={styles.list__paperCardDelete} >
-            <PaperCard
-              paperRef={deleteConfirmationRef}
-              color="var(--blue-100)"
-              handleBlur={handleDeleteConfirmationOnBlur}
-            >
-              <div className={styles.list__confirmation}>
-                <h2>Delete List?</h2>
-                <p>If you delete this list, you won't be able to recover it.</p>
-                <button key={color} onClick={() => handleListDelete(id)}>
-                  Delete
-                </button>
+            {moreOption && (
+              <div
+                className={styles.list__paperCardWrapper}
+              >
+                <PaperCard
+                  paperRef={optionRef}
+                  color="var(--blue-100)"
+                  handleBlur={handleMoreOtionOnBlur}
+                >
+                  <div className={styles.list__actions}>
+                    <button onClick={handleRename}>
+                      Rename
+                    </button>
+                    <button onClick={handleColors}>
+                      Change Color
+                    </button>
+                    <button onClick={handleConfirmation}>
+                      Delete
+                    </button>
+                  </div>
+                </PaperCard>
               </div>
-            </PaperCard>
-          </div>
+            )}
+            {changeColor && (
+              <div className={styles.list__paperCardColors}>
+                <PaperCard
+                  paperRef={colorRef}
+                  color="var(--blue-100)"
+                  handleBlur={handleColorOnBlur}
+                >
+                  <div className={styles.list__changeColor}>
+                    {colors.map((color) => (
+                      <button
+                        key={color}
+                        style={{ backgroundColor: color }}
+                        onClick={() =>
+                          handleChangeListColor(color)
+                        }
+                      ></button>
+                    ))}
+                  </div>
+                </PaperCard>
+              </div>
+            )}
+            {deleteConfirmation && (
+              <div className={styles.list__paperCardDelete}>
+                <PaperCard
+                  paperRef={deleteConfirmationRef}
+                  color="var(--blue-100)"
+                  handleBlur={
+                    handleDeleteConfirmationOnBlur
+                  }
+                >
+                  <div
+                    className={styles.list__confirmation}
+                  >
+                    <h2>Delete List?</h2>
+                    <p>
+                      If you delete this list, you won't be
+                      able to recover it.
+                    </p>
+                    <button
+                      key={color}
+                      onClick={() => handleListDelete(id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </PaperCard>
+              </div>
+            )}
+          </header>
+          <section className={styles.list__body}>
+            {allTasks.length < 1 && (
+              <p className={styles.list__body__emptyText}>
+                You don't have any task yet...
+              </p>
+            )}
+            {allTasks.map((task) => (
+              <Card
+                key={task.id}
+                title={task.name}
+                id={task.id}
+                tags={task.tags}
+              />
+            ))}
 
-        )}
-      </header>
-      <section className={styles.list__body}>
-        {
-          allTasks.length < 1 && <p className={styles.list__body__emptyText} >You don't have any task yet...</p>
-        }
-        {allTasks.map((task) => (
-          <Card key={task.id} title={task.name} id={task.id} tags={task.tags} />
-        ))}
-
-        {addNewCard && (
-          <ListCard
-            handleCloseTextFied={handleCloseAddNewCardTextField}
-            listId={id}
-          />
-        )}
-      </section>
-    </section>
+            {addNewCard && (
+              <ListCard
+                handleCloseTextFied={
+                  handleCloseAddNewCardTextField
+                }
+                listId={id}
+              />
+            )}
+          </section>
+        </section>
+      )}
+    </Draggable>
   );
 };
 

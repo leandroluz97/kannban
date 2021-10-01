@@ -17,6 +17,7 @@ const DueDate = ({ dueDate }: DueTimeProps) => {
       dueTime: dates,
       description: selectedTask.description,
       listId: selectedTask.listId,
+      position: selectedTask.position,
       tags: selectedTask.tags,
     });
   }
