@@ -109,8 +109,25 @@ export default class Lists {
         });
     } catch (error: any) {
       console.log(error);
+    }
+  }
 
-      //throw new Error(error.message as string);
+  async updatePosition(listsId: any) {
+    try {
+      for (const listId in listsId) {
+        await this.db
+          .collection("users")
+          .doc(this.user?.uid)
+          .collection("projects")
+          .doc(this.projectId)
+          .collection("lists")
+          .doc(listId)
+          .update({
+            position: listsId[listId],
+          });
+      }
+    } catch (error: any) {
+      console.log(error);
     }
   }
 

@@ -642,51 +642,35 @@ export const DataProvider = ({
       destination
     );
 
+    const listsId = {} as any;
+
     const allLists = lists.map((list) => {
       if (list.position === source) {
         list.position = destination;
+        listsId[list.id] = destination;
         return list;
       }
 
       if (leftToRight(list.position)) {
         list.position = list.position - 1;
+        listsId[list.id] = list.position;
         return list;
       }
 
       if (rigthToLeft(list.position)) {
         list.position = list.position + 1;
+        listsId[list.id] = list.position;
         return list;
       }
 
       return list;
     });
 
-    console.log(allLists);
-
     //Instance of classes
-    //const listClass = new Lists(projectId);
+    const listClass = new Lists(selectedProject.id);
 
     try {
-      //Add list in Database
-      // let listDB: any = await listClass.updateList(
-      //   id,
-      //   name,
-      //   color,
-      //   position
-      // );
-
-      //console.log(listDB);
-
-      // const allLists = lists.map((list) => {
-      //   if (list.id === id) {
-      //     list = {
-      //       ...list,
-
-      //       position: position,
-      //     };
-      //   }
-      //   return list;
-      // }) as ListsType[];
+      await listClass.updatePosition(listsId);
 
       setLists(allLists);
     } catch (error: any) {
@@ -758,7 +742,7 @@ export const DataProvider = ({
   }
 
   async function addTask(taskName: string, listId: string) {
-    const position = 0;
+    const position = getLastPosition(tasks) + 1;
     try {
       const taskClass = new Tasks();
 

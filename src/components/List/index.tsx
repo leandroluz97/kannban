@@ -14,7 +14,12 @@ import PaperCard from "../PaperCard";
 import { useData } from "../../hooks/useData";
 import { useParams } from "react-router-dom";
 import ContentEditable from "react-contenteditable";
-import { Draggable } from "react-beautiful-dnd";
+import { SortByPosition } from "../../utils/sortByPosition";
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+} from "react-beautiful-dnd";
 
 interface TasksType {
   name: string;
@@ -145,6 +150,15 @@ const List = ({ name, color, id, position }: ListProps) => {
     setMoreOption(false);
   }
 
+  const onDragEnd = (result: any) => {
+    if (result.destination === null) return;
+
+    // switchList(
+    //   result.source.index,
+    //   result.destination.index
+    // );
+  };
+
   return (
     <Draggable draggableId={id.toString()} index={position}>
       {(provided) => (
@@ -262,15 +276,29 @@ const List = ({ name, color, id, position }: ListProps) => {
                 You don't have any task yet...
               </p>
             )}
-            {allTasks.map((task) => (
-              <Card
-                key={task.id}
-                title={task.name}
-                id={task.id}
-                tags={task.tags}
-              />
-            ))}
-
+            <DragDropContext onDragEnd={onDragEnd}>
+              <Droppable droppableId="Tasks">
+                {(provided) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                  >
+                    {allTasks
+                      .sort(SortByPosition)
+                      .map((task) => (
+                        <Card
+                          key={task.id}
+                          title={task.name}
+                          id={task.id}
+                          tags={task.tags}
+                          position={task.position}
+                        />
+                      ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
             {addNewCard && (
               <ListCard
                 handleCloseTextFied={

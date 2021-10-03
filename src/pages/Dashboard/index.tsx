@@ -12,6 +12,7 @@ import styles from "./styles.module.scss";
 
 import { useParams, useHistory } from "react-router-dom";
 import { useData } from "../../hooks/useData";
+import { SortByPosition } from "../../utils/sortByPosition";
 
 interface ID {
   id: string;
@@ -39,12 +40,7 @@ const Dashboard = () => {
     getListsOnLoad();
   }, [params]);
 
-  const SortByPosition = (a: any, b: any) =>
-    a.position - b.position;
-
   const onDragEnd = (result: any) => {
-    console.log(result);
-
     if (result.destination === null) return;
 
     switchList(
