@@ -120,6 +120,25 @@ export default class Tasks {
       console.log(error);
     }
   }
+  async updatePosition(tasksId: any) {
+    try {
+      //Update Task in Database
+      let taskDB = await this.db
+        .collection("users")
+        .doc(this.user?.uid)
+        .collection("tasks")
+        .doc("")
+        .update({
+          position: "position",
+        });
+    } catch (error) {
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+      console.log(error);
+    }
+  }
 
   async deleteTask(id: string) {
     try {

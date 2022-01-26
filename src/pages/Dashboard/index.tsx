@@ -1,9 +1,6 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import {
-  DragDropContext,
-  Droppable,
-} from "react-beautiful-dnd";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import Header from "../../components/Header";
 
 import List from "../../components/List";
@@ -20,14 +17,7 @@ interface ID {
 const Dashboard = () => {
   // const [lists, setLists] = useState([1, 2, 3, 4, 5, 6, 7]);
 
-  const {
-    getLists,
-    lists,
-    getProject,
-    selectedProject,
-    getTasks,
-    switchList,
-  } = useData();
+  const { getLists, lists, getProject, selectedProject, getTasks, switchList } = useData();
 
   let params: ID = useParams();
 
@@ -43,11 +33,13 @@ const Dashboard = () => {
   const onDragEnd = (result: any) => {
     if (result.destination === null) return;
 
-    switchList(
-      result.source.index,
-      result.destination.index
-    );
+    console.log(result);
+
+    switchList(result.source.index, result.destination.index);
   };
+
+  console.log(lists);
+
   return (
     <div className={styles.dashboard}>
       <div className={styles.dashboard__header}>
@@ -55,24 +47,11 @@ const Dashboard = () => {
       </div>
 
       <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable
-          droppableId="LISTTASK"
-          direction="horizontal"
-        >
+        <Droppable droppableId="LISTTASK" direction="horizontal">
           {(provided) => (
-            <div
-              ref={provided.innerRef}
-              className={styles.dashboard__lists}
-              {...provided.droppableProps}
-            >
+            <div ref={provided.innerRef} className={styles.dashboard__lists} {...provided.droppableProps}>
               {lists.sort(SortByPosition).map((list) => (
-                <List
-                  key={list.id}
-                  color={list.color}
-                  name={list.name}
-                  id={list.id}
-                  position={list.position}
-                />
+                <List key={list.id} color={list.color} name={list.name} id={list.id} position={list.position} />
               ))}
               {provided.placeholder}
               <ListFrom />

@@ -15,11 +15,7 @@ import { useData } from "../../hooks/useData";
 import { useParams } from "react-router-dom";
 import ContentEditable from "react-contenteditable";
 import { SortByPosition } from "../../utils/sortByPosition";
-import {
-  DragDropContext,
-  Droppable,
-  Draggable,
-} from "react-beautiful-dnd";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 interface TasksType {
   name: string;
@@ -44,37 +40,18 @@ const List = ({ name, color, id, position }: ListProps) => {
   const [addNewCard, setAddNewCard] = useState(false);
   const [moreOption, setMoreOption] = useState(false);
   const [changeColor, setChangeColor] = useState(false);
-  const [deleteConfirmation, setDeleteConfirmation] =
-    useState(false);
+  const [deleteConfirmation, setDeleteConfirmation] = useState(false);
   const [title, setTitle] = useState(name);
-  const [colors, seTcolors] = useState([
-    "#8B18D1",
-    "#3399AF",
-    "#D03737",
-    "#C2D118",
-    "#33AF47",
-    "#D18718",
-    "#18D183",
-    "#3350B9",
-  ]);
+  const [colors, seTcolors] = useState(["#8B18D1", "#3399AF", "#D03737", "#C2D118", "#33AF47", "#D18718", "#18D183", "#3350B9"]);
 
   const optionRef = useRef<HTMLDivElement | null>(null);
   const colorRef = useRef<HTMLDivElement | null>(null);
-  const deleteConfirmationRef =
-    useRef<HTMLDivElement | null>(null);
+  const deleteConfirmationRef = useRef<HTMLDivElement | null>(null);
   const titleRef = useRef<HTMLHeadingElement | null>(null);
 
-  const {
-    deleteList,
-    tasks,
-    updateList,
-    getProject,
-    selectedProject,
-  } = useData();
+  const { deleteList, tasks, updateList, getProject, selectedProject } = useData();
 
-  const allTasks = tasks.filter(
-    (task) => task.listId === id
-  );
+  const allTasks = tasks.filter((task) => task.listId === id);
 
   let params: ParamsProps = useParams();
 
@@ -110,6 +87,7 @@ const List = ({ name, color, id, position }: ListProps) => {
       name,
       color: newColor,
       projectId: params.id,
+      position: position,
     });
     setChangeColor(false);
   }
@@ -135,6 +113,7 @@ const List = ({ name, color, id, position }: ListProps) => {
       name: text,
       color: color,
       projectId: params.id,
+      position: position,
     });
     titleRef.current?.blur();
   }
@@ -153,7 +132,9 @@ const List = ({ name, color, id, position }: ListProps) => {
   const onDragEnd = (result: any) => {
     if (result.destination === null) return;
 
-    // switchList(
+    console.log(result);
+
+    // switchTask(
     //   result.source.index,
     //   result.destination.index
     // );
@@ -162,26 +143,15 @@ const List = ({ name, color, id, position }: ListProps) => {
   return (
     <Draggable draggableId={id.toString()} index={position}>
       {(provided) => (
-        <section
-          className={styles.list}
-          ref={provided.innerRef}
-          {...provided.draggableProps}
-        >
+        <section className={styles.list} ref={provided.innerRef} {...provided.draggableProps}>
           <header style={{ borderBottomColor: `${color}` }}>
-            <div
-              className={styles.list__left}
-              {...provided.dragHandleProps}
-            >
-              <DragIndicatorIcon
-                className={styles.list__drag}
-              />
+            <div className={styles.list__left} {...provided.dragHandleProps}>
+              <DragIndicatorIcon className={styles.list__drag} />
               <ContentEditable
                 innerRef={titleRef}
                 html={title ? title : ""}
                 disabled={false}
-                onChange={(event) =>
-                  setTitle(event.target.value as string)
-                }
+                onChange={(event) => setTitle(event.target.value as string)}
                 onKeyDown={handleOnKeyPress}
                 onBlur={handleOnBlur}
                 tagName="h2"
@@ -199,44 +169,22 @@ const List = ({ name, color, id, position }: ListProps) => {
             </div>
 
             {moreOption && (
-              <div
-                className={styles.list__paperCardWrapper}
-              >
-                <PaperCard
-                  paperRef={optionRef}
-                  color="var(--blue-100)"
-                  handleBlur={handleMoreOtionOnBlur}
-                >
+              <div className={styles.list__paperCardWrapper}>
+                <PaperCard paperRef={optionRef} color="var(--blue-100)" handleBlur={handleMoreOtionOnBlur}>
                   <div className={styles.list__actions}>
-                    <button onClick={handleRename}>
-                      Rename
-                    </button>
-                    <button onClick={handleColors}>
-                      Change Color
-                    </button>
-                    <button onClick={handleConfirmation}>
-                      Delete
-                    </button>
+                    <button onClick={handleRename}>Rename</button>
+                    <button onClick={handleColors}>Change Color</button>
+                    <button onClick={handleConfirmation}>Delete</button>
                   </div>
                 </PaperCard>
               </div>
             )}
             {changeColor && (
               <div className={styles.list__paperCardColors}>
-                <PaperCard
-                  paperRef={colorRef}
-                  color="var(--blue-100)"
-                  handleBlur={handleColorOnBlur}
-                >
+                <PaperCard paperRef={colorRef} color="var(--blue-100)" handleBlur={handleColorOnBlur}>
                   <div className={styles.list__changeColor}>
                     {colors.map((color) => (
-                      <button
-                        key={color}
-                        style={{ backgroundColor: color }}
-                        onClick={() =>
-                          handleChangeListColor(color)
-                        }
-                      ></button>
+                      <button key={color} style={{ backgroundColor: color }} onClick={() => handleChangeListColor(color)}></button>
                     ))}
                   </div>
                 </PaperCard>
@@ -244,25 +192,11 @@ const List = ({ name, color, id, position }: ListProps) => {
             )}
             {deleteConfirmation && (
               <div className={styles.list__paperCardDelete}>
-                <PaperCard
-                  paperRef={deleteConfirmationRef}
-                  color="var(--blue-100)"
-                  handleBlur={
-                    handleDeleteConfirmationOnBlur
-                  }
-                >
-                  <div
-                    className={styles.list__confirmation}
-                  >
+                <PaperCard paperRef={deleteConfirmationRef} color="var(--blue-100)" handleBlur={handleDeleteConfirmationOnBlur}>
+                  <div className={styles.list__confirmation}>
                     <h2>Delete List?</h2>
-                    <p>
-                      If you delete this list, you won't be
-                      able to recover it.
-                    </p>
-                    <button
-                      key={color}
-                      onClick={() => handleListDelete(id)}
-                    >
+                    <p>If you delete this list, you won't be able to recover it.</p>
+                    <button key={color} onClick={() => handleListDelete(id)}>
                       Delete
                     </button>
                   </div>
@@ -271,42 +205,20 @@ const List = ({ name, color, id, position }: ListProps) => {
             )}
           </header>
           <section className={styles.list__body}>
-            {allTasks.length < 1 && (
-              <p className={styles.list__body__emptyText}>
-                You don't have any task yet...
-              </p>
-            )}
+            {allTasks.length < 1 && <p className={styles.list__body__emptyText}>You don't have any task yet...</p>}
             <DragDropContext onDragEnd={onDragEnd}>
-              <Droppable droppableId="Tasks">
+              <Droppable droppableId={"Tasks" + id}>
                 {(provided) => (
-                  <div
-                    ref={provided.innerRef}
-                    {...provided.droppableProps}
-                  >
-                    {allTasks
-                      .sort(SortByPosition)
-                      .map((task) => (
-                        <Card
-                          key={task.id}
-                          title={task.name}
-                          id={task.id}
-                          tags={task.tags}
-                          position={task.position}
-                        />
-                      ))}
+                  <div ref={provided.innerRef} {...provided.droppableProps}>
+                    {allTasks.sort(SortByPosition).map((task) => (
+                      <Card key={task.id} title={task.name} id={task.id} tags={task.tags} position={task.position} />
+                    ))}
                     {provided.placeholder}
                   </div>
                 )}
               </Droppable>
             </DragDropContext>
-            {addNewCard && (
-              <ListCard
-                handleCloseTextFied={
-                  handleCloseAddNewCardTextField
-                }
-                listId={id}
-              />
-            )}
+            {addNewCard && <ListCard handleCloseTextFied={handleCloseAddNewCardTextField} listId={id} />}
           </section>
         </section>
       )}

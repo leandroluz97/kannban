@@ -1,10 +1,4 @@
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 //imports
@@ -16,17 +10,11 @@ import Tags from "../utils/tags";
 import Comments from "../utils/comments";
 import Lists from "../utils/lists";
 
-import {
-  groupProjectsByGroupName,
-  joinGroupAndProjects,
-} from "../utils/normarlization";
+import { groupProjectsByGroupName, joinGroupAndProjects } from "../utils/normarlization";
 
 import Subtasks from "../utils/subtasks";
 import { getLastPosition } from "../utils/getLastPosition";
-import {
-  getLeftToRightDirection,
-  getRightToLeftDirection,
-} from "../utils/getDirection";
+import { getLeftToRightDirection, getRightToLeftDirection } from "../utils/getDirection";
 
 interface DataProviderPropsType {
   children: ReactNode;
@@ -118,6 +106,7 @@ interface UpdateListType {
   name: string;
   color: string;
   projectId: string;
+  position: number;
 }
 
 interface contextProps {
@@ -130,10 +119,7 @@ interface contextProps {
   getLists: (id: string) => Promise<void>;
   getProject: (id: string) => Promise<void>;
   archiveProject: (id: string) => Promise<void>;
-  updateProject: (
-    id: string,
-    name: string
-  ) => Promise<void>;
+  updateProject: (id: string, name: string) => Promise<void>;
   selectedProject: ProjectSelf;
   archivedProjects: ProjectType[];
   getArchivedProjects: () => Promise<void>;
@@ -142,33 +128,15 @@ interface contextProps {
   lists: ListsType[];
   addList: (name: string) => Promise<void>;
   deleteList: (id: string) => Promise<void>;
-  updateList: ({
-    id,
-    name,
-    color,
-    projectId,
-  }: UpdateListType) => Promise<void>;
-  switchList: (
-    source: number,
-    destination: number
-  ) => Promise<void>;
+  updateList: ({ id, name, color, projectId, position }: UpdateListType) => Promise<void>;
+  switchList: (source: number, destination: number) => Promise<void>;
 
   getTask: (id: string) => Promise<void>;
   getTasks: () => Promise<void>;
   tasks: TasksType[];
   selectedTask: TasksType;
-  addTask: (
-    taskName: string,
-    listId: string
-  ) => Promise<void>;
-  updateTask: ({
-    id,
-    name,
-    listId,
-    description,
-    dueTime,
-    tags,
-  }: TasksType) => Promise<void>;
+  addTask: (taskName: string, listId: string) => Promise<void>;
+  updateTask: ({ id, name, listId, description, dueTime, tags }: TasksType) => Promise<void>;
   unSetTasks: () => void;
   deleteTask: (id: string) => Promise<void>;
 
@@ -179,53 +147,30 @@ interface contextProps {
   addSubtask: (subtask: string) => Promise<void>;
   subtasks: SubTaskType[];
   deleteSubtask: (id: string) => Promise<void>;
-  updateSubtask: (
-    id: string,
-    isDone: boolean,
-    subtask: string,
-    createdAt: string
-  ) => Promise<void>;
+  updateSubtask: (id: string, isDone: boolean, subtask: string, createdAt: string) => Promise<void>;
 
   tags: TagType[];
-  updateTag: (
-    id: string,
-    isActive: boolean
-  ) => Promise<void>;
+  updateTag: (id: string, isActive: boolean) => Promise<void>;
   getTags: (id: string) => Promise<void>;
 }
 
 //context
-const DataContext = createContext<contextProps>(
-  {} as contextProps
-);
+const DataContext = createContext<contextProps>({} as contextProps);
 
 //Provider
-export const DataProvider = ({
-  children,
-}: DataProviderPropsType) => {
+export const DataProvider = ({ children }: DataProviderPropsType) => {
   //const [projects, setProjects] = useState<projectData[]>([]);
   const [groups, setGroups] = useState<JoinedType[]>([]);
-  const [storageProjectName, setStorageProjectName] =
-    useState<string>("");
-  const [selectedProject, setSelectedProject] = useState(
-    {} as ProjectSelf
-  );
-  const [archivedProjects, setArchivedProjects] = useState<
-    ProjectType[]
-  >([]);
+  const [storageProjectName, setStorageProjectName] = useState<string>("");
+  const [selectedProject, setSelectedProject] = useState({} as ProjectSelf);
+  const [archivedProjects, setArchivedProjects] = useState<ProjectType[]>([]);
 
   const [lists, setLists] = useState<ListsType[]>([]);
   const [tasks, setTasks] = useState<TasksCard[]>([]);
   const [tags, setTags] = useState<TagType[]>([]);
-  const [comments, setComments] = useState<CommentType[]>(
-    []
-  );
-  const [subtasks, setSubtasks] = useState<SubTaskType[]>(
-    []
-  );
-  const [selectedTask, setSelectedTask] = useState(
-    {} as TasksType
-  );
+  const [comments, setComments] = useState<CommentType[]>([]);
+  const [subtasks, setSubtasks] = useState<SubTaskType[]>([]);
+  const [selectedTask, setSelectedTask] = useState({} as TasksType);
 
   useEffect(() => {
     getProjects();
@@ -239,39 +184,31 @@ export const DataProvider = ({
     try {
       //Get Groups and Projects from Database
       let collectionGroups = await groupClasse.getGroups();
-      let collectionProjects =
-        await projectClasse.getProjects();
+      let collectionProjects = await projectClasse.getProjects();
 
-      const dataOfGroup = collectionGroups?.reduce(
-        (acc: any, group) => {
-          acc[group.name] = {
-            name: group.name,
-            id: group.id,
-            createdAt: group.createdAt,
-          };
-          return acc;
-        },
-        {}
-      );
+      const dataOfGroup = collectionGroups?.reduce((acc: any, group) => {
+        acc[group.name] = {
+          name: group.name,
+          id: group.id,
+          createdAt: group.createdAt,
+        };
+        return acc;
+      }, {});
 
-      let dataOfProjects = collectionProjects?.reduce(
-        (acc: any, project) => {
-          if (project.isActive) {
-            acc.push({
-              group: project.group,
-              name: project.name,
-              id: project.id,
-              isActive: project.isActive,
-            });
-          }
+      let dataOfProjects = collectionProjects?.reduce((acc: any, project) => {
+        if (project.isActive) {
+          acc.push({
+            group: project.group,
+            name: project.name,
+            id: project.id,
+            isActive: project.isActive,
+          });
+        }
 
-          return acc;
-        },
-        []
-      );
+        return acc;
+      }, []);
 
-      const groupOfProjects =
-        groupProjectsByGroupName(dataOfProjects);
+      const groupOfProjects = groupProjectsByGroupName(dataOfProjects);
       const joinedGroupProjects = joinGroupAndProjects({
         groups: dataOfGroup,
         projects: groupOfProjects,
@@ -294,9 +231,7 @@ export const DataProvider = ({
     const groupClass = new Groups();
 
     try {
-      const returnedGroup = await groupClass.addGroup(
-        groupName
-      );
+      const returnedGroup = await groupClass.addGroup(groupName);
 
       const newGroup = {
         name: returnedGroup?.name,
@@ -304,10 +239,7 @@ export const DataProvider = ({
         projects: [],
       };
 
-      const dataOfGroups = [
-        ...groups,
-        newGroup,
-      ] as JoinedType[];
+      const dataOfGroups = [...groups, newGroup] as JoinedType[];
 
       setGroups(dataOfGroups);
     } catch (error) {
@@ -322,10 +254,7 @@ export const DataProvider = ({
     const projectClass = new Projects();
 
     try {
-      const returnedProject = await projectClass.addProject(
-        projectName,
-        storageProjectName
-      );
+      const returnedProject = await projectClass.addProject(projectName, storageProjectName);
 
       const newProject = {
         name: returnedProject?.name,
@@ -357,9 +286,7 @@ export const DataProvider = ({
 
     try {
       //Get Project from Database
-      const projectDB: any = await projectClass.getProject(
-        id
-      );
+      const projectDB: any = await projectClass.getProject(id);
 
       //If the project is not archived show it as an active project
       if (projectDB.isActive) {
@@ -392,16 +319,11 @@ export const DataProvider = ({
       await projectClass.archiveProject(id);
 
       //Archived Project
-      const archivedProject = groups.reduce(
-        (acc, group) => {
-          group.projects = group.projects.filter(
-            (project) => project.id !== id
-          );
-          acc = [...acc, group];
-          return acc;
-        },
-        [] as JoinedType[]
-      ) as JoinedType[];
+      const archivedProject = groups.reduce((acc, group) => {
+        group.projects = group.projects.filter((project) => project.id !== id);
+        acc = [...acc, group];
+        return acc;
+      }, [] as JoinedType[]) as JoinedType[];
 
       //Update State
       setGroups(archivedProject);
@@ -417,9 +339,7 @@ export const DataProvider = ({
     //Instance of classes
     const projectClass = new Projects();
 
-    let archivedProject = archivedProjects.find(
-      (project) => project.id === id
-    ) as ProjectType;
+    let archivedProject = archivedProjects.find((project) => project.id === id) as ProjectType;
 
     archivedProject = {
       ...archivedProject,
@@ -440,9 +360,7 @@ export const DataProvider = ({
         return acc;
       }, [] as JoinedType[]);
 
-      const newArchivedProject = archivedProjects.filter(
-        (project) => project.id !== id
-      );
+      const newArchivedProject = archivedProjects.filter((project) => project.id !== id);
 
       console.log(allGroups);
 
@@ -462,13 +380,10 @@ export const DataProvider = ({
     const projectClass = new Projects();
 
     try {
-      const allArchivedProjects =
-        await projectClass.getArchivedProjects();
+      const allArchivedProjects = await projectClass.getArchivedProjects();
 
       //Update State
-      setArchivedProjects(
-        allArchivedProjects as ProjectType[]
-      );
+      setArchivedProjects(allArchivedProjects as ProjectType[]);
     } catch (error) {
       toast.error(error.message, {
         bodyClassName: "toastify__error",
@@ -533,11 +448,7 @@ export const DataProvider = ({
 
     try {
       //Add list in Database
-      let listDB: any = await listClass.addList(
-        name,
-        "8B18D1",
-        position
-      );
+      let listDB: any = await listClass.addList(name, "8B18D1", position);
 
       const newList = {
         name: listDB.name,
@@ -566,9 +477,7 @@ export const DataProvider = ({
       await listClass.deleteList(id);
 
       //Delete List in State
-      const allLists = lists.filter(
-        (list) => list.id !== id
-      );
+      const allLists = lists.filter((list) => list.id !== id);
 
       //Update State
       setLists(allLists);
@@ -585,25 +494,13 @@ export const DataProvider = ({
     }
   }
 
-  async function updateList({
-    id,
-    name,
-    color,
-    projectId,
-  }: UpdateListType) {
+  async function updateList({ id, name, color, projectId, position }: UpdateListType) {
     //Instance of classes
     const listClass = new Lists(projectId);
 
-    const position = 0;
-
     try {
       //Add list in Database
-      let listDB: any = await listClass.updateList(
-        id,
-        name,
-        color,
-        position
-      );
+      let listDB: any = await listClass.updateList(id, name, color, position);
 
       //console.log(listDB);
 
@@ -628,19 +525,10 @@ export const DataProvider = ({
     }
   }
 
-  async function switchList(
-    source: number,
-    destination: number
-  ) {
-    const leftToRight = getLeftToRightDirection(
-      source,
-      destination
-    );
+  async function switchList(source: number, destination: number) {
+    const leftToRight = getLeftToRightDirection(source, destination);
 
-    const rigthToLeft = getRightToLeftDirection(
-      source,
-      destination
-    );
+    const rigthToLeft = getRightToLeftDirection(source, destination);
 
     const listsId = {} as any;
 
@@ -689,15 +577,11 @@ export const DataProvider = ({
 
     try {
       //Get subtasks comments and tags from Database
-      const allSubtasks: any =
-        await subtaskClass.getSubtasks();
-      const allComments: any =
-        await comentsClass.getComments();
+      const allSubtasks: any = await subtaskClass.getSubtasks();
+      const allComments: any = await comentsClass.getComments();
       const allTags: any = await tagsClass.getTags();
 
-      const task: any = tasks.find(
-        (task) => task.id === id
-      );
+      const task: any = tasks.find((task) => task.id === id);
 
       //Update States
       setSubtasks(allSubtasks);
@@ -747,11 +631,7 @@ export const DataProvider = ({
       const taskClass = new Tasks();
 
       //New task
-      let newTask = await taskClass.addTask(
-        taskName,
-        listId,
-        position
-      );
+      let newTask = await taskClass.addTask(taskName, listId, position);
       const id = newTask?.id as string;
 
       //Get original tags
@@ -773,29 +653,13 @@ export const DataProvider = ({
     }
   }
 
-  async function updateTask({
-    id,
-    name,
-    listId,
-    description,
-    dueTime,
-    tags,
-  }: TasksType) {
+  async function updateTask({ id, name, listId, description, dueTime, tags, position }: TasksType) {
     //Instance of classes
     const taskClass = new Tasks();
 
-    const position = 0;
-
     try {
       //delete subtasks from Database
-      await taskClass.updateTask(
-        id,
-        name,
-        dueTime,
-        description,
-        listId,
-        position
-      );
+      await taskClass.updateTask(id, name, dueTime, description, listId, position);
 
       //New array of subtasks
       const allTasks = tasks.map((task) => {
@@ -829,6 +693,72 @@ export const DataProvider = ({
     }
   }
 
+  async function switchTask(listID: string, source: number, destination: number) {
+    //Instance of classes
+    const taskClass = new Tasks();
+
+    const leftToRight = getLeftToRightDirection(source, destination);
+
+    const rigthToLeft = getRightToLeftDirection(source, destination);
+
+    const allTasks = tasks.map((task) => {
+      if (task.position === source && listID === task.listId) {
+        task.position = destination;
+        //tasksId[task.id] = destination;
+        return task;
+      }
+
+      if (leftToRight(task.position)) {
+        task.position = task.position - 1;
+        // tasksId[task.id] = task.position;
+        return task;
+      }
+
+      if (rigthToLeft(task.position)) {
+        task.position = task.position + 1;
+        // tasksId[task.id] = task.position;
+        return task;
+      }
+
+      return task;
+    });
+
+    try {
+      //delete subtasks from Database
+      // await taskClass.updatePosition();
+
+      //New array of subtasks
+      // const allTasks = tasks.map((task) => {
+      //   if (task.id === id) {
+      //     task.name = name;
+      //     task.description = description;
+      //     task.dueTime = dueTime;
+      //     task.listId = listId;
+      //     task.position = position;
+      //     task.tags = tags;
+      //   }
+
+      //   return task;
+      // }) as TasksType[];
+
+      //Update States
+      //setTasks(allTasks);
+
+      toast.success("Comment Deleted!", {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+    } catch (error) {
+      //handle toast error
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+
+      console.log(error);
+    }
+  }
+
   async function deleteTask(id: string) {
     //Instance of classes
     const taskClass = new Tasks();
@@ -838,9 +768,7 @@ export const DataProvider = ({
       await taskClass.deleteTask(id);
 
       //Delete Task in State
-      const allTasks = tasks.filter(
-        (task) => task.id !== id
-      );
+      const allTasks = tasks.filter((task) => task.id !== id);
 
       //Update State
       setTasks(allTasks);
@@ -863,9 +791,7 @@ export const DataProvider = ({
 
     try {
       //Get subtasks comments and tags from Database
-      const newComment: any = await comentsClass.addComment(
-        comment
-      );
+      const newComment: any = await comentsClass.addComment(comment);
 
       //New array of comments
       const allComments = [...comments, newComment];
@@ -892,9 +818,7 @@ export const DataProvider = ({
       await comentsClass.deleteComment(id);
 
       //New array of comments
-      const allComments = comments.filter(
-        (comment) => comment.id !== id
-      );
+      const allComments = comments.filter((comment) => comment.id !== id);
 
       //Update States
       setComments(allComments);
@@ -920,9 +844,7 @@ export const DataProvider = ({
 
     try {
       //Get subtasks comments and tags from Database
-      const newSubtask: any = await subtaskClass.addSubtask(
-        subtask
-      );
+      const newSubtask: any = await subtaskClass.addSubtask(subtask);
 
       //New array of comments
       const allComments = [...subtasks, newSubtask];
@@ -949,9 +871,7 @@ export const DataProvider = ({
       await subtaskClass.deleteSubtask(id);
 
       //New array of subtasks
-      const allSubtasks = subtasks.filter(
-        (subtask) => subtask.id !== id
-      );
+      const allSubtasks = subtasks.filter((subtask) => subtask.id !== id);
 
       //Update States
       setSubtasks(allSubtasks);
@@ -971,23 +891,13 @@ export const DataProvider = ({
     }
   }
 
-  async function updateSubtask(
-    id: string,
-    isDone: boolean,
-    subtaskName: string,
-    createdAt: string
-  ) {
+  async function updateSubtask(id: string, isDone: boolean, subtaskName: string, createdAt: string) {
     //Instance of classes
     const subtaskClass = new Subtasks(selectedTask.id);
 
     try {
       //delete subtasks from Database
-      await subtaskClass.updateSubtask(
-        id,
-        isDone,
-        subtaskName,
-        createdAt
-      );
+      await subtaskClass.updateSubtask(id, isDone, subtaskName, createdAt);
 
       //New array of subtasks
       const allSubtasks = subtasks.map((subtask) => {
