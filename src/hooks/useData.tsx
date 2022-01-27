@@ -139,6 +139,7 @@ interface contextProps {
   updateTask: ({ id, name, listId, description, dueTime, tags }: TasksType) => Promise<void>;
   unSetTasks: () => void;
   deleteTask: (id: string) => Promise<void>;
+  switchTask: (source: number, destination: number) => Promise<void>;
 
   addComment: (comment: string) => Promise<void>;
   deleteComment: (id: string) => Promise<void>;
@@ -556,6 +557,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
 
     //Instance of classes
     const listClass = new Lists(selectedProject.id);
+    console.log(listsId);
 
     try {
       await listClass.updatePosition(listsId);
@@ -693,56 +695,43 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
     }
   }
 
-  async function switchTask(listID: string, source: number, destination: number) {
+  async function switchTask(source: number, destination: number) {
     //Instance of classes
     const taskClass = new Tasks();
 
     const leftToRight = getLeftToRightDirection(source, destination);
-
     const rigthToLeft = getRightToLeftDirection(source, destination);
 
+    const tasksId = {} as any;
+
     const allTasks = tasks.map((task) => {
-      if (task.position === source && listID === task.listId) {
+      if (task.position === source) {
         task.position = destination;
-        //tasksId[task.id] = destination;
+        tasksId[task.id] = destination;
         return task;
       }
 
       if (leftToRight(task.position)) {
         task.position = task.position - 1;
-        // tasksId[task.id] = task.position;
+        tasksId[task.id] = task.position;
         return task;
       }
 
       if (rigthToLeft(task.position)) {
         task.position = task.position + 1;
-        // tasksId[task.id] = task.position;
+        tasksId[task.id] = task.position;
         return task;
       }
 
       return task;
     });
+    console.log(tasksId);
 
     try {
-      //delete subtasks from Database
-      // await taskClass.updatePosition();
+      await taskClass.updatePosition(tasksId);
 
-      //New array of subtasks
-      // const allTasks = tasks.map((task) => {
-      //   if (task.id === id) {
-      //     task.name = name;
-      //     task.description = description;
-      //     task.dueTime = dueTime;
-      //     task.listId = listId;
-      //     task.position = position;
-      //     task.tags = tags;
-      //   }
-
-      //   return task;
-      // }) as TasksType[];
-
-      //Update States
-      //setTasks(allTasks);
+      // Update States
+      setTasks(allTasks);
 
       toast.success("Comment Deleted!", {
         bodyClassName: "toastify__error",
@@ -1024,6 +1013,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
         selectedTask,
         addTask,
         updateTask,
+        switchTask,
         addComment,
         comments,
         deleteComment,

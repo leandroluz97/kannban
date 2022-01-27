@@ -24,11 +24,7 @@ export default class Tasks {
   async getTasks() {
     try {
       //Get all Tasks from Database
-      let tasksDB = await this.db
-        .collection("users")
-        .doc(this.user?.uid)
-        .collection("tasks")
-        .get();
+      let tasksDB = await this.db.collection("users").doc(this.user?.uid).collection("tasks").get();
 
       //Normalize tasks
       tasksDB.forEach((taskDB) => {
@@ -53,11 +49,7 @@ export default class Tasks {
     }
   }
 
-  async addTask(
-    taskName: string,
-    listId: string,
-    position: number
-  ) {
+  async addTask(taskName: string, listId: string, position: number) {
     try {
       //Get all the Subtasks from Database
       let taskDB = await this.db
@@ -90,28 +82,16 @@ export default class Tasks {
     }
   }
 
-  async updateTask(
-    id: string,
-    taskName: string,
-    dueTime: string,
-    description: string,
-    listId: string,
-    position: number
-  ) {
+  async updateTask(id: string, taskName: string, dueTime: string, description: string, listId: string, position: number) {
     try {
       //Update Task in Database
-      let taskDB = await this.db
-        .collection("users")
-        .doc(this.user?.uid)
-        .collection("tasks")
-        .doc(id)
-        .update({
-          name: taskName,
-          dueTime: dueTime,
-          description: description,
-          listId: listId,
-          position: position,
-        });
+      let taskDB = await this.db.collection("users").doc(this.user?.uid).collection("tasks").doc(id).update({
+        name: taskName,
+        dueTime: dueTime,
+        description: description,
+        listId: listId,
+        position: position,
+      });
     } catch (error) {
       toast.error(error.message, {
         bodyClassName: "toastify__error",
@@ -123,14 +103,12 @@ export default class Tasks {
   async updatePosition(tasksId: any) {
     try {
       //Update Task in Database
-      let taskDB = await this.db
-        .collection("users")
-        .doc(this.user?.uid)
-        .collection("tasks")
-        .doc("")
-        .update({
-          position: "position",
+
+      for (const taskId in tasksId) {
+        await this.db.collection("users").doc(this.user?.uid).collection("tasks").doc(taskId).update({
+          position: tasksId[taskId],
         });
+      }
     } catch (error) {
       toast.error(error.message, {
         bodyClassName: "toastify__error",
@@ -143,12 +121,7 @@ export default class Tasks {
   async deleteTask(id: string) {
     try {
       //Delete Task from Database
-      let subTaskDB = await this.db
-        .collection("users")
-        .doc(this.user?.uid)
-        .collection("tasks")
-        .doc(id)
-        .delete();
+      let subTaskDB = await this.db.collection("users").doc(this.user?.uid).collection("tasks").doc(id).delete();
     } catch (error) {
       toast.error(error.message, {
         bodyClassName: "toastify__error",

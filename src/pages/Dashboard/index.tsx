@@ -33,12 +33,8 @@ const Dashboard = () => {
   const onDragEnd = (result: any) => {
     if (result.destination === null) return;
 
-    console.log(result);
-
     switchList(result.source.index, result.destination.index);
   };
-
-  console.log(lists);
 
   return (
     <div className={styles.dashboard}>

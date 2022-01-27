@@ -49,7 +49,7 @@ const List = ({ name, color, id, position }: ListProps) => {
   const deleteConfirmationRef = useRef<HTMLDivElement | null>(null);
   const titleRef = useRef<HTMLHeadingElement | null>(null);
 
-  const { deleteList, tasks, updateList, getProject, selectedProject } = useData();
+  const { deleteList, tasks, updateList, getProject, selectedProject, switchTask } = useData();
 
   const allTasks = tasks.filter((task) => task.listId === id);
 
@@ -132,12 +132,9 @@ const List = ({ name, color, id, position }: ListProps) => {
   const onDragEnd = (result: any) => {
     if (result.destination === null) return;
 
-    console.log(result);
+    // console.log(result);
 
-    // switchTask(
-    //   result.source.index,
-    //   result.destination.index
-    // );
+    switchTask(result.source.index, result.destination.index);
   };
 
   return (
