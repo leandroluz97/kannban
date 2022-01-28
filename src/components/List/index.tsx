@@ -208,7 +208,15 @@ const List = ({ name, color, id, position }: ListProps) => {
                 {(provided) => (
                   <div ref={provided.innerRef} {...provided.droppableProps}>
                     {allTasks.sort(SortByPosition).map((task) => (
-                      <Card key={task.id} title={task.name} id={task.id} tags={task.tags} position={task.position} />
+                      <Card
+                        key={task.id}
+                        title={task.name}
+                        id={task.id}
+                        tags={task.tags}
+                        position={task.position}
+                        comments={task.comments}
+                        subtasks={task.subtasks}
+                      />
                     ))}
                     {provided.placeholder}
                   </div>

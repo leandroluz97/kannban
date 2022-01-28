@@ -58,6 +58,18 @@ interface TasksType {
   tags: TagType[];
 }
 
+interface TasksTypeDisplay {
+  name: string;
+  id: string;
+  listId: string;
+  dueTime: string;
+  description: string;
+  position: number;
+  tags: TagType[];
+  comments: CommentType[];
+  subtasks: SubTaskType[];
+}
+
 interface TasksCard {
   name: string;
   id: string;
@@ -133,7 +145,7 @@ interface contextProps {
 
   getTask: (id: string) => Promise<void>;
   getTasks: () => Promise<void>;
-  tasks: TasksType[];
+  tasks: TasksTypeDisplay[];
   selectedTask: TasksType;
   addTask: (taskName: string, listId: string) => Promise<void>;
   updateTask: ({ id, name, listId, description, dueTime, tags }: TasksType) => Promise<void>;
@@ -167,7 +179,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
   const [archivedProjects, setArchivedProjects] = useState<ProjectType[]>([]);
 
   const [lists, setLists] = useState<ListsType[]>([]);
-  const [tasks, setTasks] = useState<TasksCard[]>([]);
+  const [tasks, setTasks] = useState<TasksTypeDisplay[]>([]);
   const [tags, setTags] = useState<TagType[]>([]);
   const [comments, setComments] = useState<CommentType[]>([]);
   const [subtasks, setSubtasks] = useState<SubTaskType[]>([]);
@@ -610,20 +622,26 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
 
   async function getTasks() {
     try {
+      const newAllTask = [];
+
       const taskClass = new Tasks();
       const allTasks = await taskClass.getTasks();
 
-      const newAllTask = [];
-
       for (const task of allTasks as any) {
         const tagsClass = new Tags(task.id);
+        const commentsClass = new Comments(task.id);
+        const subtasksClass = new Subtasks(task.id);
         const allTags = await tagsClass.getTags();
+        const allComments = await commentsClass.getComments();
+        const allSubtasks = await subtasksClass.getSubtasks();
         task["tags"] = allTags;
+        task["comments"] = allComments;
+        task["subtasks"] = allSubtasks;
 
         newAllTask.push(task);
       }
 
-      setTasks(newAllTask as TasksType[]);
+      setTasks(newAllTask as TasksTypeDisplay[]);
     } catch (error) {}
   }
 
@@ -640,9 +658,9 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       const tagsClass = new Tags(id);
       await tagsClass.getOriginalTags();
 
-      newTask = { ...newTask, tags: [] } as TasksType;
+      newTask = { ...newTask, tags: [], comments: [], subtasks: [] } as unknown as TasksTypeDisplay;
 
-      const allTask = [...tasks, newTask] as TasksType[];
+      const allTask = [...tasks, newTask] as TasksTypeDisplay[];
 
       setTasks(allTask);
     } catch (error) {
@@ -672,10 +690,12 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
           task.listId = listId;
           task.position = position;
           task.tags = tags;
+          task.comments = comments;
+          task.subtasks = subtasks;
         }
 
         return task;
-      }) as TasksType[];
+      }) as TasksTypeDisplay[];
 
       //Update States
       setTasks(allTasks);
@@ -938,7 +958,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
           task.tags = allTags;
         }
         return task;
-      }) as TasksType[];
+      }) as TasksTypeDisplay[];
 
       //Update States
       setTags(allTags);

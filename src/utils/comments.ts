@@ -54,8 +54,6 @@ export default class Comments {
         this.comments.push(comment);
       });
 
-      console.log(this.comments);
-
       return this.comments;
     } catch (error) {
       toast.error(error.message, {

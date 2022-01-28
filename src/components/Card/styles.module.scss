@@ -27,6 +27,18 @@
     }
   }
 
+  &__stats {
+    display: flex;
+
+    p {
+      color: var(--gray-180);
+    }
+
+    p:first-child {
+      margin-right: 1rem;
+    }
+  }
+
   &:hover {
     background-color: var(--blue-card-plus);
 
