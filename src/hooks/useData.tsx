@@ -805,8 +805,18 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       //New array of comments
       const allComments = [...comments, newComment];
 
+      const allTasks = tasks.map((task) => {
+        if (task.id === selectedTask.id) {
+          console.log("yesss");
+
+          task.comments = [...task.comments, newComment];
+        }
+        return task;
+      }) as unknown as TasksTypeDisplay[];
+
       //Update States
       setComments(allComments);
+      setTasks(allTasks);
     } catch (error) {
       //handle toast error
       toast.error(error.message, {
@@ -829,8 +839,17 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       //New array of comments
       const allComments = comments.filter((comment) => comment.id !== id);
 
+      const allTasks = tasks.map((task) => {
+        if (task.id === selectedTask.id) {
+          task.comments = task.comments.filter((c) => c.id !== id);
+        }
+
+        return task;
+      });
+
       //Update States
       setComments(allComments);
+      setTasks(allTasks);
 
       toast.success("Comment Deleted!", {
         bodyClassName: "toastify__error",
@@ -856,10 +875,18 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       const newSubtask: any = await subtaskClass.addSubtask(subtask);
 
       //New array of comments
-      const allComments = [...subtasks, newSubtask];
+      const allSubtasks = [...subtasks, newSubtask];
 
+      const allTasks = tasks.map((task) => {
+        if (task.id === selectedTask.id) {
+          task.subtasks = [...task.subtasks, newSubtask];
+        }
+
+        return task;
+      });
       //Update States
-      setSubtasks(allComments);
+      setSubtasks(allSubtasks);
+      setTasks(allTasks);
     } catch (error) {
       //handle toast error
       toast.error(error.message, {
@@ -882,8 +909,17 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       //New array of subtasks
       const allSubtasks = subtasks.filter((subtask) => subtask.id !== id);
 
+      const allTasks = tasks.map((task) => {
+        if (task.id === selectedTask.id) {
+          task.subtasks = task.subtasks.filter((s) => s.id !== id);
+        }
+
+        return task;
+      });
+
       //Update States
       setSubtasks(allSubtasks);
+      setTasks(allTasks);
 
       toast.success("Comment Deleted!", {
         bodyClassName: "toastify__error",
@@ -918,8 +954,23 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
         return subtask;
       }) as SubTaskType[];
 
+      const allTasks = tasks.map((task) => {
+        if (task.id === selectedTask.id) {
+          task.subtasks = task.subtasks.map((s) => {
+            if (s.id === id) {
+              s.isDone = isDone;
+              s.subtask = subtaskName;
+            }
+            return s;
+          });
+        }
+
+        return task;
+      });
+
       //Update States
       setSubtasks(allSubtasks);
+      setTasks(allTasks);
 
       toast.success("Comment Deleted!", {
         bodyClassName: "toastify__error",

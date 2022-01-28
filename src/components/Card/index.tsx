@@ -34,7 +34,7 @@ interface CartProps {
 
 const Card = ({ title, id, tags, position, comments, subtasks }: CartProps) => {
   const { setTaskModalOpen } = useUI();
-  const { getTask, getTags } = useData();
+  const { getTask, getTags, subtasks: allSubtasks } = useData();
 
   const subtasksStats = useMemo(
     () =>
@@ -49,7 +49,7 @@ const Card = ({ title, id, tags, position, comments, subtasks }: CartProps) => {
         },
         { done: 0, todo: 0 }
       ),
-    []
+    [allSubtasks]
   );
 
   const isActiveTags = tags.filter((tag) => tag.isActive === true);
