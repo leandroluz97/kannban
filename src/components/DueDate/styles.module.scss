@@ -5,21 +5,21 @@
     margin-bottom: 1rem;
   }
 
-  button {
-    background-color: var(--blue-50);
-    color: var(--white);
-    border: none;
-    padding: 1rem 3rem;
-    border-radius: 3px;
-    cursor: pointer;
-    border: solid 2px transparent;
-    margin-left: 1rem;
+  // button {
+  //   background-color: var(--blue-50);
+  //   color: var(--white);
+  //   border: none;
+  //   padding: 1rem 3rem;
+  //   border-radius: 3px;
+  //   cursor: pointer;
+  //   border: solid 2px transparent;
+  //   margin-left: 1rem;
 
-    &:hover {
-      background-color: var(--blue-50-plus);
-      border: solid 2px var(--blue-10);
-    }
-  }
+  //   &:hover {
+  //     background-color: var(--blue-50-plus);
+  //     border: solid 2px var(--blue-10);
+  //   }
+  // }
 
   input {
     background: var(--blue-50);

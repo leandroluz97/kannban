@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useData } from "../../hooks/useData";
 import styles from "./styles.module.scss";
+import DatePicker from "react-datepicker";
 
 interface DueTimeProps {
   dueDate: string;
@@ -8,13 +9,15 @@ interface DueTimeProps {
 const DueDate = ({ dueDate }: DueTimeProps) => {
   const { selectedTask, updateTask } = useData();
 
-  const [dates, setDate] = useState("");
+  const [date, setDate] = useState(undefined);
 
   async function handleSaveDateTimeOnBlur() {
+    if (!date) return;
+
     await updateTask({
       id: selectedTask.id,
       name: selectedTask.name,
-      dueTime: dates,
+      dueTime: date as unknown as string,
       description: selectedTask.description,
       listId: selectedTask.listId,
       position: selectedTask.position,
@@ -23,17 +26,20 @@ const DueDate = ({ dueDate }: DueTimeProps) => {
   }
 
   return (
-    <div className={styles.date}>
+    <div>
       <h3>Due Date</h3>
-
-      <input
-        type="datetime-local"
-        name=""
-        id=""
-        onChange={(e) => setDate(e.target.value)}
-        value={dates}
-        onBlur={handleSaveDateTimeOnBlur}
+      <DatePicker
+        selected={date}
+        onChange={(d) => setDate(date)}
+        locale="en-US"
+        showTimeSelect
+        className="red-border"
+        timeFormat="p"
+        timeIntervals={15}
+        dateFormat="Pp"
       />
+
+      {/* <input type="datetime-local" name="" id="" onChange={(e) => setDate(e.target.value)} value={dates} onBlur={handleSaveDateTimeOnBlur} /> */}
       {/*dates.length > 0 ? (
         <button onClick={() => setDate("")}>Remove</button>
       ) : null*/}

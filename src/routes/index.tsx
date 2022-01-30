@@ -40,18 +40,9 @@ const Routes = () => {
             <ExpandButton />
             <SideBarMobile />
             <Switch>
-              <Route
-                path="/gettingstarted"
-                component={GettingStarted}
-              />
-              <Route
-                path="/project/:id"
-                component={Dashboard}
-              />
-              <Route
-                path="/settings"
-                component={Settings}
-              />
+              <Route path="/gettingstarted" component={GettingStarted} />
+              <Route path="/project/:id" component={Dashboard} />
+              <Route path="/settings" component={Settings} />
               <Route path="/archive" component={Archive} />
             </Switch>
           </div>
