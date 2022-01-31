@@ -5,7 +5,7 @@ interface TaskType {
   name: string;
   id: string;
   listId: string;
-  dueTime: string;
+  dueTime?: Date;
   description: string;
   position: number;
 }
@@ -32,7 +32,7 @@ export default class Tasks {
           name: taskDB.data().name,
           id: taskDB.id,
           listId: taskDB.data().listId,
-          dueTime: taskDB.data().dueTime,
+          dueTime: taskDB.data().dueTime && new Date(taskDB.data().dueTime.toDate().getTime()),
           description: taskDB.data().description,
           position: taskDB.data().position,
         };
@@ -59,7 +59,7 @@ export default class Tasks {
         .add({
           name: taskName,
           listId: listId,
-          dueTime: "",
+          dueTime: null,
           position: position,
         })
         .then((data) => data.get());
@@ -82,16 +82,23 @@ export default class Tasks {
     }
   }
 
-  async updateTask(id: string, taskName: string, dueTime: string, description: string, listId: string, position: number) {
+  async updateTask(id: string, taskName: string, dueTime: undefined | Date, description: string, listId: string, position: number) {
     try {
+      const dueDatetimestamp = dueTime ? firebase.firestore.Timestamp.fromDate(new Date(dueTime)) : null;
+
       //Update Task in Database
-      let taskDB = await this.db.collection("users").doc(this.user?.uid).collection("tasks").doc(id).update({
-        name: taskName,
-        dueTime: dueTime,
-        description: description,
-        listId: listId,
-        position: position,
-      });
+      let taskDB = await this.db
+        .collection("users")
+        .doc(this.user?.uid)
+        .collection("tasks")
+        .doc(id)
+        .update({
+          name: taskName,
+          dueTime: dueDatetimestamp,
+          description: description ? description : "",
+          listId: listId,
+          position: position,
+        });
     } catch (error) {
       toast.error(error.message, {
         bodyClassName: "toastify__error",

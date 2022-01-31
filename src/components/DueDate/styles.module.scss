@@ -34,5 +34,10 @@
       background-color: var(--blue-50-plus);
       border: solid 2px var(--blue-10);
     }
+
+    &::placeholder {
+      color: var(--blue-150);
+      font-family: var(--font-family);
+    }
   }
 }

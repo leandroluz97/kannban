@@ -52,7 +52,7 @@ interface TasksType {
   name: string;
   id: string;
   listId: string;
-  dueTime: string;
+  dueTime?: Date;
   description: string;
   position: number;
   tags: TagType[];
@@ -62,7 +62,7 @@ interface TasksTypeDisplay {
   name: string;
   id: string;
   listId: string;
-  dueTime: string;
+  dueTime?: Date;
   description: string;
   position: number;
   tags: TagType[];
@@ -74,7 +74,7 @@ interface TasksCard {
   name: string;
   id: string;
   listId: string;
-  dueTime: string;
+  dueTime?: Date;
   description: string;
   position: number;
   tags: TagType[];
@@ -677,6 +677,8 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
     //Instance of classes
     const taskClass = new Tasks();
 
+    //convert the start day of month to firestore timpstamp
+
     try {
       //delete subtasks from Database
       await taskClass.updateTask(id, name, dueTime, description, listId, position);
@@ -686,7 +688,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
         if (task.id === id) {
           task.name = name;
           task.description = description;
-          task.dueTime = dueTime;
+          task.dueTime = dueTime && new Date(dueTime);
           task.listId = listId;
           task.position = position;
           task.tags = tags;

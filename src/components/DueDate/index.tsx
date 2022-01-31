@@ -1,24 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React, { SyntheticEvent, useEffect, useState } from "react";
 import { useData } from "../../hooks/useData";
 import styles from "./styles.module.scss";
 import DatePicker from "react-datepicker";
+import { format } from "date-fns";
 
 interface DueTimeProps {
-  dueDate: string;
+  dueDate?: Date;
 }
+
+type DueDateType = null | Date;
 
 const DueDate = ({ dueDate }: DueTimeProps) => {
   const { selectedTask, updateTask } = useData();
 
-  const [date, setDate] = useState(undefined);
+  const [date, setDate] = useState(selectedTask.dueTime ? format(new Date(selectedTask.dueTime), "MM/dd/yyyy h:mm aa") : undefined);
+
+  useEffect(() => {
+    setDate(selectedTask.dueTime ? format(new Date(selectedTask.dueTime), "MM/dd/yyyy h:mm aa") : undefined);
+  }, [selectedTask]);
 
   async function handleSaveDateTimeOnBlur() {
-    if (!date) return;
-
+    // if (!date) return;
     // await updateTask({
     //   id: selectedTask.id,
     //   name: selectedTask.name,
-    //   dueTime: date as unknown as string,
+    //   dueTime: newDate,
     //   description: selectedTask.description,
     //   listId: selectedTask.listId,
     //   position: selectedTask.position,
@@ -26,34 +32,44 @@ const DueDate = ({ dueDate }: DueTimeProps) => {
     // });
   }
 
-  console.log(date);
+  async function handleChange(newDate: null | Date) {
+    setDate(newDate ? format(new Date(newDate), "MM/dd/yyyy h:mm aa") : undefined);
 
-  function handleChange(d: any) {
-    setDate(d);
+    // if (!date) return;
+
+    await updateTask({
+      id: selectedTask.id,
+      name: selectedTask.name,
+      dueTime: newDate ? new Date(newDate) : undefined,
+      description: selectedTask.description,
+      listId: selectedTask.listId,
+      position: selectedTask.position,
+      tags: selectedTask.tags,
+    });
   }
 
   const minTime = new Date().getHours() as unknown as Date;
-  const maxTime = new Date().getHours() as unknown as Date;
+  const maxTime = 10 as unknown as Date;
 
   return (
     <div className={styles.date}>
       <h3>Due Date</h3>
       <DatePicker
-        selected={date}
+        selected={date ? new Date(date) : undefined}
         value={date}
         onChange={handleChange}
-        locale="pt-PT"
-        // dateFormat="dd/MM/yyyy h:mm aa"
+        dateFormat="dd/MM/yyyy h:mm aa"
+        // timeFormat="HH:mm"
         showTimeSelect
-        className="red-border"
         timeFormat="p"
         timeIntervals={5}
-        dateFormat="Pp"
+        // dateFormat="Pp"
         onBlur={handleSaveDateTimeOnBlur}
-        // isClearable
+        isClearable
         minDate={new Date()}
-        minTime={minTime}
+        minTime={new Date()}
         maxTime={maxTime}
+        placeholderText="02/02/2022 12:00 AM"
       />
 
       {/* <input type="datetime-local" name="" id="" onChange={(e) => setDate(e.target.value)} value={dates} onBlur={handleSaveDateTimeOnBlur} /> */}
