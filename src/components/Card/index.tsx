@@ -3,6 +3,7 @@ import { useData } from "../../hooks/useData";
 import { useUI } from "../../hooks/useUi";
 import styles from "./styles.module.scss";
 import { Draggable } from "react-beautiful-dnd";
+import { format } from "date-fns";
 
 interface TagType {
   name: string;
@@ -30,9 +31,10 @@ interface CartProps {
   comments: CommentType[];
   subtasks: SubTaskType[];
   position: number;
+  dueTime?: Date;
 }
 
-const Card = ({ title, id, tags, position, comments, subtasks }: CartProps) => {
+const Card = ({ title, id, tags, position, comments, subtasks, dueTime }: CartProps) => {
   const { setTaskModalOpen } = useUI();
   const { getTask, getTags, subtasks: allSubtasks } = useData();
 
@@ -63,6 +65,7 @@ const Card = ({ title, id, tags, position, comments, subtasks }: CartProps) => {
     <Draggable draggableId={id.toString()} index={position}>
       {(provided) => (
         <div className={styles.card} onClick={handleOpenTask} ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+          {dueTime && dueTime < new Date() ? <div className={styles.card__dueDate}>{format(new Date(dueTime), "MMM d")}</div> : ""}
           <p>{title}</p>
 
           <div className={styles.card__tags}>

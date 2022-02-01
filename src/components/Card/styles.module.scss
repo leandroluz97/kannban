@@ -5,6 +5,23 @@
   margin: 1rem;
   border: solid 2px var(--blue-plus);
   cursor: pointer;
+  position: relative;
+
+  &__dueDate {
+    position: absolute;
+    top: -0.2rem;
+    right: 2rem;
+    background-color: #e6694342;
+    padding: 0.5rem;
+    margin: 0;
+    color: var(--error);
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+    border: 1px solid #e6694367;
+    border-top: none;
+    font-weight: 500;
+    font-size: var(--font-12);
+  }
 
   p {
     color: var(--white);

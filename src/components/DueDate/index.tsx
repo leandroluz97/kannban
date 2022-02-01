@@ -59,15 +59,13 @@ const DueDate = ({ dueDate }: DueTimeProps) => {
         value={date}
         onChange={handleChange}
         dateFormat="dd/MM/yyyy h:mm aa"
-        // timeFormat="HH:mm"
         showTimeSelect
         timeFormat="p"
         timeIntervals={5}
-        // dateFormat="Pp"
         onBlur={handleSaveDateTimeOnBlur}
         isClearable
-        minDate={new Date()}
-        minTime={new Date()}
+        // minDate={new Date()}
+        // minTime={new Date()}
         maxTime={maxTime}
         placeholderText="02/02/2022 12:00 AM"
       />

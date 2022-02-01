@@ -16,6 +16,7 @@ import { useParams } from "react-router-dom";
 import ContentEditable from "react-contenteditable";
 import { SortByPosition } from "../../utils/sortByPosition";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import DueDate from "../DueDate";
 
 interface TasksType {
   name: string;
@@ -216,6 +217,7 @@ const List = ({ name, color, id, position }: ListProps) => {
                         position={task.position}
                         comments={task.comments}
                         subtasks={task.subtasks}
+                        dueTime={task.dueTime}
                       />
                     ))}
                     {provided.placeholder}
