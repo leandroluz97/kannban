@@ -15,6 +15,7 @@ import { groupProjectsByGroupName, joinGroupAndProjects } from "../utils/normarl
 import Subtasks from "../utils/subtasks";
 import { getLastPosition } from "../utils/getLastPosition";
 import { getLeftToRightDirection, getRightToLeftDirection } from "../utils/getDirection";
+import { title } from "process";
 
 interface DataProviderPropsType {
   children: ReactNode;
@@ -62,6 +63,7 @@ interface TasksTypeDisplay {
   name: string;
   id: string;
   listId: string;
+  projectId: string;
   dueTime?: Date;
   description: string;
   position: number;
@@ -121,6 +123,8 @@ interface UpdateListType {
   position: number;
 }
 
+type SearchedTask = Pick<TasksType, "name" | "id">;
+
 interface contextProps {
   groups: JoinedType[];
   addGroup: (groupName: string) => Promise<void>;
@@ -152,6 +156,8 @@ interface contextProps {
   unSetTasks: () => void;
   deleteTask: (id: string) => Promise<void>;
   switchTask: (source: number, destination: number) => Promise<void>;
+  getSearchTasks: (name: string) => Promise<void>;
+  searchedTasks: SearchedTask[];
 
   addComment: (comment: string) => Promise<void>;
   deleteComment: (id: string) => Promise<void>;
@@ -180,6 +186,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
 
   const [lists, setLists] = useState<ListsType[]>([]);
   const [tasks, setTasks] = useState<TasksTypeDisplay[]>([]);
+  const [searchedTasks, setSearchedTasks] = useState<SearchedTask[]>([]);
   const [tags, setTags] = useState<TagType[]>([]);
   const [comments, setComments] = useState<CommentType[]>([]);
   const [subtasks, setSubtasks] = useState<SubTaskType[]>([]);
@@ -645,13 +652,25 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
     } catch (error) {}
   }
 
+  async function getSearchTasks(name: string) {
+    try {
+      // const newAllTask = [];
+      // const taskClass = new Tasks();
+      // const allTasks: SearchedTask[] | undefined = await taskClass.getSearchTasks(selectedProject.id, name);
+      const allTasks = tasks
+        .filter((t) => t.projectId === selectedProject.id && t.name.toLowerCase().includes(name.toLowerCase()))
+        .map((t) => ({ name: t.name, id: t.id }));
+      setSearchedTasks(allTasks ? allTasks : ([] as SearchedTask[]));
+    } catch (error) {}
+  }
+
   async function addTask(taskName: string, listId: string) {
     const position = getLastPosition(tasks) + 1;
     try {
       const taskClass = new Tasks();
 
       //New task
-      let newTask = await taskClass.addTask(taskName, listId, position);
+      let newTask = await taskClass.addTask(taskName, listId, position, selectedProject.id);
       const id = newTask?.id as string;
 
       //Get original tags
@@ -1087,6 +1106,8 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
         addTask,
         updateTask,
         switchTask,
+        getSearchTasks,
+        searchedTasks,
         addComment,
         comments,
         deleteComment,

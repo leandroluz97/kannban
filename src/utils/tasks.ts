@@ -5,10 +5,13 @@ interface TaskType {
   name: string;
   id: string;
   listId: string;
+  projectId: string;
   dueTime?: Date;
   description: string;
   position: number;
 }
+
+type SearchedTask = Pick<TaskType, "name" | "id">;
 
 export default class Tasks {
   db: firebase.firestore.Firestore;
@@ -32,6 +35,7 @@ export default class Tasks {
           name: taskDB.data().name,
           id: taskDB.id,
           listId: taskDB.data().listId,
+          projectId: taskDB.data().projectId,
           dueTime: taskDB.data().dueTime && new Date(taskDB.data().dueTime.toDate().getTime()),
           description: taskDB.data().description,
           position: taskDB.data().position,
@@ -48,8 +52,52 @@ export default class Tasks {
       });
     }
   }
+  async getSearchTasks(projectId: string, name: string) {
+    try {
+      //Get all Tasks from Database
+      let tasksDB = await this.db
+        .collection("users")
+        .doc(this.user?.uid)
+        .collection("tasks")
+        .where("projectId", "==", projectId)
+        .where("name", "in", [name])
+        .get();
 
-  async addTask(taskName: string, listId: string, position: number) {
+      //Normalize tasks
+      // tasksDB.forEach((taskDB) => {
+      //   let task: TaskType = {
+      //     name: taskDB.data().name,
+      //     id: taskDB.id,
+      //     listId: taskDB.data().listId,
+      //     dueTime: taskDB.data().dueTime && new Date(taskDB.data().dueTime.toDate().getTime()),
+      //     description: taskDB.data().description,
+      //     position: taskDB.data().position,
+      //   };
+
+      //   this.tasks.push(task);
+      // });
+      const searchResult: SearchedTask[] = [];
+      tasksDB.forEach((taskDB) => {
+        let task: SearchedTask = {
+          name: taskDB.data().name,
+          id: taskDB.id,
+        };
+
+        searchResult.push(task);
+      });
+
+      console.log(searchResult);
+
+      return searchResult;
+    } catch (error) {
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+    }
+  }
+
+  async addTask(taskName: string, listId: string, position: number, projectId: string) {
     try {
       //Get all the Subtasks from Database
       let taskDB = await this.db
@@ -61,6 +109,7 @@ export default class Tasks {
           listId: listId,
           dueTime: null,
           position: position,
+          projectId: projectId,
         })
         .then((data) => data.get());
 
@@ -68,6 +117,7 @@ export default class Tasks {
         name: taskDB.data()?.name,
         id: taskDB.id,
         listId: taskDB.data()?.listId,
+        projectId: taskDB.data()?.projectId,
         dueTime: taskDB.data()?.dueTime,
         description: taskDB.data()?.description,
         position: taskDB.data()?.position,

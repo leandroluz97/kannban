@@ -64,8 +64,8 @@ const DueDate = ({ dueDate }: DueTimeProps) => {
         timeIntervals={5}
         onBlur={handleSaveDateTimeOnBlur}
         isClearable
-        // minDate={new Date()}
-        // minTime={new Date()}
+        minDate={new Date()}
+        minTime={new Date()}
         maxTime={maxTime}
         placeholderText="02/02/2022 12:00 AM"
       />
