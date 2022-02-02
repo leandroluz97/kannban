@@ -12,6 +12,9 @@ import { useAuth } from "../hooks/useAuth";
 import Archive from "../pages/Archive";
 import ExpandButton from "../components/ExpandButton";
 import SideBarMobile from "../components/SidebarMobile";
+import LoadingState from "../components/LoadingState";
+import { useEffect } from "react";
+import { useData } from "../hooks/useData";
 
 const Routes = () => {
   const { currentUser } = useAuth();
@@ -44,6 +47,7 @@ const Routes = () => {
               <Route path="/project/:id" component={Dashboard} />
               <Route path="/settings" component={Settings} />
               <Route path="/archive" component={Archive} />
+              <Redirect to="/gettingstarted" />
             </Switch>
           </div>
         </div>

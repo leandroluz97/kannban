@@ -766,7 +766,6 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
 
       return task;
     });
-    console.log(tasksId);
 
     try {
       await taskClass.updatePosition(tasksId);

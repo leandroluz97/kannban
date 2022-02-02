@@ -1,10 +1,4 @@
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import firebase from "../config/firebase-config";
@@ -36,12 +30,7 @@ interface ContextProps {
   currentUserOnSettings: User | null;
   isLoading: boolean;
   onSubmitGmail: () => void;
-  onSignupPassword: (
-    email: string,
-    password: string,
-    firstName: string,
-    lastName: string
-  ) => void;
+  onSignupPassword: (email: string, password: string, firstName: string, lastName: string) => void;
   onSigninPassword: (email: string, password: string) => void;
   updateSettings: (data: EditSettingsTypes) => void;
   getUserInfo: () => Promise<void>;
@@ -121,21 +110,14 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
   }
 
   //Sign up with password and email
-  async function onSignupPassword(
-    email: string,
-    password: string,
-    firstName: string,
-    lastName: string
-  ) {
+  async function onSignupPassword(email: string, password: string, firstName: string, lastName: string) {
     let db = firebase.firestore();
 
     try {
       //get user
       let docRef = db.collection("users").where("email", "==", email);
 
-      const user = await firebase
-        .auth()
-        .createUserWithEmailAndPassword(email, password);
+      const user = await firebase.auth().createUserWithEmailAndPassword(email, password);
       const userCredential = user.credential;
 
       //get user with signup email
@@ -159,7 +141,7 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
         ref.doc(user.user?.uid).set(userData);
 
         setCurrentUser(userData);
-        setCurrentUserOnSettings(userData)
+        setCurrentUserOnSettings(userData);
       }
     } catch (error) {
       toast.error(error.message, {
@@ -172,9 +154,7 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
   //Sign in with password and email
   async function onSigninPassword(email: string, password: string) {
     try {
-      const userAuth = await firebase
-        .auth()
-        .signInWithEmailAndPassword(email, password);
+      const userAuth = await firebase.auth().signInWithEmailAndPassword(email, password);
 
       // Signed in
       let userCredential = userAuth.user;
@@ -195,7 +175,7 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
       } as User;
 
       setCurrentUserOnSettings(newUser);
-    } catch (error) { }
+    } catch (error) {}
   }
 
   async function updateSettings(data: EditSettingsTypes) {
@@ -206,7 +186,7 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
 
       const userData = {
         ...currentUserOnSettings,
-        ...data
+        ...data,
       };
 
       setCurrentUserOnSettings(userData as User);
@@ -250,7 +230,7 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
         getUserInfo,
       }}
     >
-      {!isLoading && children}
+      {children}
     </AuthContext.Provider>
   );
 };

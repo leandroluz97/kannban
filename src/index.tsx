@@ -3,10 +3,13 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import "react-datepicker/dist/react-datepicker.css";
 import "./styles/datePicker.scss";
+import { AuthProvider } from "./hooks/useAuth";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <AuthProvider>
+      <App />
+    </AuthProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );
