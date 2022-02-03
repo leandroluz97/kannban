@@ -52,6 +52,10 @@
     }
   }
 
+  & > button:nth-child(3) {
+    background-color: var(--error);
+  }
+
   &__form {
     display: flex;
     align-items: center;

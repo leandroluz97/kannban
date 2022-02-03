@@ -2,11 +2,13 @@ import { BrowserRouter as Router } from "react-router-dom";
 import Modal from "react-modal";
 
 import "./styles/global.scss";
+import "react-toastify/dist/ReactToastify.css";
 
 import Routes from "./routes";
 import NewTaskModal from "./components/NewTaskModal";
 import NewGroupModal from "./components/NewGroupModal";
 import DeleteProjectModal from "./components/DeleteProjectModal";
+import { ToastContainer } from "react-toastify";
 
 import { AuthProvider, useAuth } from "./hooks/useAuth";
 import { UiProvider } from "./hooks/useUi";
@@ -25,6 +27,7 @@ function App() {
 
   return (
     <>
+      <ToastContainer />
       <UiProvider>
         <DataProvider>
           <Router>

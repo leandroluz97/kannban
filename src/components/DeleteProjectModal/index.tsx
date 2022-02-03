@@ -15,7 +15,7 @@ const DeleteProjectModal = () => {
   const [isLoadingDelete, setIsLoadingDelete] = useState(false);
 
   const { setDeleteProjectModalOpen, deleteProjectModalOpen } = useUI();
-  const { archiveProject, selectedProject } = useData();
+  const { archiveProject, selectedProject, groups } = useData();
 
   let history = useHistory();
 
@@ -31,7 +31,19 @@ const DeleteProjectModal = () => {
 
       setIsLoadingDelete(false);
       setDeleteProjectModalOpen(false);
-      history.push("/gettingstarted");
+
+      const allProjects = groups
+        .map((group) => {
+          return group.projects;
+        })
+        .reduce((acc, project) => {
+          acc = [...acc, ...project.filter((p) => p.id !== selectedProject.id)];
+          return acc;
+        }, []);
+
+      const lastProject = allProjects[allProjects.length - 1];
+
+      history.push(allProjects.length <= 0 ? `/gettingstarted` : `/project/${lastProject.id}`);
     } catch (error) {}
   }
 

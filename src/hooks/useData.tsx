@@ -130,7 +130,7 @@ interface contextProps {
   addGroup: (groupName: string) => Promise<void>;
   getProjects: () => Promise<void>;
 
-  addProject: (groupName: string) => Promise<void>;
+  addProject: (groupName: string) => Promise<string | undefined>;
   setStorageProjectName: (name: string) => void;
   getLists: (id: string) => Promise<void>;
   getProject: (id: string) => Promise<void>;
@@ -140,6 +140,7 @@ interface contextProps {
   archivedProjects: ProjectType[];
   getArchivedProjects: () => Promise<void>;
   restoreProject: (id: string) => Promise<void>;
+  deleteProject: (id: string) => Promise<void>;
 
   lists: ListsType[];
   addList: (name: string) => Promise<void>;
@@ -292,6 +293,13 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       //const dataOfGroups: joinedType[] = [...groups, newGroup];
 
       setGroups(dataOfGroups);
+
+      toast.success("added", {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+
+      return returnedProject?.id;
     } catch (error) {
       toast.error(error.message, {
         bodyClassName: "toastify__error",
@@ -382,11 +390,33 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
 
       const newArchivedProject = archivedProjects.filter((project) => project.id !== id);
 
-      console.log(allGroups);
-
       //Update State
       setGroups(allGroups);
       setArchivedProjects(newArchivedProject);
+    } catch (error) {
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+    }
+  }
+
+  async function deleteProject(id: string) {
+    //Instance of classes
+    const projectClass = new Projects();
+
+    let projectToDelete = archivedProjects.find((project) => project.id === id) as ProjectType;
+
+    if (!projectToDelete) return;
+
+    try {
+      //Update Project in Database
+      await projectClass.deleteProject(id);
+
+      const newProjects = archivedProjects.filter((project) => project.id !== id);
+
+      //Update State
+      setArchivedProjects(newProjects);
     } catch (error) {
       toast.error(error.message, {
         bodyClassName: "toastify__error",
@@ -1090,6 +1120,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
         archivedProjects,
         getArchivedProjects,
         restoreProject,
+        deleteProject,
         getLists,
         lists,
         addList,

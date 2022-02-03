@@ -1,4 +1,5 @@
 import React, { KeyboardEvent, useEffect, useRef, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { useData } from "../../hooks/useData";
 import styles from "./styles.module.scss";
 
@@ -7,6 +8,7 @@ interface InputProjectType {
 }
 
 const InputProject = ({ handleBlur }: InputProjectType) => {
+  const history = useHistory();
   const [projectName, setprojectName] = useState("");
   const inputEl = useRef<HTMLInputElement | null>(null);
 
@@ -24,11 +26,13 @@ const InputProject = ({ handleBlur }: InputProjectType) => {
     handleBlur();
   }
 
-  function handleOnKeyPress(event: KeyboardEvent<HTMLInputElement>) {
+  async function handleOnKeyPress(event: KeyboardEvent<HTMLInputElement>) {
     if (event.key === "Enter" && !event.shiftKey && projectName.length > 2) {
-      addProject(projectName);
+      const id = await addProject(projectName);
 
       handleBlur();
+
+      history.push(`/project/${id}`);
     }
   }
   return (

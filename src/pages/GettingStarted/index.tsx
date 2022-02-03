@@ -15,13 +15,13 @@ interface StartedType {
 
 const GettingStarted = () => {
   const [started, setStarted] = useState({} as StartedType);
-  const { getProjects } = useData()
+  const { getProjects } = useData();
 
   useEffect(() => {
     const getStart = async () => {
       const gettingStarted = new Started();
       const data = await gettingStarted.getGettingStarted();
-      await getProjects()
+      await getProjects();
 
       setStarted(data as StartedType);
     };
@@ -44,7 +44,7 @@ const GettingStarted = () => {
         </>
       ) : (
         <div className={styles.gettingstarted__progress}>
-          <CircularProgress />
+          <CircularProgress size={20} />
         </div>
       )}
     </div>
