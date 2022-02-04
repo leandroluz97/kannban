@@ -11,11 +11,12 @@ import Comments from "../utils/comments";
 import Lists from "../utils/lists";
 
 import { groupProjectsByGroupName, joinGroupAndProjects } from "../utils/normarlization";
-
 import Subtasks from "../utils/subtasks";
 import { getLastPosition } from "../utils/getLastPosition";
 import { getLeftToRightDirection, getRightToLeftDirection } from "../utils/getDirection";
-import { title } from "process";
+
+const configSuccess = { bodyClassName: "toastify__success", className: "toastify" };
+const configError = { bodyClassName: "toastify__error", className: "toastify" };
 
 interface DataProviderPropsType {
   children: ReactNode;
@@ -238,10 +239,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       setGroups(joinedGroupProjects);
       // setProjects(dataOfProjects);
     } catch (error) {
-      toast.error(error.message, {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
+      toast.error("Error on getting the projects.", configError);
     }
   }
 
@@ -264,10 +262,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
 
       setGroups(dataOfGroups);
     } catch (error) {
-      toast.error(error.message, {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
+      toast.error(error.message, configError);
     }
   }
 
@@ -301,10 +296,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
 
       return returnedProject?.id;
     } catch (error) {
-      toast.error(error.message, {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
+      toast.error(error.message, configError);
     }
   }
 
@@ -331,10 +323,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
 
       setSelectedProject({} as ProjectSelf);
     } catch (error) {
-      toast.error(error.message, {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
+      toast.error("Error on creating a group.", configError);
     }
   }
 
@@ -356,10 +345,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       //Update State
       setGroups(archivedProject);
     } catch (error) {
-      toast.error(error.message, {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
+      toast.error("Error on archive project", configError);
     }
   }
 
@@ -394,10 +380,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       setGroups(allGroups);
       setArchivedProjects(newArchivedProject);
     } catch (error) {
-      toast.error(error.message, {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
+      toast.error("Error on archiving project", configError);
     }
   }
 
@@ -417,11 +400,10 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
 
       //Update State
       setArchivedProjects(newProjects);
+
+      toast.success(`Project ${projectToDelete.name} deleted successfully!`, configSuccess);
     } catch (error) {
-      toast.error(error.message, {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
+      toast.error("Error on deleting project.", configError);
     }
   }
 
@@ -435,10 +417,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       //Update State
       setArchivedProjects(allArchivedProjects as ProjectType[]);
     } catch (error) {
-      toast.error(error.message, {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
+      toast.error("Error on getting archived projects.", configError);
     }
   }
 
@@ -465,10 +444,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       //Update State
       setGroups(updatedProject);
     } catch (error) {
-      toast.error(error.message, {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
+      toast.error(error.message, configError);
     }
   }
 
@@ -483,10 +459,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       //Update State
       setLists(listDB);
     } catch (error) {
-      toast.error(error.message, {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
+      toast.error("Error on getting the project lists.", configError);
     }
   }
 
@@ -510,11 +483,10 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       const allLists: ListsType[] = [...lists, newList];
 
       setLists(allLists);
+
+      toast.success(`List ${name} created successfully!`, configSuccess);
     } catch (error) {
-      toast.error(error.message, {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
+      toast.error("Error on creating list", configError);
     }
   }
 
@@ -532,15 +504,9 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       //Update State
       setLists(allLists);
 
-      toast.error("List Deleted!", {
-        bodyClassName: "toastify__success",
-        className: "toastify",
-      });
+      toast.success(`List deleted successfully!`, configSuccess);
     } catch (error) {
-      toast.error(error.message, {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
+      toast.error("Error on deleting list!", configError);
     }
   }
 
@@ -568,10 +534,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
 
       setLists(allLists);
     } catch (error: any) {
-      toast.error(error.message, {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
+      toast.error("Error on updating list.", configError);
     }
   }
 
@@ -613,10 +576,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
 
       setLists(allLists);
     } catch (error: any) {
-      toast.error(error.message, {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
+      toast.error("Error on swapping list.", configError);
     }
   }
 
@@ -641,12 +601,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       setSelectedTask(task);
     } catch (error) {
       //handle toast error
-      toast.error(error.message, {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
-
-      console.log(error);
+      toast.error("Error on getting task.", configError);
     }
   }
 
@@ -679,7 +634,9 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       }
 
       setTasks(newAllTask as TasksTypeDisplay[]);
-    } catch (error) {}
+    } catch (error) {
+      toast.error("Error on getting tasks.", configError);
+    }
   }
 
   async function getSearchTasks(name: string) {
@@ -713,10 +670,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
 
       setTasks(allTask);
     } catch (error) {
-      toast.error(error.message, {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
+      toast.error("Error o creating task.", configError);
 
       console.log(error);
     }
@@ -750,17 +704,9 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
 
       //Update States
       setTasks(allTasks);
-
-      toast.success("Comment Deleted!", {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
     } catch (error) {
       //handle toast error
-      toast.error(error.message, {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
+      toast.error("Error on updating task.", configError);
 
       console.log(error);
     }
@@ -802,17 +748,9 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
 
       // Update States
       setTasks(allTasks);
-
-      toast.success("Comment Deleted!", {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
     } catch (error) {
       //handle toast error
-      toast.error(error.message, {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
+      toast.error("Error swapping task.", configError);
 
       console.log(error);
     }
@@ -832,15 +770,9 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       //Update State
       setTasks(allTasks);
 
-      toast.error("Task Deleted!", {
-        bodyClassName: "toastify__success",
-        className: "toastify",
-      });
+      toast.success(`Task ${selectedTask.name} deleted successfully`, configSuccess);
     } catch (error) {
-      toast.error(error.message, {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
+      toast.error("Error on deleting task.", configError);
     }
   }
 
@@ -869,10 +801,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       setTasks(allTasks);
     } catch (error) {
       //handle toast error
-      toast.error(error.message, {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
+      toast.error("Error on creating a comment.", configError);
 
       console.log(error);
     }
@@ -900,17 +829,9 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       //Update States
       setComments(allComments);
       setTasks(allTasks);
-
-      toast.success("Comment Deleted!", {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
     } catch (error) {
       //handle toast error
-      toast.error(error.message, {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
+      toast.error("Error on deleting comment.", configError);
 
       console.log(error);
     }
@@ -939,12 +860,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       setTasks(allTasks);
     } catch (error) {
       //handle toast error
-      toast.error(error.message, {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
-
-      console.log(error);
+      toast.error("Error on creating subtask.", configError);
     }
   }
 
@@ -977,10 +893,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       });
     } catch (error) {
       //handle toast error
-      toast.error(error.message, {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
+      toast.error(error.message, configError);
 
       console.log(error);
     }
@@ -1028,10 +941,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       });
     } catch (error) {
       //handle toast error
-      toast.error(error.message, {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
+      toast.error(error.message, configError);
 
       console.log(error);
     }
@@ -1070,10 +980,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       });
     } catch (error) {
       //handle toast error
-      toast.error(error.message, {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
+      toast.error(error.message, configError);
 
       console.log(error);
     }
@@ -1096,10 +1003,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       });
     } catch (error) {
       //handle toast error
-      toast.error(error.message, {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
+      toast.error(error.message, configError);
 
       console.log(error);
     }
