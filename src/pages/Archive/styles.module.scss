@@ -1,6 +1,13 @@
 .archive {
   margin: 6rem 10rem;
   width: 100%;
+
+  &__emptyState {
+    display: flex;
+    justify-content: center;
+    margin-top: 20%;
+  }
+
   &__inputs {
     width: 100%;
     max-width: 500px;
@@ -11,8 +18,8 @@
   }
 }
 
-@media(max-width:426px){
-  .archive{
+@media (max-width: 426px) {
+  .archive {
     margin: 2rem 2rem;
   }
 }

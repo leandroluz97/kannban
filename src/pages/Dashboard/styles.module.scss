@@ -8,6 +8,19 @@
     margin-left: 1rem;
   }
 
+  &__listForm {
+    max-width: 290px;
+    padding: 1rem;
+  }
+
+  &__emptyState {
+    display: flex;
+    // align-items: center;
+    margin-top: 15%;
+    justify-content: center;
+    height: 100%;
+  }
+
   &__lists {
     max-width: 100%;
     width: 100%;
@@ -33,6 +46,11 @@
     &__header {
       height: 10rem;
       margin-left: 0rem;
+    }
+
+    &__listForm {
+      max-width: 100%;
+      padding: 0rem;
     }
 
     &__lists {

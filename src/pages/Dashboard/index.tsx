@@ -10,6 +10,7 @@ import styles from "./styles.module.scss";
 import { useParams, useHistory } from "react-router-dom";
 import { useData } from "../../hooks/useData";
 import { SortByPosition } from "../../utils/sortByPosition";
+import EmptyState from "../../components/EmptyState";
 
 interface ID {
   id: string;
@@ -42,19 +43,30 @@ const Dashboard = () => {
         <Header />
       </div>
 
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="LISTTASK" direction="horizontal">
-          {(provided) => (
-            <div ref={provided.innerRef} className={styles.dashboard__lists} {...provided.droppableProps}>
-              {lists.sort(SortByPosition).map((list) => (
-                <List key={list.id} color={list.color} name={list.name} id={list.id} position={list.position} />
-              ))}
-              {provided.placeholder}
-              <ListFrom />
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+      {lists.length <= 0 ? (
+        <>
+          <div className={styles.dashboard__listForm}>
+            <ListFrom />
+          </div>
+          <section className={styles.dashboard__emptyState}>
+            <EmptyState title="Empty Project" text="You dont have any List yet." />
+          </section>
+        </>
+      ) : (
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="LISTTASK" direction="horizontal">
+            {(provided) => (
+              <div ref={provided.innerRef} className={styles.dashboard__lists} {...provided.droppableProps}>
+                {lists.sort(SortByPosition).map((list) => (
+                  <List key={list.id} color={list.color} name={list.name} id={list.id} position={list.position} />
+                ))}
+                {provided.placeholder}
+                <ListFrom />
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
+      )}
     </div>
   );
 };

@@ -1,0 +1,16 @@
+.emptyState {
+  text-align: center;
+
+  &__body {
+    text-align: center;
+    margin-top: 2.8rem;
+    color: var(--gray-100);
+    h2 {
+      font-size: var(--font-24);
+      margin-bottom: 0.8rem;
+    }
+    p {
+      font-size: var(--font-14);
+    }
+  }
+}

@@ -886,14 +886,9 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       //Update States
       setSubtasks(allSubtasks);
       setTasks(allTasks);
-
-      toast.success("Comment Deleted!", {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
     } catch (error) {
       //handle toast error
-      toast.error(error.message, configError);
+      toast.error("Error on deletting subtask.", configError);
 
       console.log(error);
     }
@@ -934,16 +929,9 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       //Update States
       setSubtasks(allSubtasks);
       setTasks(allTasks);
-
-      toast.success("Comment Deleted!", {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
     } catch (error) {
       //handle toast error
-      toast.error(error.message, configError);
-
-      console.log(error);
+      toast.error("Subtask updated successfully.", configError);
     }
   }
 
