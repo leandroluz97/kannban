@@ -5,6 +5,7 @@ import Modal from "react-modal";
 import { toast } from "react-toastify";
 import CloseRoundedIcon from "@material-ui/icons/CloseRounded";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 
 import InputSubTask from "../InputSubTask";
 import Subtask from "../Subtask";
@@ -20,15 +21,15 @@ import { useUI } from "../../hooks/useUi";
 import { useData } from "../../hooks/useData";
 import Spinner from "../Spinner";
 
-const NewTaskModal = () => {
+const GroupOptionsModal = () => {
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const { groupModalOpen, setGroupModalOpen } = useUI();
+  const { setGroupModalOptions, groupModalOptions } = useUI();
   const { addGroup } = useData();
 
   function closeModal() {
-    setGroupModalOpen(false);
+    setGroupModalOptions(false);
   }
 
   async function handleNewGroup(e: React.SyntheticEvent) {
@@ -43,7 +44,7 @@ const NewTaskModal = () => {
     try {
       await addGroup(inputValue.trim());
 
-      setGroupModalOpen(false);
+      setGroupModalOptions(false);
       setInputValue("");
       setIsLoading(false);
     } catch (error) {
@@ -56,32 +57,54 @@ const NewTaskModal = () => {
 
   return (
     <Modal
-      isOpen={groupModalOpen}
+      isOpen={groupModalOptions}
       onRequestClose={closeModal}
-      className="group__modal"
+      className="options__modal"
       overlayClassName="global__overlay"
-      contentLabel="New task Modal"
+      contentLabel="modal group options"
     >
       <section className={styles.section}>
         <button className={styles.section__close} onClick={closeModal}>
           <CloseRoundedIcon fontSize="large" />
         </button>
-        <form onSubmit={handleNewGroup}>
-          <h3 className={styles.section__title}>New group</h3>
-          <input type="text" placeholder="Type group name here..." value={inputValue} onChange={(e) => setInputValue(e.target.value)} />
+        <article className={styles.section__article}>
+          <header>
+            <h3 className={styles.section__article__title}>Web development</h3>
+          </header>
+          <div className={styles.section__article__body}>
+            <div>
+              <span>Change name</span>
+              <p>Web Development</p>
+            </div>
+            <div>
+              <span>Number of projects</span>
+              <p>6</p>
+            </div>
+          </div>
 
-          {isLoading ? (
+          {/* {isLoading ? (
             <button type="button" disabled>
               <CircularProgress disableShrink size={20} />
-              {/*<Spinner color="violet" />*/}
             </button>
           ) : (
             <button type="submit">Create Group</button>
-          )}
-        </form>
+          )} */}
+        </article>
+        <footer className={styles.footer}>
+          <div className={styles.footer__left}>
+            <button type="submit">
+              <span>Delete</span>
+              <DeleteForeverIcon fontSize="large" />
+            </button>
+          </div>
+          <div className={styles.footer__right}>
+            <button type="submit">Cancel</button>
+            <button type="submit">Save</button>
+          </div>
+        </footer>
       </section>
     </Modal>
   );
 };
 
-export default NewTaskModal;
+export default GroupOptionsModal;

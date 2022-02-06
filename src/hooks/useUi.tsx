@@ -1,10 +1,4 @@
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 
 interface UiProviderType {
   children: ReactNode;
@@ -17,11 +11,12 @@ interface UiProps {
   setGroupModalOpen: (value: boolean) => void;
   deleteProjectModalOpen: boolean;
   setDeleteProjectModalOpen: (value: boolean) => void;
+  groupModalOptions: boolean;
+  setGroupModalOptions: (value: boolean) => void;
   handleSetThemeLight: () => void;
   darkTheme: boolean;
   colapse: boolean;
   setColapse: (value: boolean) => void;
-
 }
 
 //Context
@@ -31,8 +26,8 @@ const UiContext = createContext<UiProps>({} as UiProps);
 export const UiProvider = ({ children }: UiProviderType) => {
   const [taskModalOpen, setTaskModalOpen] = useState<boolean>(false);
   const [groupModalOpen, setGroupModalOpen] = useState<boolean>(false);
-  const [deleteProjectModalOpen, setDeleteProjectModalOpen] =
-    useState<boolean>(false);
+  const [groupModalOptions, setGroupModalOptions] = useState<boolean>(false);
+  const [deleteProjectModalOpen, setDeleteProjectModalOpen] = useState<boolean>(false);
   const [darkTheme, setDarkTheme] = useState(false);
   const [colapse, setColapse] = useState(false);
 
@@ -93,9 +88,7 @@ export const UiProvider = ({ children }: UiProviderType) => {
 
     //root css variables
     const root = document.getElementsByTagName("html")[0];
-    root.style.cssText = !darkTheme
-      ? colorDark.join(";")
-      : colorLight.join(";");
+    root.style.cssText = !darkTheme ? colorDark.join(";") : colorLight.join(";");
   }, [darkTheme]);
 
   //handle set theme
@@ -112,10 +105,12 @@ export const UiProvider = ({ children }: UiProviderType) => {
         setGroupModalOpen,
         deleteProjectModalOpen,
         setDeleteProjectModalOpen,
+        groupModalOptions,
+        setGroupModalOptions,
         handleSetThemeLight,
         darkTheme,
         colapse,
-        setColapse
+        setColapse,
       }}
     >
       {children}

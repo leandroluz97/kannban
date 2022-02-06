@@ -6,7 +6,7 @@ import GettingStarted from "../pages/GettingStarted";
 import Settings from "../pages/Settings";
 
 import styles from "./styles.module.scss";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route, Redirect, useLocation } from "react-router-dom";
 import SideBar from "../components/SideBar";
 import { useAuth } from "../hooks/useAuth";
 import Archive from "../pages/Archive";
@@ -18,6 +18,7 @@ import { useData } from "../hooks/useData";
 
 const Routes = () => {
   const { currentUser } = useAuth();
+  const { pathname } = useLocation();
 
   let routes = (
     <>
@@ -39,7 +40,7 @@ const Routes = () => {
           <div>
             <SideBar />
           </div>
-          <div className={styles.routes}>
+          <div className={pathname.includes("gettingstarted") ? `${styles.routes} ${styles.routes__m0}` : `${styles.routes}`}>
             <ExpandButton />
             <SideBarMobile />
             <Switch>

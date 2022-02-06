@@ -15,6 +15,7 @@ import { UiProvider } from "./hooks/useUi";
 import { DataProvider } from "./hooks/useData";
 import { useEffect } from "react";
 import LoadingState from "./components/LoadingState";
+import GroupOptionsModal from "./components/groupOptionModal";
 
 Modal.setAppElement("#root");
 
@@ -34,6 +35,7 @@ function App() {
             <DeleteProjectModal />
             <NewTaskModal />
             <NewGroupModal />
+            <GroupOptionsModal />
             <Routes />
           </Router>
         </DataProvider>

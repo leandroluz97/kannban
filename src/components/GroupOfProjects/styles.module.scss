@@ -19,6 +19,18 @@
       }
     }
 
+    button:first-child {
+      svg {
+        &:hover {
+          background-color: transparent;
+          color: white;
+        }
+      }
+      &:hover {
+        background-color: transparent;
+      }
+    }
+
     &:hover {
       background-color: var(--gray-500);
       // cursor: pointer;

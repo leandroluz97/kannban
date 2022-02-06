@@ -2,15 +2,7 @@ import React, { KeyboardEvent, useEffect, useMemo, useState } from "react";
 import styles from "./styles.module.scss";
 
 import AddRoundedIcon from "@material-ui/icons/AddRounded";
-import {
-  IoIosRocket,
-  IoIosSettings,
-  IoMdArchive,
-  IoMdTrash,
-  IoMdFolder,
-  IoIosAdd,
-  IoIosNotifications,
-} from "react-icons/io";
+import { IoIosRocket, IoIosSettings, IoMdArchive, IoMdTrash, IoMdFolder, IoIosAdd, IoIosNotifications } from "react-icons/io";
 import { NavLink } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
@@ -37,6 +29,7 @@ const GroupOfProjects = ({ name, id, projects }: GroupOfProjectsProps) => {
   const [newProject, setNewProject] = useState(false);
 
   const { setStorageProjectName } = useData();
+  const { setGroupModalOptions, groupModalOptions } = useUI();
 
   //const filteredProjects = projects.filter((project) => project.group === name);
   /*
@@ -56,7 +49,9 @@ const GroupOfProjects = ({ name, id, projects }: GroupOfProjectsProps) => {
   return (
     <div className={styles.groupOfProject__project}>
       <div className={styles.groupOfProject__group}>
-        <IoMdFolder size={20} />
+        <button onClick={() => setGroupModalOptions(true)}>
+          <IoMdFolder size={20} />
+        </button>
         <span>{name}</span>
 
         <button onClick={handleNewGroupInput}>
@@ -67,10 +62,7 @@ const GroupOfProjects = ({ name, id, projects }: GroupOfProjectsProps) => {
       <ul>
         {projects.map((project) => (
           <li key={project.id}>
-            <NavLink
-              to={`/project/${project.id}`}
-              activeClassName={styles.groupOfProject__groupActive}
-            >
+            <NavLink to={`/project/${project.id}`} activeClassName={styles.groupOfProject__groupActive}>
               {project.name}
             </NavLink>
           </li>
