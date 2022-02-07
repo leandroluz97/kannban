@@ -28,7 +28,7 @@ interface GroupOfProjectsProps {
 const GroupOfProjects = ({ name, id, projects }: GroupOfProjectsProps) => {
   const [newProject, setNewProject] = useState(false);
 
-  const { setStorageProjectName } = useData();
+  const { setStorageProjectName, setSelectedGroup } = useData();
   const { setGroupModalOptions, groupModalOptions } = useUI();
 
   //const filteredProjects = projects.filter((project) => project.group === name);
@@ -45,11 +45,15 @@ const GroupOfProjects = ({ name, id, projects }: GroupOfProjectsProps) => {
   function handleNewProjectBlur() {
     setNewProject(false);
   }
+  async function handleGroupOption() {
+    setGroupModalOptions(true);
+    setSelectedGroup({ name: name, groupId: id });
+  }
 
   return (
     <div className={styles.groupOfProject__project}>
       <div className={styles.groupOfProject__group}>
-        <button onClick={() => setGroupModalOptions(true)}>
+        <button onClick={() => handleGroupOption()}>
           <IoMdFolder size={20} />
         </button>
         <span>{name}</span>

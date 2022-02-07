@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 interface GroupType {
   name: string;
   id: string;
-  createdAt: string;
+  createdAt: Date;
 }
 
 export default class Groups {
@@ -21,17 +21,13 @@ export default class Groups {
   async getGroups() {
     try {
       //Get all Groups from Database
-      let groupsDB = await this.db
-        .collection("users")
-        .doc(this.user?.uid)
-        .collection("groups")
-        .get();
+      let groupsDB = await this.db.collection("users").doc(this.user?.uid).collection("groups").get();
 
       //Normalize  group  data
       groupsDB.forEach((groupDB) => {
         let subtask: GroupType = {
           name: groupDB.data().name,
-          createdAt: groupDB.data().createdAt,
+          createdAt: groupDB.data()?.createdAt ? new Date(groupDB.data()?.createdAt.toDate().getTime()) : new Date(),
           id: groupDB.id,
         };
 
@@ -48,23 +44,36 @@ export default class Groups {
   }
 
   async addGroup(groupName: string) {
+    const createdAt = firebase.firestore.Timestamp.fromDate(new Date());
     try {
       //Add group to Database
       let groupsDB = await this.db
         .collection("users")
         .doc(this.user?.uid)
         .collection("groups")
-        .add({ name: groupName, createdAt: "vv" })
+        .add({ name: groupName, createdAt: createdAt })
         .then((group) => group.get());
 
       //new group from database data
       const newGroup = {
         name: groupsDB.data()?.name,
-        createdAt: groupsDB.data()?.createdAt,
+        createdAt: groupsDB.data()?.createdAt ? new Date(groupsDB.data()?.createdAt.toDate().getTime()) : new Date(),
         id: groupsDB.id,
       } as GroupType;
 
       return newGroup;
+    } catch (error) {
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+    }
+  }
+
+  async deleteGroup(id: string) {
+    try {
+      //Add group to Database
+      let groupsDB = await this.db.collection("users").doc(this.user?.uid).collection("groups").doc(id).delete();
     } catch (error) {
       toast.error(error.message, {
         bodyClassName: "toastify__error",

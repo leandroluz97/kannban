@@ -186,4 +186,26 @@ export default class Tasks {
       });
     }
   }
+
+  async deleteTaskBatch(projectId: string) {
+    try {
+      //Delete Task from Database
+      let subTaskDB = await this.db
+        .collection("users")
+        .doc(this.user?.uid)
+        .collection("tasks")
+        .where("projectId", "==", projectId)
+        .get()
+        .then(function (querySnapshot) {
+          querySnapshot.forEach(function (doc) {
+            doc.ref.delete();
+          });
+        });
+    } catch (error) {
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+    }
+  }
 }

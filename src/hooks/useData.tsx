@@ -14,6 +14,7 @@ import { groupProjectsByGroupName, joinGroupAndProjects } from "../utils/normarl
 import Subtasks from "../utils/subtasks";
 import { getLastPosition } from "../utils/getLastPosition";
 import { getLeftToRightDirection, getRightToLeftDirection } from "../utils/getDirection";
+import { group } from "console";
 
 const configSuccess = { bodyClassName: "toastify__success", className: "toastify" };
 const configError = { bodyClassName: "toastify__error", className: "toastify" };
@@ -43,6 +44,12 @@ interface ProjectData {
   isActive: boolean;
 }
 
+interface JoinedType {
+  createdAt: string;
+  name: string;
+  groupId: string;
+  projects: ProjectData[];
+}
 interface JoinedType {
   createdAt: string;
   name: string;
@@ -124,12 +131,16 @@ interface UpdateListType {
   position: number;
 }
 
+type GroupSelectedType = Pick<JoinedType, "name" | "groupId">;
 type SearchedTask = Pick<TasksType, "name" | "id">;
 
 interface contextProps {
   groups: JoinedType[];
   addGroup: (groupName: string) => Promise<void>;
   getProjects: () => Promise<void>;
+  deleteGroup: (id: string) => Promise<void>;
+  setSelectedGroup: (payload: GroupSelectedType) => void;
+  selectedGroup: GroupSelectedType;
 
   addProject: (groupName: string) => Promise<string | undefined>;
   setStorageProjectName: (name: string) => void;
@@ -184,6 +195,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
   const [groups, setGroups] = useState<JoinedType[]>([]);
   const [storageProjectName, setStorageProjectName] = useState<string>("");
   const [selectedProject, setSelectedProject] = useState({} as ProjectSelf);
+  const [selectedGroup, setSelectedGroup] = useState({} as GroupSelectedType);
   const [archivedProjects, setArchivedProjects] = useState<ProjectType[]>([]);
 
   const [lists, setLists] = useState<ListsType[]>([]);
@@ -259,6 +271,38 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       };
 
       const dataOfGroups = [...groups, newGroup] as JoinedType[];
+
+      setGroups(dataOfGroups);
+    } catch (error) {
+      toast.error(error.message, configError);
+    }
+  }
+
+  async function deleteGroup(id: string) {
+    // inicialize firebase firestore
+
+    try {
+      const groupToDelete = groups.find((group) => group.groupId === id);
+      const projectsToDeleteIds = groupToDelete && groupToDelete.projects && groupToDelete.projects.map((project) => project.id);
+      const groupClass = new Groups();
+      const projectClass = new Projects();
+      const tasksClass = new Tasks();
+
+      await groupClass.deleteGroup(id);
+
+      if (groupToDelete && groupToDelete.projects && groupToDelete.projects.length > 0) {
+        for await (const project of groupToDelete?.projects) {
+          projectClass.deleteProject(project.id);
+        }
+      }
+
+      if (projectsToDeleteIds && projectsToDeleteIds.length > 0) {
+        for await (const projectId of projectsToDeleteIds) {
+          await tasksClass.deleteTaskBatch(projectId);
+        }
+      }
+
+      const dataOfGroups = groups.filter((group) => group.groupId !== id);
 
       setGroups(dataOfGroups);
     } catch (error) {
@@ -1003,6 +1047,9 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
         groups,
         addGroup,
         getProjects,
+        deleteGroup,
+        setSelectedGroup,
+        selectedGroup,
         addProject,
         setStorageProjectName,
         selectedProject,

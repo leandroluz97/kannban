@@ -21,12 +21,16 @@ import { useUI } from "../../hooks/useUi";
 import { useData } from "../../hooks/useData";
 import Spinner from "../Spinner";
 
+interface payloadType {
+  name: string;
+  groupId: string;
+}
 const GroupOptionsModal = () => {
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const { setGroupModalOptions, groupModalOptions } = useUI();
-  const { addGroup } = useData();
+  const { addGroup, deleteGroup, selectedGroup } = useData();
 
   function closeModal() {
     setGroupModalOptions(false);
@@ -53,6 +57,11 @@ const GroupOptionsModal = () => {
         className: "toastify",
       });
     }
+  }
+
+  async function handleDeleteGroup(payload: payloadType) {
+    await deleteGroup(payload.groupId);
+    setGroupModalOptions(false);
   }
 
   return (
@@ -92,7 +101,7 @@ const GroupOptionsModal = () => {
         </article>
         <footer className={styles.footer}>
           <div className={styles.footer__left}>
-            <button type="submit">
+            <button type="submit" onClick={() => handleDeleteGroup(selectedGroup)}>
               <span>Delete</span>
               <DeleteForeverIcon fontSize="large" />
             </button>
