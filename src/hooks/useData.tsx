@@ -141,6 +141,7 @@ interface contextProps {
   deleteGroup: (id: string) => Promise<void>;
   setSelectedGroup: (payload: GroupSelectedType) => void;
   selectedGroup: GroupSelectedType;
+  updateGroup: (data: { id: string; name: string }) => Promise<void>;
 
   addProject: (groupName: string) => Promise<string | undefined>;
   setStorageProjectName: (name: string) => void;
@@ -311,6 +312,28 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       });
     } catch (error) {
       toast.error(`Error on deleting ${selectedGroup.name} group.`, configError);
+    }
+  }
+
+  async function updateGroup(data: { id: string; name: string }) {
+    // inicialize firebase firestore
+    const { id, name } = data;
+
+    try {
+      const groupClass = new Groups();
+
+      await groupClass.updateGroup({ id, name });
+
+      const dataOfGroups = groups.map((group) => {
+        if (group.groupId === id) {
+          group.name = name;
+        }
+        return group;
+      });
+
+      setGroups(dataOfGroups);
+    } catch (error) {
+      toast.error(`Error on changing ${selectedGroup.name} group name.`, configError);
     }
   }
 
@@ -1049,6 +1072,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
         deleteGroup,
         setSelectedGroup,
         selectedGroup,
+        updateGroup,
         addProject,
         setStorageProjectName,
         selectedProject,

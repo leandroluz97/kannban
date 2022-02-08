@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import styles from "./styles.module.scss";
 
 import Modal from "react-modal";
@@ -22,6 +22,7 @@ import { useData } from "../../hooks/useData";
 import Spinner from "../Spinner";
 import { group } from "console";
 import { useHistory } from "react-router-dom";
+import ContentEditable from "react-contenteditable";
 
 interface payloadType {
   name: string;
@@ -29,18 +30,22 @@ interface payloadType {
 }
 const GroupOptionsModal = () => {
   const history = useHistory();
-  const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const { setGroupModalOptions, groupModalOptions } = useUI();
-  const { addGroup, deleteGroup, selectedGroup, groups } = useData();
+  const { addGroup, deleteGroup, selectedGroup, groups, updateGroup } = useData();
+  const groupTitleRef = useRef<HTMLParagraphElement | null>(null);
+  const [inputValue, setInputValue] = useState(selectedGroup.name);
+
+  useEffect(() => {
+    setInputValue(selectedGroup.name);
+  }, [selectedGroup]);
 
   function closeModal() {
     setGroupModalOptions(false);
   }
 
-  async function handleNewGroup(e: React.SyntheticEvent) {
-    e.preventDefault();
+  async function handleChangeGroupName(id: string) {
     setIsLoading(true);
 
     if (inputValue.trim().length < 1) {
@@ -49,7 +54,7 @@ const GroupOptionsModal = () => {
     }
 
     try {
-      await addGroup(inputValue.trim());
+      await updateGroup({ id, name: inputValue.trim() });
 
       setGroupModalOptions(false);
       setInputValue("");
@@ -74,6 +79,8 @@ const GroupOptionsModal = () => {
     }
   }
 
+  const totalProjects = useMemo(() => groups.find((g) => g.groupId === selectedGroup.groupId)?.projects.length, [selectedGroup]);
+
   return (
     <Modal
       isOpen={groupModalOptions}
@@ -88,16 +95,22 @@ const GroupOptionsModal = () => {
         </button>
         <article className={styles.section__article}>
           <header>
-            <h3 className={styles.section__article__title}>Web development</h3>
+            <h3 className={styles.section__article__title}>{selectedGroup.name}</h3>
           </header>
           <div className={styles.section__article__body}>
             <div>
               <span>Change name</span>
-              <p>Web Development</p>
+              <ContentEditable
+                innerRef={groupTitleRef}
+                html={inputValue ? inputValue : ""}
+                disabled={false}
+                onChange={(event) => setInputValue(event.target.value as string)}
+                tagName="span"
+              />
             </div>
             <div>
               <span>Number of projects</span>
-              <p>6</p>
+              <p>{totalProjects}</p>
             </div>
           </div>
 
@@ -118,7 +131,9 @@ const GroupOptionsModal = () => {
           </div>
           <div className={styles.footer__right}>
             <button type="submit">Cancel</button>
-            <button type="submit">Save</button>
+            <button type="submit" onClick={() => handleChangeGroupName(selectedGroup.groupId)}>
+              Save
+            </button>
           </div>
         </footer>
       </section>

@@ -70,6 +70,22 @@ export default class Groups {
     }
   }
 
+  async updateGroup({ id, name }: { id: string; name: string }) {
+    try {
+      //Update Task in Database
+      this.db.collection("users").doc(this.user?.uid).collection("groups");
+      await this.db.collection("users").doc(this.user?.uid).collection("groups").doc(id).update({
+        name: name,
+      });
+    } catch (error) {
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+      console.log(error);
+    }
+  }
+
   async deleteGroup(id: string) {
     try {
       //Add group to Database
