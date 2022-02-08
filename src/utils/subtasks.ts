@@ -84,12 +84,7 @@ export default class Subtasks {
     }
   }
 
-  async updateSubtask(
-    id: string,
-    isDone: boolean,
-    subtask: string,
-    createdAt: string
-  ) {
+  async updateSubtask(id: string, isDone: boolean, subtask: string, createdAt: string) {
     try {
       //Get all the Subtasks from Database
       let subTaskDB = await this.db

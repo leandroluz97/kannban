@@ -189,18 +189,12 @@ export default class Tasks {
 
   async deleteTaskBatch(projectId: string) {
     try {
-      //Delete Task from Database
-      let subTaskDB = await this.db
-        .collection("users")
-        .doc(this.user?.uid)
-        .collection("tasks")
-        .where("projectId", "==", projectId)
-        .get()
-        .then(function (querySnapshot) {
-          querySnapshot.forEach(function (doc) {
-            doc.ref.delete();
-          });
-        });
+      const batch = this.db.batch();
+      let taskRef = await this.db.collection("users").doc(this.user?.uid).collection("tasks").where("projectId", "==", projectId).get();
+      taskRef.forEach((doc) => {
+        batch.delete(doc.ref);
+      });
+      await batch.commit();
     } catch (error) {
       toast.error(error.message, {
         bodyClassName: "toastify__error",

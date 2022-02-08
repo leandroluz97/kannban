@@ -20,17 +20,20 @@ import Input from "../Input";
 import { useUI } from "../../hooks/useUi";
 import { useData } from "../../hooks/useData";
 import Spinner from "../Spinner";
+import { group } from "console";
+import { useHistory } from "react-router-dom";
 
 interface payloadType {
   name: string;
   groupId: string;
 }
 const GroupOptionsModal = () => {
+  const history = useHistory();
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const { setGroupModalOptions, groupModalOptions } = useUI();
-  const { addGroup, deleteGroup, selectedGroup } = useData();
+  const { addGroup, deleteGroup, selectedGroup, groups } = useData();
 
   function closeModal() {
     setGroupModalOptions(false);
@@ -62,6 +65,13 @@ const GroupOptionsModal = () => {
   async function handleDeleteGroup(payload: payloadType) {
     await deleteGroup(payload.groupId);
     setGroupModalOptions(false);
+
+    if (groups.length > 0 && groups[0].projects.length > 0) {
+      const id = groups[0].projects[0].id;
+      history.push(`/project/${id}`);
+    } else {
+      history.push(`/gettingstarted`);
+    }
   }
 
   return (

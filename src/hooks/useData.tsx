@@ -266,7 +266,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
 
       const newGroup = {
         name: returnedGroup?.name,
-        id: returnedGroup?.id,
+        groupId: returnedGroup?.id,
         projects: [],
       };
 
@@ -274,7 +274,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
 
       setGroups(dataOfGroups);
     } catch (error) {
-      toast.error(error.message, configError);
+      toast.error("Error on adding new group.", configError);
     }
   }
 
@@ -288,11 +288,10 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       const projectClass = new Projects();
       const tasksClass = new Tasks();
 
-      await groupClass.deleteGroup(id);
-
       if (groupToDelete && groupToDelete.projects && groupToDelete.projects.length > 0) {
         for await (const project of groupToDelete?.projects) {
-          projectClass.deleteProject(project.id);
+          await projectClass.deleteProject(project.id);
+          const listsClass = await new Lists(project.id).deleteListBatch();
         }
       }
 
@@ -301,12 +300,17 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
           await tasksClass.deleteTaskBatch(projectId);
         }
       }
+      await groupClass.deleteGroup(id);
 
       const dataOfGroups = groups.filter((group) => group.groupId !== id);
 
       setGroups(dataOfGroups);
+      toast.success("Group deleted", {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
     } catch (error) {
-      toast.error(error.message, configError);
+      toast.error(`Error on deleting ${selectedGroup.name} group.`, configError);
     }
   }
 
@@ -332,11 +336,6 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       //const dataOfGroups: joinedType[] = [...groups, newGroup];
 
       setGroups(dataOfGroups);
-
-      toast.success("added", {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
 
       return returnedProject?.id;
     } catch (error) {

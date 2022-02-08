@@ -24,13 +24,7 @@ export default class Lists {
   async getLists() {
     try {
       //Get  all Lists from Database
-      let listsDB = await this.db
-        .collection("users")
-        .doc(this.user?.uid)
-        .collection("projects")
-        .doc(this.projectId)
-        .collection("lists")
-        .get();
+      let listsDB = await this.db.collection("users").doc(this.user?.uid).collection("projects").doc(this.projectId).collection("lists").get();
 
       //Normalize all subtask
       listsDB.forEach((listDB) => {
@@ -50,11 +44,7 @@ export default class Lists {
     }
   }
 
-  async addList(
-    ListName: string,
-    color: string,
-    position: number
-  ) {
+  async addList(ListName: string, color: string, position: number) {
     try {
       //Add List to Database
       let listDB = await this.db
@@ -86,12 +76,7 @@ export default class Lists {
     }
   }
 
-  async updateList(
-    id: string,
-    name: string,
-    color: string,
-    position: number
-  ) {
+  async updateList(id: string, name: string, color: string, position: number) {
     try {
       //throw Error("Falha na rede");
       //Update list in Database
@@ -115,16 +100,9 @@ export default class Lists {
   async updatePosition(listsId: any) {
     try {
       for (const listId in listsId) {
-        await this.db
-          .collection("users")
-          .doc(this.user?.uid)
-          .collection("projects")
-          .doc(this.projectId)
-          .collection("lists")
-          .doc(listId)
-          .update({
-            position: listsId[listId],
-          });
+        await this.db.collection("users").doc(this.user?.uid).collection("projects").doc(this.projectId).collection("lists").doc(listId).update({
+          position: listsId[listId],
+        });
       }
     } catch (error: any) {
       console.log(error);
@@ -142,6 +120,27 @@ export default class Lists {
         .collection("lists")
         .doc(id)
         .delete();
+
+      //Normalize all subtask
+    } catch (error) {
+      toast.error(error.message, {
+        bodyClassName: "toastify__error",
+        className: "toastify",
+      });
+    }
+  }
+
+  async deleteListBatch() {
+    try {
+      //Delete list from Database
+
+      const batch = this.db.batch();
+      let listRef = await this.db.collection("users").doc(this.user?.uid).collection("projects").doc(this.projectId).collection("lists").get();
+
+      listRef.forEach((doc) => {
+        batch.delete(doc.ref);
+      });
+      await batch.commit();
 
       //Normalize all subtask
     } catch (error) {

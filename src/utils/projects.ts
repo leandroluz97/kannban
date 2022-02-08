@@ -30,11 +30,7 @@ export default class Projects {
   async getProjects() {
     try {
       //Get all Projects from Database
-      let projectsDB = await this.db
-        .collection("users")
-        .doc(this.user?.uid)
-        .collection("projects")
-        .get();
+      let projectsDB = await this.db.collection("users").doc(this.user?.uid).collection("projects").get();
 
       //Normalize Project data
       projectsDB.forEach((projectDB) => {
@@ -61,12 +57,7 @@ export default class Projects {
   async getProject(id: string) {
     try {
       //Get ONE PROJECT from Database
-      let projectDB = await this.db
-        .collection("users")
-        .doc(this.user?.uid)
-        .collection("projects")
-        .doc(id)
-        .get();
+      let projectDB = await this.db.collection("users").doc(this.user?.uid).collection("projects").doc(id).get();
 
       //new Project from database data
       const project = {
@@ -116,12 +107,7 @@ export default class Projects {
   async updateProject(id: string, name: string) {
     try {
       //Get all the Subtasks from Database
-      let projectDB = await this.db
-        .collection("users")
-        .doc(this.user?.uid)
-        .collection("projects")
-        .doc(id)
-        .update({ name: name });
+      let projectDB = await this.db.collection("users").doc(this.user?.uid).collection("projects").doc(id).update({ name: name });
 
       //Normalize all subtask
     } catch (error) {
@@ -135,12 +121,7 @@ export default class Projects {
   async archiveProject(id: string) {
     try {
       //Get all the Subtasks from Database
-      let projectDB = await this.db
-        .collection("users")
-        .doc(this.user?.uid)
-        .collection("projects")
-        .doc(id)
-        .update({ isActive: false });
+      let projectDB = await this.db.collection("users").doc(this.user?.uid).collection("projects").doc(id).update({ isActive: false });
 
       //Normalize all subtask
     } catch (error) {
@@ -154,12 +135,7 @@ export default class Projects {
   async restoreProject(id: string) {
     try {
       //Get all the Subtasks from Database
-      let projectDB = await this.db
-        .collection("users")
-        .doc(this.user?.uid)
-        .collection("projects")
-        .doc(id)
-        .update({ isActive: true });
+      let projectDB = await this.db.collection("users").doc(this.user?.uid).collection("projects").doc(id).update({ isActive: true });
 
       //Normalize all subtask
     } catch (error) {
@@ -173,12 +149,7 @@ export default class Projects {
   async getArchivedProjects() {
     try {
       //Get all Projects from Database
-      let projectsDB = await this.db
-        .collection("users")
-        .doc(this.user?.uid)
-        .collection("projects")
-        .where("isActive", "==", false)
-        .get();
+      let projectsDB = await this.db.collection("users").doc(this.user?.uid).collection("projects").where("isActive", "==", false).get();
 
       //Normalize Project data
       projectsDB.forEach((projectDB) => {
@@ -205,12 +176,7 @@ export default class Projects {
   async deleteProject(id: string) {
     try {
       //Delete Project  from Database
-      let subTaskDB = await this.db
-        .collection("users")
-        .doc(this.user?.uid)
-        .collection("projects")
-        .doc(id)
-        .delete();
+      let subTaskDB = await this.db.collection("users").doc(this.user?.uid).collection("projects").doc(id).delete();
     } catch (error) {
       toast.error(error.message, {
         bodyClassName: "toastify__error",
