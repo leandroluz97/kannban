@@ -70,9 +70,12 @@ const GroupOptionsModal = () => {
   async function handleDeleteGroup(payload: payloadType) {
     await deleteGroup(payload.groupId);
     setGroupModalOptions(false);
+    console.log(groups.length, groups[0].projects.length > 0);
 
-    if (groups.length > 0 && groups[0].projects.length > 0) {
-      const id = groups[0].projects[0].id;
+    const updatedGroup = groups.filter((g) => g.groupId !== payload.groupId);
+
+    if (updatedGroup.length > 0 && updatedGroup[0].projects.length > 0) {
+      const id = updatedGroup[0].projects[0].id;
       history.push(`/project/${id}`);
     } else {
       history.push(`/gettingstarted`);
@@ -130,7 +133,9 @@ const GroupOptionsModal = () => {
             </button>
           </div>
           <div className={styles.footer__right}>
-            <button type="submit">Cancel</button>
+            <button type="submit" onClick={() => setGroupModalOptions(false)}>
+              Cancel
+            </button>
             <button type="submit" onClick={() => handleChangeGroupName(selectedGroup.groupId)}>
               Save
             </button>
