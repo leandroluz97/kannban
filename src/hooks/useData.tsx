@@ -222,7 +222,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       let collectionProjects = await projectClasse.getProjects();
 
       const dataOfGroup = collectionGroups?.reduce((acc: any, group) => {
-        acc[group.name] = {
+        acc[group.id] = {
           name: group.name,
           id: group.id,
           createdAt: group.createdAt,
@@ -350,7 +350,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       } as ProjectData;
 
       const dataOfGroups = groups.map((group) => {
-        if (group.name === newProject.group) {
+        if (group.groupId === newProject.group) {
           group.projects = [...group.projects, newProject];
         }
         return group;

@@ -39,7 +39,7 @@ const GroupOfProjects = ({ name, id, projects }: GroupOfProjectsProps) => {
 */
   function handleNewGroupInput() {
     setNewProject(true);
-    setStorageProjectName(name);
+    setStorageProjectName(id);
   }
 
   function handleNewProjectBlur() {

@@ -33,7 +33,7 @@ export function joinGroupAndProjects({ groups, projects }: any) {
     const groupID: groupType = group as never;
 
     acc.push({
-      name: key,
+      name: groupID.name,
       groupId: groupID.id,
       projects: projects[key] || [],
     });
