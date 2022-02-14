@@ -1,0 +1,56 @@
+.notificationCard {
+  background-color: var(--blue-card);
+  color: var(--white);
+  border-radius: 1rem;
+  border-top: solid 0px var(--violet);
+
+  border-spacing: 0;
+  //   overflow: hidden;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    &__left {
+      font-size: 2.5rem;
+
+      h3 {
+        font-weight: 400;
+      }
+    }
+
+    &__right {
+    }
+  }
+
+  &__body {
+    padding: 0 1rem 1rem 1rem;
+    font-size: var(--font-14);
+    color: var(--blue-150);
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--violet);
+    font-size: var(--font-14);
+    border-bottom-right-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+
+    // transform: scale(101%);
+
+    // border-bottom-left-radius: 1rem;
+    // border-bottom-right-radius: 0.8rem;
+
+    &__left {
+      display: flex;
+      align-items: center;
+      padding-left: 1rem;
+    }
+    &__right {
+      padding: 0.6rem;
+      background-color: var(--violet--dark);
+      border-bottom-right-radius: 1rem;
+    }
+  }
+}

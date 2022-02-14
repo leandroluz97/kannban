@@ -70,7 +70,6 @@ const GroupOptionsModal = () => {
   async function handleDeleteGroup(payload: payloadType) {
     await deleteGroup(payload.groupId);
     setGroupModalOptions(false);
-    console.log(groups.length, groups[0].projects.length > 0);
 
     const updatedGroup = groups.filter((g) => g.groupId !== payload.groupId);
 

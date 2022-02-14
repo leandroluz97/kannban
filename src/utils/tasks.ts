@@ -157,6 +157,7 @@ export default class Tasks {
       console.log(error);
     }
   }
+
   async updatePosition(tasksId: any) {
     try {
       //Update Task in Database

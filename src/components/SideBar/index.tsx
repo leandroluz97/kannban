@@ -88,9 +88,11 @@ const SideBar = () => {
       </div>
 
       <div className={stylescss.sidebar__projects}>
-        {groups.map((group) => (
-          <GroupOfProjects name={group.name} key={group.groupId} id={group.groupId} projects={group.projects} />
-        ))}
+        {groups
+          .sort((a, b) => (a.createdAt > b.createdAt ? 1 : -1))
+          .map((group) => (
+            <GroupOfProjects name={group.name} key={group.groupId} id={group.groupId} projects={group.projects} />
+          ))}
       </div>
 
       <div className={stylescss.sidebar__add}>

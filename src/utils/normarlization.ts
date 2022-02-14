@@ -7,6 +7,7 @@ interface projectData {
 interface groupType {
   name: string;
   id: string;
+  createdAt: Date;
 }
 
 interface groupByName {}
@@ -35,6 +36,7 @@ export function joinGroupAndProjects({ groups, projects }: any) {
     acc.push({
       name: groupID.name,
       groupId: groupID.id,
+      createdAt: groupID.createdAt,
       projects: projects[key] || [],
     });
 

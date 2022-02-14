@@ -6,7 +6,7 @@ interface ProjectType {
   group: string;
   id: string;
   isActive: boolean;
-  createdAt: string;
+  createdAt: Date;
 }
 
 interface ProjectSelectedType {
@@ -38,7 +38,7 @@ export default class Projects {
           name: projectDB.data().name,
           group: projectDB.data().group,
           isActive: projectDB.data().isActive,
-          createdAt: projectDB.data().createdAt,
+          createdAt: projectDB.data()?.createdAt ? new Date(projectDB.data()?.createdAt.toDate().getTime()) : new Date(),
           id: projectDB.id,
         };
 
@@ -64,7 +64,7 @@ export default class Projects {
         name: projectDB.data()?.name,
         id: projectDB.id,
         isActive: projectDB.data()?.isActive,
-        createdAt: projectDB.data()?.createdAt,
+        createdAt: projectDB.data()?.createdAt ? new Date(projectDB.data()?.createdAt.toDate().getTime()) : new Date(),
       };
 
       return project;
@@ -78,12 +78,13 @@ export default class Projects {
 
   async addProject(project: string, group: string) {
     try {
+      const createdAt = firebase.firestore.Timestamp.fromDate(new Date());
       //Add Project to Database
       let projectDB = await this.db
         .collection("users")
         .doc(this.user?.uid)
         .collection("projects")
-        .add({ name: project, isActive: true, group: group, createdAt: "ffff" })
+        .add({ name: project, isActive: true, group: group, createdAt: createdAt })
         .then((data) => data.get());
 
       // new Project from database data
@@ -91,7 +92,7 @@ export default class Projects {
         name: projectDB.data()?.name,
         group: projectDB.data()?.group,
         isActive: projectDB.data()?.isActive,
-        createdAt: projectDB.data()?.createdAt,
+        createdAt: projectDB.data()?.createdAt ? new Date(projectDB.data()?.createdAt.toDate().getTime()) : new Date(),
         id: projectDB.id,
       } as ProjectType;
 
@@ -157,7 +158,7 @@ export default class Projects {
           name: projectDB.data().name,
           group: projectDB.data().group,
           isActive: projectDB.data().isActive,
-          createdAt: projectDB.data().createdAt,
+          createdAt: projectDB.data()?.createdAt ? new Date(projectDB.data()?.createdAt.toDate().getTime()) : new Date(),
           id: projectDB.id,
         };
 

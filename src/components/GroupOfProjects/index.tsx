@@ -18,6 +18,7 @@ interface projectData {
   name: string;
   id: string;
   group: string;
+  createdAt: Date;
 }
 interface GroupOfProjectsProps {
   name: string;
@@ -50,6 +51,9 @@ const GroupOfProjects = ({ name, id, projects }: GroupOfProjectsProps) => {
     setSelectedGroup({ name: name, groupId: id });
   }
 
+  console.log(projects.sort((a, b) => (a.createdAt > b.createdAt ? 1 : -1)));
+  console.log(projects);
+
   return (
     <div className={styles.groupOfProject__project}>
       <div className={styles.groupOfProject__group}>
@@ -64,13 +68,15 @@ const GroupOfProjects = ({ name, id, projects }: GroupOfProjectsProps) => {
       </div>
 
       <ul>
-        {projects.map((project) => (
-          <li key={project.id}>
-            <NavLink to={`/project/${project.id}`} activeClassName={styles.groupOfProject__groupActive}>
-              {project.name}
-            </NavLink>
-          </li>
-        ))}
+        {projects
+          .sort((a, b) => (a.createdAt > b.createdAt ? 1 : -1))
+          .map((project) => (
+            <li key={project.id}>
+              <NavLink to={`/project/${project.id}`} activeClassName={styles.groupOfProject__groupActive}>
+                {project.name}
+              </NavLink>
+            </li>
+          ))}
 
         {newProject && (
           <li>

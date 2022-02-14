@@ -34,7 +34,7 @@ interface ProjectType {
   group: string;
   id: string;
   isActive: boolean;
-  createdAt: string;
+  createdAt: Date;
 }
 
 interface ProjectData {
@@ -42,16 +42,17 @@ interface ProjectData {
   id: string;
   group: string;
   isActive: boolean;
+  createdAt: Date;
 }
 
 interface JoinedType {
-  createdAt: string;
+  createdAt: Date;
   name: string;
   groupId: string;
   projects: ProjectData[];
 }
 interface JoinedType {
-  createdAt: string;
+  createdAt: Date;
   name: string;
   groupId: string;
   projects: ProjectData[];
@@ -237,6 +238,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
             name: project.name,
             id: project.id,
             isActive: project.isActive,
+            createdAt: project.createdAt,
           });
         }
 
