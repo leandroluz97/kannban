@@ -1,6 +1,7 @@
 .notification {
   width: 100%;
   margin: 0 5rem;
+  margin-top: 5rem;
   &__header {
     margin-bottom: 5rem;
   }
@@ -10,5 +11,38 @@
     gap: 1.6rem;
     width: 100%;
     margin: 0 auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .notification {
+    width: 100%;
+    margin: 0 1rem;
+    &__header {
+      margin-bottom: 5rem;
+    }
+    &__body {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.6rem;
+      width: 100%;
+      margin: 0 auto;
+    }
+  }
+}
+@media (max-width: 426px) {
+  .notification {
+    width: 100%;
+    margin: 0 1rem;
+    &__header {
+      margin-bottom: 5rem;
+    }
+    &__body {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      gap: 1.6rem;
+      width: 100%;
+      margin: 0 auto;
+    }
   }
 }

@@ -46,11 +46,24 @@
       display: flex;
       align-items: center;
       padding-left: 1rem;
+      p {
+        // font-size: 1.2rem;
+        opacity: 0.7;
+      }
     }
     &__right {
       padding: 0.6rem;
       background-color: var(--violet--dark);
       border-bottom-right-radius: 1rem;
+      cursor: pointer;
+
+      svg {
+        opacity: 0.6;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
     }
   }
 }

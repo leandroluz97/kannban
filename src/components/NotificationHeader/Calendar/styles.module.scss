@@ -41,3 +41,28 @@
     }
   }
 }
+
+@media (max-width: 768px) {
+  .date {
+    input {
+      background: var(--blue-100);
+      border: none;
+      padding: 0.7rem;
+      border-radius: 3px;
+      color: white;
+      border: solid 2px transparent;
+      outline: none;
+      display: block;
+
+      &:hover {
+        //   background-color: var(--blue-150);
+        border: solid 2px var(--blue-10);
+      }
+
+      &::placeholder {
+        color: var(--blue-150);
+        font-family: var(--font-family);
+      }
+    }
+  }
+}

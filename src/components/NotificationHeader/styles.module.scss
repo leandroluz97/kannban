@@ -51,3 +51,83 @@
     }
   }
 }
+
+@media (max-width: 768px) {
+  .notificationHeader {
+    padding: 2rem;
+
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+
+    &__left {
+      display: flex;
+      gap: 1.6rem;
+      width: 100%;
+
+      input:first-child {
+        outline: none;
+        width: 100%;
+      }
+
+      &__calendar {
+        width: 60%;
+      }
+    }
+    &__right {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 1.6rem;
+      button {
+        width: 100%;
+      }
+    }
+  }
+}
+@media (max-width: 426px) {
+  .notificationHeader {
+    padding: 2rem;
+
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+
+    &__left {
+      display: flex;
+      flex-direction: column;
+      gap: 1.6rem;
+      width: 100%;
+
+      input:first-child {
+        outline: none;
+        width: 100%;
+      }
+
+      &__calendar {
+        width: 100%;
+
+        input {
+          display: block;
+          width: 100% !important;
+          // width: 1000px !important;
+          // max-width: 100% !important;
+        }
+      }
+    }
+    &__right {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 1.6rem;
+      button {
+        width: 100%;
+        padding: 1.1rem;
+      }
+    }
+  }
+}
+.react-datepicker-wrapper {
+  // max-width: 300px !important;
+  width: 100% !important;
+}
