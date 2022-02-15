@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import Header from "../../components/Header";
 
 import List from "../../components/List";
 import ListFrom from "../../components/ListForm";
@@ -11,6 +10,7 @@ import { useParams, useHistory } from "react-router-dom";
 import { useData } from "../../hooks/useData";
 import { SortByPosition } from "../../utils/sortByPosition";
 import EmptyState from "../../components/EmptyState";
+import Header from "../../components/Header";
 
 interface ID {
   id: string;

@@ -1,0 +1,53 @@
+.notificationHeader {
+  background-color: var(--blue-card);
+  border-radius: 1rem;
+  padding: 5rem;
+
+  display: flex;
+  justify-content: space-between;
+
+  &__left {
+    display: flex;
+    gap: 1.6rem;
+    width: 60%;
+
+    input:first-child {
+      background: var(--blue-100);
+      border: none;
+      padding: 1rem;
+      border-radius: 3px;
+      color: white;
+      border: solid 2px transparent;
+      outline: none;
+      width: 100%;
+
+      &:hover {
+        //   background-color: var(--blue-150);
+        border: solid 2px var(--blue-10);
+      }
+
+      &::placeholder {
+        color: var(--blue-150);
+        font-family: var(--font-family);
+      }
+    }
+
+    &__calendar {
+      width: 100%;
+    }
+  }
+  &__right {
+    width: 40%;
+    display: flex;
+    justify-content: flex-end;
+    button {
+      color: white;
+      font-family: var(--font-family);
+      background-color: var(--violet);
+      border-radius: 0.4rem;
+      border: none;
+      padding: 0.8rem 4rem;
+      cursor: pointer;
+    }
+  }
+}

@@ -1,6 +1,14 @@
 .notification {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.6rem;
-  width: 80%;
+  width: 100%;
+  margin: 0 5rem;
+  &__header {
+    margin-bottom: 5rem;
+  }
+  &__body {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.6rem;
+    width: 100%;
+    margin: 0 auto;
+  }
 }
