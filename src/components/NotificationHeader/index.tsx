@@ -2,7 +2,11 @@ import React from "react";
 import Calendar from "./Calendar";
 import styles from "./styles.module.scss";
 
-const NotificationHeader = () => {
+interface INotificationHeader {
+  createNotification: () => Promise<void>;
+}
+
+const NotificationHeader = ({ createNotification }: INotificationHeader) => {
   return (
     <header className={styles.notificationHeader}>
       <div className={styles.notificationHeader__left}>
@@ -12,7 +16,7 @@ const NotificationHeader = () => {
         </div>
       </div>
       <div className={styles.notificationHeader__right}>
-        <button>Add New</button>
+        <button onClick={createNotification}>Add New</button>
       </div>
     </header>
   );
