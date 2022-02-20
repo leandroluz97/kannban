@@ -15,9 +15,10 @@ interface ISwitcher {
   isActive: boolean;
   deactivateNotification: (data: updateNotification) => Promise<void>;
   id: string;
+  notificationTime: Date;
 }
 
-const Switcher = ({ isActive, deactivateNotification, id }: ISwitcher) => {
+const Switcher = ({ isActive, deactivateNotification, id, notificationTime }: ISwitcher) => {
   const [isActiveState, setIsActiveState] = useState(isActive ? true : false);
 
   useEffect(() => {
@@ -28,6 +29,7 @@ const Switcher = ({ isActive, deactivateNotification, id }: ISwitcher) => {
   let cssBackGround = isActiveState ? { backgroundColor: "var(--violet)" } : { backgroundColor: "var(--blue-bg)" };
 
   const handleSwitch = async () => {
+    if (notificationTime < new Date()) return;
     await deactivateNotification({ isActive: !isActiveState, id: id });
     setIsActiveState(!isActiveState);
   };

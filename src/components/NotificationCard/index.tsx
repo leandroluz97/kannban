@@ -21,7 +21,7 @@ interface NotificationCardProps {
 
 const NotificationCard = ({ deleteNotification, deactivateNotification, notification }: NotificationCardProps) => {
   return (
-    <div className={styles.notificationCard}>
+    <div className={styles.notificationCard} style={{ opacity: notification.isActive ? "1" : "0.3" }}>
       <header className={styles.notificationCard__header}>
         <div className={styles.notificationCard__header__left}>
           <h3>
@@ -30,7 +30,12 @@ const NotificationCard = ({ deleteNotification, deactivateNotification, notifica
           </h3>
         </div>
         <div className={styles.notificationCard__header__right}>
-          <Switcher isActive={notification.isActive} deactivateNotification={deactivateNotification} id={notification.id} />
+          <Switcher
+            isActive={notification.isActive}
+            deactivateNotification={deactivateNotification}
+            id={notification.id}
+            notificationTime={notification.notificationTime}
+          />
         </div>
       </header>
       <section className={styles.notificationCard__body}>

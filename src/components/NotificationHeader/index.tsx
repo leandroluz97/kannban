@@ -1,6 +1,9 @@
 import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import Spinner from "../Spinner";
 import Calendar from "./Calendar";
 import styles from "./styles.module.scss";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 interface INotificationCard {
   id: string;
@@ -18,14 +21,26 @@ interface INotificationHeader {
 const NotificationHeader = ({ createNotification }: INotificationHeader) => {
   const [description, setDescription] = useState("");
   const [date, setDate] = useState<string | undefined>(undefined);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleOnClick = () => {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    getValues,
+    formState: { errors },
+  } = useForm<addNotification>();
+
+  const handleOnClick = async () => {
     if (!date || description.length <= 0) return;
 
-    createNotification({ description: description, notificationTime: new Date(date) });
+    setIsLoading(true);
+
+    await createNotification({ description: description, notificationTime: new Date(date) });
 
     setDescription("");
     setDate(undefined);
+    setIsLoading(false);
   };
 
   return (
@@ -37,7 +52,14 @@ const NotificationHeader = ({ createNotification }: INotificationHeader) => {
         </div>
       </div>
       <div className={styles.notificationHeader__right}>
-        <button onClick={() => handleOnClick()}>Add New</button>
+        <button onClick={() => handleOnClick()}>
+          <span>Add New</span>
+          {isLoading && (
+            <span>
+              <CircularProgress size={15} />
+            </span>
+          )}
+        </button>
       </div>
     </header>
   );

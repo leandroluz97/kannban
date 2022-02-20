@@ -48,6 +48,18 @@
       border: none;
       padding: 0.8rem 4rem;
       cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      span {
+        margin: 0 0.5rem;
+      }
+      svg {
+        color: var(--white);
+      }
+      &:hover {
+        background-color: var(--violet--dark);
+      }
     }
   }
 }
@@ -85,6 +97,7 @@
     }
   }
 }
+
 @media (max-width: 426px) {
   .notificationHeader {
     padding: 2rem;

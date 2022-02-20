@@ -15,11 +15,19 @@ import SideBarMobile from "../components/SidebarMobile";
 import LoadingState from "../components/LoadingState";
 import { useEffect } from "react";
 import { useData } from "../hooks/useData";
-import Notification from "../pages/Notification";
+import NotificationPage from "../pages/Notification";
 
 const Routes = () => {
   const { currentUser } = useAuth();
   const { pathname } = useLocation();
+
+  useEffect(() => {
+    if (!("Notification" in window)) {
+      alert("This browser does not support desktop notification");
+    } else if (Notification.permission !== "denied") {
+      Notification.requestPermission();
+    }
+  }, []);
 
   let routes = (
     <>
@@ -48,7 +56,7 @@ const Routes = () => {
               <Route path="/gettingstarted" component={GettingStarted} />
               <Route path="/project/:id" component={Dashboard} />
               <Route path="/settings" component={Settings} />
-              <Route path="/notification" component={Notification} />
+              <Route path="/notification" component={NotificationPage} />
               <Route path="/archive" component={Archive} />
               <Redirect to="/gettingstarted" />
             </Switch>

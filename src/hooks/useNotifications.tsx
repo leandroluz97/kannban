@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext, useState } from "react";
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Notification from "../utils/notifications";
 
@@ -34,6 +34,29 @@ const NotificationContext = createContext<contextProps>({} as contextProps);
 //Provider
 export const NotificationProvider = ({ children }: NotificationProviderPropsType) => {
   const [notifications, setNotifications] = useState<NotificationType[]>([]);
+  const [counter, setCounter] = useState(0);
+
+  useEffect(() => {
+    let timer = setTimeout(() => {
+      if (notifications.length > 0) {
+        let outDatedNotifications = notifications.filter((notify) => notify.notificationTime <= new Date() && notify.isActive === true);
+
+        if (outDatedNotifications.length > 0) {
+          outDatedNotifications.map((notify) => updateNotification({ id: notify.id, isActive: false }));
+
+          if (window.Notification.permission === "granted") {
+            outDatedNotifications.forEach((notify) => {
+              new window.Notification(`Notification for ${notify.description} its on time!`);
+            });
+          }
+        }
+
+        setCounter((prev) => prev + 1);
+      }
+    }, 1000 * 60);
+
+    return () => clearTimeout(timer);
+  }, [counter, notifications]);
 
   async function getAllNotifications() {
     try {

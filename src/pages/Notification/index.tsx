@@ -16,49 +16,10 @@ interface INotificationCard {
 type addNotification = Pick<INotificationCard, "description" | "notificationTime">;
 type updateNotification = Pick<INotificationCard, "isActive" | "id">;
 
-const Notification = () => {
-  const notificationsData: INotificationCard[] = [
-    {
-      id: "fuvb-58nbv-442eb-dff12",
-      description: "Need to finish the kannban app.",
-      isActive: true,
-      createdAt: new Date(),
-      notificationTime: new Date(),
-    },
-    {
-      id: "fuvb-58nbv-442eb-dff12",
-      description: "Need to finish the kannban app.",
-      isActive: true,
-      createdAt: new Date(),
-      notificationTime: new Date(),
-    },
-    {
-      id: "fuvb-58nbv-442eb-dff12",
-      description: "Need to finish the kannban app.",
-      isActive: true,
-      createdAt: new Date(),
-      notificationTime: new Date(),
-    },
-    {
-      id: "fuvb-58nbv-442eb-dff12",
-      description: "Need to finish the kannban app.",
-      isActive: true,
-      createdAt: new Date(),
-      notificationTime: new Date(),
-    },
-    {
-      id: "fuvb-58nbv-442eb-dff12",
-      description: "Need to finish the kannban app.",
-      isActive: true,
-      createdAt: new Date(),
-      notificationTime: new Date(),
-    },
-  ];
-
+const NotificationPage = () => {
   const { notifications, getAllNotifications, addNotification, updateNotification, deleteNotification } = useNotifications();
 
   const [notificationsDatas, setNotificationDatas] = useState(notifications);
-  const [counter, setCounter] = useState(0);
 
   useEffect(() => {
     (async function () {
@@ -76,9 +37,13 @@ const Notification = () => {
   //       let outDatedNotifications = notifications.filter((notify) => notify.notificationTime <= new Date() && notify.isActive === true);
 
   //       if (outDatedNotifications.length > 0) {
-  //         console.log("entered");
-
   //         outDatedNotifications.map((notify) => updateNotification({ id: notify.id, isActive: false }));
+
+  //         if (Notification.permission === "granted") {
+  //           outDatedNotifications.forEach((notify) => {
+  //             new Notification(`Notification for ${notify.description} its on time!! `);
+  //           });
+  //         }
   //       }
 
   //       setCounter((prev) => prev + 1);
@@ -87,8 +52,6 @@ const Notification = () => {
 
   //   return () => clearTimeout(timer);
   // }, [counter, notifications]);
-
-  console.log("counter: " + counter);
 
   const handleCreateNotification = async ({ description, notificationTime }: addNotification) => {
     await addNotification({ description, notificationTime });
@@ -101,8 +64,6 @@ const Notification = () => {
   const handleDeactivateNotification = async ({ isActive, id }: updateNotification) => {
     await updateNotification({ isActive, id });
   };
-
-  console.log(notificationsDatas);
 
   return (
     <section className={styles.notification}>
@@ -129,4 +90,4 @@ const Notification = () => {
   );
 };
 
-export default Notification;
+export default NotificationPage;
