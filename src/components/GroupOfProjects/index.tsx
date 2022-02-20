@@ -51,9 +51,6 @@ const GroupOfProjects = ({ name, id, projects }: GroupOfProjectsProps) => {
     setSelectedGroup({ name: name, groupId: id });
   }
 
-  console.log(projects.sort((a, b) => (a.createdAt > b.createdAt ? 1 : -1)));
-  console.log(projects);
-
   return (
     <div className={styles.groupOfProject__project}>
       <div className={styles.groupOfProject__group}>

@@ -12,9 +12,10 @@ interface INotificationCard {
   notificationTime: Date;
 }
 
+type updateNotification = Pick<INotificationCard, "isActive" | "id">;
 interface NotificationCardProps {
-  deleteNotification: () => Promise<void>;
-  deactivateNotification: () => Promise<void>;
+  deleteNotification: (id: string) => Promise<void>;
+  deactivateNotification: (data: updateNotification) => Promise<void>;
   notification: INotificationCard;
 }
 
@@ -29,18 +30,18 @@ const NotificationCard = ({ deleteNotification, deactivateNotification, notifica
           </h3>
         </div>
         <div className={styles.notificationCard__header__right}>
-          <Switcher isActive={notification.isActive} />
+          <Switcher isActive={notification.isActive} deactivateNotification={deactivateNotification} id={notification.id} />
         </div>
       </header>
       <section className={styles.notificationCard__body}>
-        <p>Need to finish the kannban app.</p>
+        <p>{notification.description}</p>
       </section>
       <footer className={styles.notificationCard__footer}>
         <div className={styles.notificationCard__footer__left}>
-          <p>{format(new Date(notification.notificationTime), "EE, MMMM")}</p>
+          <p>{format(new Date(notification.notificationTime), "EE dd, MMMM")}</p>
         </div>
         <div className={styles.notificationCard__footer__right}>
-          <div>
+          <div role="button" onClick={() => deleteNotification(notification.id)}>
             <DeleteForeverIcon fontSize="large" />
           </div>
         </div>

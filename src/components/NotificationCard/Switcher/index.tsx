@@ -1,18 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./styles.module.scss";
+
+interface INotificationCard {
+  id: string;
+  description: string;
+  isActive: boolean;
+  createdAt: Date;
+  notificationTime: Date;
+}
+
+type updateNotification = Pick<INotificationCard, "isActive" | "id">;
 
 interface ISwitcher {
   isActive: boolean;
+  deactivateNotification: (data: updateNotification) => Promise<void>;
+  id: string;
 }
 
-const Switcher = ({ isActive }: ISwitcher) => {
-  const [isActiveState, setIsActiveState] = useState(isActive);
+const Switcher = ({ isActive, deactivateNotification, id }: ISwitcher) => {
+  const [isActiveState, setIsActiveState] = useState(isActive ? true : false);
+
+  useEffect(() => {
+    setIsActiveState(isActive);
+  }, [isActive]);
 
   let css = isActiveState ? { right: "0.3rem" } : { right: "2.2rem" };
-  let cssBackGround = isActiveState ? { backgroundColor: "var(--blue-bg)" } : { backgroundColor: "var(--violet)" };
+  let cssBackGround = isActiveState ? { backgroundColor: "var(--violet)" } : { backgroundColor: "var(--blue-bg)" };
 
+  const handleSwitch = async () => {
+    await deactivateNotification({ isActive: !isActiveState, id: id });
+    setIsActiveState(!isActiveState);
+  };
   return (
-    <div className={styles.switcher} onClick={() => setIsActiveState(!isActiveState)}>
+    <div className={styles.switcher} onClick={() => handleSwitch()}>
       <div role="button" className={styles.switcher__track} style={cssBackGround} onClick={() => {}}>
         <div className={styles.switcher__thumb} style={css}></div>
       </div>

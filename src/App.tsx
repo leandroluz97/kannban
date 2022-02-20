@@ -16,6 +16,7 @@ import { DataProvider } from "./hooks/useData";
 import { useEffect } from "react";
 import LoadingState from "./components/LoadingState";
 import GroupOptionsModal from "./components/groupOptionModal";
+import { NotificationProvider } from "./hooks/useNotifications";
 
 Modal.setAppElement("#root");
 
@@ -31,13 +32,15 @@ function App() {
       <ToastContainer />
       <UiProvider>
         <DataProvider>
-          <Router>
-            <DeleteProjectModal />
-            <NewTaskModal />
-            <NewGroupModal />
-            <GroupOptionsModal />
-            <Routes />
-          </Router>
+          <NotificationProvider>
+            <Router>
+              <DeleteProjectModal />
+              <NewTaskModal />
+              <NewGroupModal />
+              <GroupOptionsModal />
+              <Routes />
+            </Router>
+          </NotificationProvider>
         </DataProvider>
       </UiProvider>
     </>

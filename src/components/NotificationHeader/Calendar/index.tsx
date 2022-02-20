@@ -5,36 +5,15 @@ import DatePicker from "react-datepicker";
 import { format } from "date-fns";
 
 interface CalendarProps {
-  Calendardate?: Date;
+  date?: string;
+  setDate: (date?: string) => void;
 }
 
 type DueDateType = null | Date;
 
-const Calendar = ({ Calendardate }: CalendarProps) => {
-  const { selectedTask } = useData();
-
-  const [date, setDate] = useState(selectedTask.dueTime ? format(new Date(selectedTask.dueTime), "MM/dd/yyyy h:mm aa") : undefined);
-
-  useEffect(() => {
-    setDate(selectedTask.dueTime ? format(new Date(selectedTask.dueTime), "MM/dd/yyyy h:mm aa") : undefined);
-  }, [selectedTask]);
-
-  async function handleSaveDateTimeOnBlur() {
-    // if (!date) return;
-    // await updateTask({
-    //   id: selectedTask.id,
-    //   name: selectedTask.name,
-    //   dueTime: newDate,
-    //   description: selectedTask.description,
-    //   listId: selectedTask.listId,
-    //   position: selectedTask.position,
-    //   tags: selectedTask.tags,
-    // });
-  }
-
+const Calendar = ({ date, setDate }: CalendarProps) => {
   async function handleChange(newDate: null | Date) {
     setDate(newDate ? format(new Date(newDate), "MM/dd/yyyy h:mm aa") : undefined);
-    // if (!date) return;
   }
   const minTime = new Date().getHours() as unknown as Date;
   const maxTime = 10 as unknown as Date;
@@ -49,7 +28,6 @@ const Calendar = ({ Calendardate }: CalendarProps) => {
         showTimeSelect
         timeFormat="p"
         timeIntervals={5}
-        onBlur={handleSaveDateTimeOnBlur}
         isClearable
         minDate={new Date()}
         minTime={new Date()}
