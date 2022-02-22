@@ -91,7 +91,7 @@ const SideBar = () => {
         {groups
           .sort((a, b) => (a.createdAt > b.createdAt ? 1 : -1))
           .map((group) => (
-            <GroupOfProjects name={group.name} key={group.groupId} id={group.groupId} projects={group.projects} />
+            <GroupOfProjects name={group.name} key={group.groupId} id={group.groupId} projects={group.projects} colapse={colapse} />
           ))}
       </div>
 

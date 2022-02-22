@@ -24,9 +24,10 @@ interface GroupOfProjectsProps {
   name: string;
   id: string;
   projects: projectData[];
+  colapse: boolean;
 }
 
-const GroupOfProjects = ({ name, id, projects }: GroupOfProjectsProps) => {
+const GroupOfProjects = ({ name, id, projects, colapse }: GroupOfProjectsProps) => {
   const [newProject, setNewProject] = useState(false);
 
   const { setStorageProjectName, setSelectedGroup } = useData();
@@ -59,9 +60,13 @@ const GroupOfProjects = ({ name, id, projects }: GroupOfProjectsProps) => {
         </button>
         <span>{name}</span>
 
-        <button onClick={handleNewGroupInput}>
-          <AddRoundedIcon fontSize="large" />
-        </button>
+        {colapse ? (
+          ""
+        ) : (
+          <button onClick={handleNewGroupInput}>
+            <AddRoundedIcon fontSize="large" />
+          </button>
+        )}
       </div>
 
       <ul>
@@ -69,9 +74,15 @@ const GroupOfProjects = ({ name, id, projects }: GroupOfProjectsProps) => {
           .sort((a, b) => (a.createdAt > b.createdAt ? 1 : -1))
           .map((project) => (
             <li key={project.id}>
-              <NavLink to={`/project/${project.id}`} activeClassName={styles.groupOfProject__groupActive}>
-                {project.name}
-              </NavLink>
+              {colapse ? (
+                <NavLink to={`/project/${project.id}`} activeClassName={styles.groupOfProject__groupActive} className={styles.groupOfProject__list}>
+                  {project.name.charAt(0)}
+                </NavLink>
+              ) : (
+                <NavLink to={`/project/${project.id}`} activeClassName={styles.groupOfProject__groupActive}>
+                  {project.name}
+                </NavLink>
+              )}
             </li>
           ))}
 

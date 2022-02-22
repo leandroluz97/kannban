@@ -6,15 +6,7 @@ import kannbanIcon from "../../assets/icon_kannban.svg";
 import colapseImg from "../../assets/colapse.svg";
 import uncolapseImg from "../../assets/uncolapse.svg";
 import AddRoundedIcon from "@material-ui/icons/AddRounded";
-import {
-  IoIosRocket,
-  IoIosSettings,
-  IoMdArchive,
-  IoMdTrash,
-  IoMdFolder,
-  IoIosAdd,
-  IoIosNotifications,
-} from "react-icons/io";
+import { IoIosRocket, IoIosSettings, IoMdArchive, IoMdTrash, IoMdFolder, IoIosAdd, IoIosNotifications } from "react-icons/io";
 import { NavLink } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
@@ -30,9 +22,6 @@ import { useData } from "../../hooks/useData";
 import { useAuth } from "../../hooks/useAuth";
 
 const SideBarMobile = () => {
-
-
-
   const { setGroupModalOpen, colapse } = useUI();
   const { groups } = useData();
   const { currentUserOnSettings } = useAuth();
@@ -55,9 +44,7 @@ const SideBarMobile = () => {
       });
   }
 
-  const sidebarStyle = colapse
-    ? `${stylescss.sidebar} ${stylescss.colapse}`
-    : `${stylescss.sidebar}`;
+  const sidebarStyle = colapse ? `${stylescss.sidebar} ${stylescss.colapse}` : `${stylescss.sidebar}`;
 
   return (
     <div className={sidebarStyle}>
@@ -76,35 +63,19 @@ const SideBarMobile = () => {
       </button>
 
       <div className={stylescss.sidebar__menu}>
-        <NavLink
-          to="/gettingstarted"
-          className={stylescss.sidebar__group}
-          activeClassName={stylescss.sidebar__groupActive}
-        >
+        <NavLink to="/gettingstarted" className={stylescss.sidebar__group} activeClassName={stylescss.sidebar__groupActive}>
           <IoIosRocket size={20} />
           <span>Getting Started</span>
         </NavLink>
-        <NavLink
-          to="/settings"
-          className={stylescss.sidebar__group}
-          activeClassName={stylescss.sidebar__groupActive}
-        >
+        <NavLink to="/settings" className={stylescss.sidebar__group} activeClassName={stylescss.sidebar__groupActive}>
           <IoIosSettings size={20} />
           <span>Settings</span>
         </NavLink>
-        <NavLink
-          to="/archive"
-          className={stylescss.sidebar__group}
-          activeClassName={stylescss.sidebar__groupActive}
-        >
+        <NavLink to="/archive" className={stylescss.sidebar__group} activeClassName={stylescss.sidebar__groupActive}>
           <IoMdArchive size={20} />
           <span>Archive</span>
         </NavLink>
-        <NavLink
-          to="/notification"
-          className={stylescss.sidebar__group}
-          activeClassName={stylescss.sidebar__groupActive}
-        >
+        <NavLink to="/notification" className={stylescss.sidebar__group} activeClassName={stylescss.sidebar__groupActive}>
           <IoIosNotifications size={20} />
           <span>Notification</span>
         </NavLink>
@@ -112,12 +83,7 @@ const SideBarMobile = () => {
 
       <div className={stylescss.sidebar__projects}>
         {groups.map((group) => (
-          <GroupOfProjects
-            name={group.name}
-            key={group.groupId}
-            id={group.groupId}
-            projects={group.projects}
-          />
+          <GroupOfProjects name={group.name} key={group.groupId} id={group.groupId} projects={group.projects} colapse={false} />
         ))}
       </div>
 

@@ -59,7 +59,7 @@
 
     align-items: center;
 
-    img{
+    img {
       width: 3rem;
       height: 3rem;
       border-radius: 3px;
@@ -127,7 +127,6 @@
 
   &__projects {
     margin-top: 3rem;
-
     overflow-y: scroll;
     flex: 1;
   }
@@ -248,12 +247,12 @@
     }
   }
 
-  .sidebar__projects {
-    //display: none;
+  // .sidebar__projects {
+  //   //display: none;
 
-    opacity: 0;
-    visibility: hidden;
-  }
+  //   opacity: 0;
+  //   visibility: hidden;
+  // }
 
   .sidebar__add {
     display: none;
@@ -267,8 +266,8 @@
   }
 }
 
-@media(max-width:426px){
-  .sidebar{
-      display: none;
+@media (max-width: 426px) {
+  .sidebar {
+    display: none;
   }
 }

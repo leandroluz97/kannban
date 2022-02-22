@@ -30,6 +30,9 @@
         background-color: transparent;
       }
     }
+    button:last-child {
+      margin-left: auto;
+    }
 
     &:hover {
       background-color: var(--gray-500);
@@ -91,6 +94,10 @@
         }
       }
     }
+  }
+  &__list {
+    padding-left: 0.5rem !important;
+    text-align: center;
   }
 
   &__new {
