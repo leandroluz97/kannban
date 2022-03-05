@@ -75,8 +75,6 @@ export const NotificationProvider = ({ children }: NotificationProviderPropsType
       const notification = new Notification();
       const newNotification: NotificationType = await notification.addNotification({ description, isActive, notificationTime });
 
-      console.log(newNotification);
-
       setNotifications([...notifications, newNotification]);
     } catch (error) {
       toast.error("Error on adding new notification.", configError);

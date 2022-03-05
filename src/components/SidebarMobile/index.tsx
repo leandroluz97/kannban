@@ -22,7 +22,7 @@ import { useData } from "../../hooks/useData";
 import { useAuth } from "../../hooks/useAuth";
 
 const SideBarMobile = () => {
-  const { setGroupModalOpen, colapse } = useUI();
+  const { setGroupModalOpen, colapse, setColapse } = useUI();
   const { groups } = useData();
   const { currentUserOnSettings } = useAuth();
 
@@ -63,19 +63,39 @@ const SideBarMobile = () => {
       </button>
 
       <div className={stylescss.sidebar__menu}>
-        <NavLink to="/gettingstarted" className={stylescss.sidebar__group} activeClassName={stylescss.sidebar__groupActive}>
+        <NavLink
+          to="/gettingstarted"
+          className={stylescss.sidebar__group}
+          activeClassName={stylescss.sidebar__groupActive}
+          onClick={() => setColapse(false)}
+        >
           <IoIosRocket size={20} />
           <span>Getting Started</span>
         </NavLink>
-        <NavLink to="/settings" className={stylescss.sidebar__group} activeClassName={stylescss.sidebar__groupActive}>
+        <NavLink
+          to="/settings"
+          className={stylescss.sidebar__group}
+          activeClassName={stylescss.sidebar__groupActive}
+          onClick={() => setColapse(false)}
+        >
           <IoIosSettings size={20} />
           <span>Settings</span>
         </NavLink>
-        <NavLink to="/archive" className={stylescss.sidebar__group} activeClassName={stylescss.sidebar__groupActive}>
+        <NavLink
+          to="/archive"
+          className={stylescss.sidebar__group}
+          activeClassName={stylescss.sidebar__groupActive}
+          onClick={() => setColapse(false)}
+        >
           <IoMdArchive size={20} />
           <span>Archive</span>
         </NavLink>
-        <NavLink to="/notification" className={stylescss.sidebar__group} activeClassName={stylescss.sidebar__groupActive}>
+        <NavLink
+          to="/notification"
+          className={stylescss.sidebar__group}
+          activeClassName={stylescss.sidebar__groupActive}
+          onClick={() => setColapse(false)}
+        >
           <IoIosNotifications size={20} />
           <span>Notification</span>
         </NavLink>

@@ -31,7 +31,7 @@ const GroupOfProjects = ({ name, id, projects, colapse }: GroupOfProjectsProps) 
   const [newProject, setNewProject] = useState(false);
 
   const { setStorageProjectName, setSelectedGroup } = useData();
-  const { setGroupModalOptions, groupModalOptions } = useUI();
+  const { setGroupModalOptions, groupModalOptions, setColapse } = useUI();
 
   //const filteredProjects = projects.filter((project) => project.group === name);
   /*
@@ -79,7 +79,7 @@ const GroupOfProjects = ({ name, id, projects, colapse }: GroupOfProjectsProps) 
                   {project.name.charAt(0)}
                 </NavLink>
               ) : (
-                <NavLink to={`/project/${project.id}`} activeClassName={styles.groupOfProject__groupActive}>
+                <NavLink to={`/project/${project.id}`} onClick={() => setColapse(false)} activeClassName={styles.groupOfProject__groupActive}>
                   {project.name}
                 </NavLink>
               )}

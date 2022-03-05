@@ -8,11 +8,8 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 interface InputCardTitleProps {
   closeModal: () => void;
 }
-const InputCartTitle = ({
-  closeModal,
-}: InputCardTitleProps) => {
-  const { selectedTask, updateTask, deleteTask } =
-    useData();
+const InputCartTitle = ({ closeModal }: InputCardTitleProps) => {
+  const { selectedTask, updateTask, deleteTask } = useData();
 
   const [title, setTitle] = useState("");
 
@@ -38,22 +35,16 @@ const InputCartTitle = ({
   }
   return (
     <div className={styles.inputCartTitle}>
+      <button onClick={handleDeleteTask}>
+        <DeleteForeverIcon />
+      </button>
       {!title ? (
         <div className={styles.inputCartTitle__progress}>
           <CircularProgress size={20} />
         </div>
       ) : (
-        <textarea
-          cols={30}
-          rows={3}
-          onBlur={handleOnBlur}
-          onChange={(e) => setTitle(e.target.value)}
-          value={title}
-        ></textarea>
+        <textarea cols={30} rows={3} onBlur={handleOnBlur} onChange={(e) => setTitle(e.target.value)} value={title}></textarea>
       )}
-      <button onClick={handleDeleteTask}>
-        <DeleteForeverIcon />
-      </button>
     </div>
   );
 };

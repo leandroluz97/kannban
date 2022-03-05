@@ -15,6 +15,7 @@ import Subtasks from "../utils/subtasks";
 import { getLastPosition } from "../utils/getLastPosition";
 import { getLeftToRightDirection, getRightToLeftDirection } from "../utils/getDirection";
 import { group } from "console";
+import { ExecOptions } from "child_process";
 
 const configSuccess = { bodyClassName: "toastify__success", className: "toastify" };
 const configError = { bodyClassName: "toastify__error", className: "toastify" };
@@ -212,52 +213,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
     getProjects();
   }, []);
 
-  async function getProjects() {
-    //Instances of classes
-    const projectClasse = new Projects();
-    const groupClasse = new Groups();
-
-    try {
-      //Get Groups and Projects from Database
-      let collectionGroups = await groupClasse.getGroups();
-      let collectionProjects = await projectClasse.getProjects();
-
-      const dataOfGroup = collectionGroups?.reduce((acc: any, group) => {
-        acc[group.id] = {
-          name: group.name,
-          id: group.id,
-          createdAt: group.createdAt,
-        };
-        return acc;
-      }, {});
-
-      let dataOfProjects = collectionProjects?.reduce((acc: any, project) => {
-        if (project.isActive) {
-          acc.push({
-            group: project.group,
-            name: project.name,
-            id: project.id,
-            isActive: project.isActive,
-            createdAt: project.createdAt,
-          });
-        }
-
-        return acc;
-      }, []);
-
-      const groupOfProjects = groupProjectsByGroupName(dataOfProjects);
-      const joinedGroupProjects = joinGroupAndProjects({
-        groups: dataOfGroup,
-        projects: groupOfProjects,
-      });
-
-      setGroups(joinedGroupProjects);
-      // setProjects(dataOfProjects);
-    } catch (error) {
-      toast.error("Error on getting the projects.", configError);
-    }
-  }
-
+  //#region Group
   async function addGroup(groupName: string) {
     // inicialize firebase firestore
     let db = firebase.firestore();
@@ -338,6 +294,54 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       toast.error(`Error on changing ${selectedGroup.name} group name.`, configError);
     }
   }
+  //#endregion
+
+  //#region Project
+  async function getProjects() {
+    //Instances of classes
+    const projectClasse = new Projects();
+    const groupClasse = new Groups();
+
+    try {
+      //Get Groups and Projects from Database
+      let collectionGroups = await groupClasse.getGroups();
+      let collectionProjects = await projectClasse.getProjects();
+
+      const dataOfGroup = collectionGroups?.reduce((acc: any, group) => {
+        acc[group.id] = {
+          name: group.name,
+          id: group.id,
+          createdAt: group.createdAt,
+        };
+        return acc;
+      }, {});
+
+      let dataOfProjects = collectionProjects?.reduce((acc: any, project) => {
+        if (project.isActive) {
+          acc.push({
+            group: project.group,
+            name: project.name,
+            id: project.id,
+            isActive: project.isActive,
+            createdAt: project.createdAt,
+          });
+        }
+
+        return acc;
+      }, []);
+
+      const groupOfProjects = groupProjectsByGroupName(dataOfProjects);
+      const joinedGroupProjects = joinGroupAndProjects({
+        groups: dataOfGroup,
+        projects: groupOfProjects,
+      });
+
+      setGroups(joinedGroupProjects);
+      // setProjects(dataOfProjects);
+    } catch (error) {
+      toast.error("Error on getting the projects.", configError);
+    }
+  }
 
   async function addProject(projectName: string) {
     const projectClass = new Projects();
@@ -364,7 +368,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
 
       return returnedProject?.id;
     } catch (error) {
-      toast.error(error.message, configError);
+      toast.error("Error on creating project.", configError);
     }
   }
 
@@ -512,10 +516,13 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       //Update State
       setGroups(updatedProject);
     } catch (error) {
-      toast.error(error.message, configError);
+      toast.error("Error on updating project", configError);
     }
   }
 
+  //#endregion
+
+  //#region List
   async function getLists(id: string) {
     //Instance of classes
     const listClass = new Lists(id);
@@ -552,7 +559,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
 
       setLists(allLists);
 
-      toast.success(`List ${name} created successfully!`, configSuccess);
+      //toast.success(`List ${name} created successfully!`, configSuccess);
     } catch (error) {
       toast.error("Error on creating list", configError);
     }
@@ -584,9 +591,7 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
 
     try {
       //Add list in Database
-      let listDB: any = await listClass.updateList(id, name, color, position);
-
-      //console.log(listDB);
+      await listClass.updateList(id, name, color, position);
 
       const allLists = lists.map((list) => {
         if (list.id === id) {
@@ -637,7 +642,6 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
 
     //Instance of classes
     const listClass = new Lists(selectedProject.id);
-    console.log(listsId);
 
     try {
       await listClass.updatePosition(listsId);
@@ -647,7 +651,9 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       toast.error("Error on swapping list.", configError);
     }
   }
+  //#endregion
 
+  //#region Task
   async function getTask(id: string) {
     //Instance of classes
     const subtaskClass = new Subtasks(id);
@@ -739,8 +745,6 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       setTasks(allTask);
     } catch (error) {
       toast.error("Error o creating task.", configError);
-
-      console.log(error);
     }
   }
 
@@ -775,8 +779,6 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
     } catch (error) {
       //handle toast error
       toast.error("Error on updating task.", configError);
-
-      console.log(error);
     }
   }
 
@@ -819,8 +821,6 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
     } catch (error) {
       //handle toast error
       toast.error("Error swapping task.", configError);
-
-      console.log(error);
     }
   }
 
@@ -844,6 +844,9 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
     }
   }
 
+  //#endregion
+
+  //#region Comment
   async function addComment(comment: string) {
     //Instance of classes
     const comentsClass = new Comments(selectedTask.id);
@@ -870,8 +873,6 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
     } catch (error) {
       //handle toast error
       toast.error("Error on creating a comment.", configError);
-
-      console.log(error);
     }
   }
 
@@ -904,7 +905,9 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       console.log(error);
     }
   }
+  //#endregion
 
+  //#region Subtask
   async function addSubtask(subtask: string) {
     //Instance of classes
     const subtaskClass = new Subtasks(selectedTask.id);
@@ -923,11 +926,10 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
 
         return task;
       });
-      //Update States
+
       setSubtasks(allSubtasks);
       setTasks(allTasks);
     } catch (error) {
-      //handle toast error
       toast.error("Error on creating subtask.", configError);
     }
   }
@@ -957,8 +959,6 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
     } catch (error) {
       //handle toast error
       toast.error("Error on deletting subtask.", configError);
-
-      console.log(error);
     }
   }
 
@@ -1003,6 +1003,9 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
     }
   }
 
+  //#endregion
+
+  //#region Tags
   async function updateTag(id: string, isActive: boolean) {
     //Instance of classes
     const tagsClass = new Tags(selectedTask.id);
@@ -1030,15 +1033,9 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
       //Update States
       setTags(allTags);
       setTasks(allTasks);
-      toast.success("Tags Update!", {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
     } catch (error) {
       //handle toast error
-      toast.error(error.message, configError);
-
-      console.log(error);
+      toast.error("Error on updating tags", configError);
     }
   }
 
@@ -1052,18 +1049,15 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
 
       //Update States
       setTags(allTags as TagType[]);
-
-      toast.success("Tags Update!", {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
     } catch (error) {
       //handle toast error
-      toast.error(error.message, configError);
+      toast.error("Error on loading all Tags", configError);
 
       console.log(error);
     }
   }
+
+  //#endregion
 
   return (
     <DataContext.Provider

@@ -22,6 +22,18 @@ const Dashboard = () => {
 
   let params: ID = useParams();
 
+  // function handleScroll(e: any) {
+  //   console.log(e.target);
+  // }
+  // useEffect(() => {
+  //   const scrollEvent = document;
+  //   scrollEvent.addEventListener("drop", handleScroll, true);
+
+  //   return () => {
+  //     scrollEvent.removeEventListener("drop", handleScroll);
+  //   };
+  // }, []);
+
   useEffect(() => {
     async function getListsOnLoad() {
       await getLists(params.id);

@@ -1,5 +1,6 @@
 .inputComment {
   margin-top: 3rem;
+
   h3 {
     font-size: var(--font-16);
     color: var(--white);
@@ -30,6 +31,7 @@
 
   input[type="submit"] {
     background-color: var(--blue-50);
+    font-family: var(--font-family);
     color: var(--white);
     border: none;
     padding: 1rem;

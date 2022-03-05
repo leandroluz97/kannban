@@ -33,8 +33,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const NewTaskModal = () => {
   const { setTaskModalOpen, taskModalOpen } = useUI();
-  const { getTask, comments, subtasks, selectedTask, unSetTasks, getTags } =
-    useData();
+  const { getTask, comments, subtasks, selectedTask, unSetTasks, getTags } = useData();
 
   useEffect(() => {}, []);
 
@@ -63,38 +62,23 @@ const NewTaskModal = () => {
             <Tags />
             <DueDate dueDate={selectedTask.dueTime} />
 
-            {selectedTask.id && (
-              <Description description={selectedTask.description} />
-            )}
+            {selectedTask.id && <Description description={selectedTask.description} />}
           </div>
           <div className={styles.newTaskModal__right}>
             <InputSubTask />
 
             {subtasks.length > 0 ? (
               subtasks.map((subtask) => (
-                <Subtask
-                  key={subtask.id}
-                  subtask={subtask.subtask}
-                  isDone={subtask.isDone}
-                  id={subtask.id}
-                  createdAt={subtask.createdAt}
-                />
+                <Subtask key={subtask.id} subtask={subtask.subtask} isDone={subtask.isDone} id={subtask.id} createdAt={subtask.createdAt} />
               ))
             ) : (
-              <p className={styles.newTaskModal__right__info}>
-                You Don't Have Any Subtask Yet!
-              </p>
+              <p className={styles.newTaskModal__right__info}>You Don't Have Any Subtask Yet!</p>
             )}
 
             <InputComment />
             <>
               {comments.map((comment) => (
-                <Comment
-                  key={comment.id}
-                  comment={comment.comment}
-                  createdAt={comment.createdAt}
-                  id={comment.id}
-                />
+                <Comment key={comment.id} comment={comment.comment} createdAt={comment.createdAt} id={comment.id} />
               ))}
             </>
           </div>
