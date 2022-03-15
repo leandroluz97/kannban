@@ -39,6 +39,9 @@
         top: 0;
         margin-right: -2.5rem;
       }
+      &__dropdown {
+        max-width: 200px;
+      }
     }
     &__right {
       width: 90%;

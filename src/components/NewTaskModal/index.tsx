@@ -9,6 +9,7 @@ import DueDate from "../DueDate";
 import InputCartTitle from "../InputCartTitle";
 import CloseRoundedIcon from "@material-ui/icons/CloseRounded";
 import { useUI } from "../../hooks/useUi";
+import Dropdown from "react-dropdown";
 
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -16,6 +17,7 @@ import TextField from "@material-ui/core/TextField";
 import Tags from "../Tags";
 import { useData } from "../../hooks/useData";
 import Description from "../../components/Description";
+import DropDown from "../Dropdown";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -63,6 +65,10 @@ const NewTaskModal = () => {
             <DueDate dueDate={selectedTask.dueTime} />
 
             {selectedTask.id && <Description description={selectedTask.description} />}
+            <div className={styles.newTaskModal__left__dropdown}>
+              {/* swipe */}
+              <DropDown />
+            </div>
           </div>
           <div className={styles.newTaskModal__right}>
             <InputSubTask />
