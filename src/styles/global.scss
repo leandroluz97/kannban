@@ -90,7 +90,8 @@ body {
 }
 .global__modal,
 .group__modal,
-.options__modal {
+.options__modal,
+.group__modal-delete {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -109,6 +110,11 @@ body {
   width: 100%;
   max-width: 450px;
   height: 250px;
+}
+.group__modal-delete {
+  width: 100%;
+  max-width: 450px;
+  height: 200px;
 }
 
 .options__modal {

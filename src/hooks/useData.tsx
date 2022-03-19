@@ -752,12 +752,14 @@ export const DataProvider = ({ children }: DataProviderPropsType) => {
     //Instance of classes
     const taskClass = new Tasks();
 
-    //convert the start day of month to firestore timpstamp
-
     try {
       //delete subtasks from Database
       await taskClass.updateTask(id, name, dueTime, description, listId, position);
 
+      console.log(listId, selectedTask.listId);
+      if (listId !== selectedTask.listId) {
+        toast.success("Task moved successfully!", configSuccess);
+      }
       //New array of subtasks
       const allTasks = tasks.map((task) => {
         if (task.id === id) {

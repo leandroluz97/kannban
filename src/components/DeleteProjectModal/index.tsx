@@ -51,7 +51,7 @@ const DeleteProjectModal = () => {
     <Modal
       isOpen={deleteProjectModalOpen}
       onRequestClose={closeModal}
-      className="group__modal"
+      className="group__modal-delete"
       overlayClassName="global__overlay"
       contentLabel="New task Modal"
     >

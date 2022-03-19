@@ -40,18 +40,11 @@ const NewTaskModal = () => {
       return;
     }
 
-    try {
-      await addGroup(inputValue.trim());
+    await addGroup(inputValue.trim());
 
-      setGroupModalOpen(false);
-      setInputValue("");
-      setIsLoading(false);
-    } catch (error) {
-      toast.error(error.message, {
-        bodyClassName: "toastify__error",
-        className: "toastify",
-      });
-    }
+    setGroupModalOpen(false);
+    setInputValue("");
+    setIsLoading(false);
   }
 
   return (
